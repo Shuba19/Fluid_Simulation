@@ -1,0 +1,12 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/antonio/Documents/Universita/Magi_3/Gpu_programming/Progetto/Fluid_Simulation/build/cmake_install.cmake",
+		"/Users/antonio/Documents/Universita/Magi_3/Gpu_programming/Progetto/Fluid_Simulation/build/_deps/glfw-build/cmake_install.cmake",
+		"/Users/antonio/Documents/Universita/Magi_3/Gpu_programming/Progetto/Fluid_Simulation/build/_deps/glfw-build/src/cmake_install.cmake",
+		"/Users/antonio/Documents/Universita/Magi_3/Gpu_programming/Progetto/Fluid_Simulation/build/_deps/glfw-build/docs/cmake_install.cmake",
+		"/Users/antonio/Documents/Universita/Magi_3/Gpu_programming/Progetto/Fluid_Simulation/build/_deps/glm-build/cmake_install.cmake",
+		"/Users/antonio/Documents/Universita/Magi_3/Gpu_programming/Progetto/Fluid_Simulation/build/_deps/glm-build/glm/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

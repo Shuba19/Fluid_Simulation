@@ -8,39 +8,85 @@ const int WIDTH = 800;
 const int HEIGHT = 600;
 
 GLFWwindow* window;
+VkInstance instance;
+VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+
+
 
 void initWindow() {
     glfwInit();
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API); // Vulkan
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API); //tells GLFW we're using Vulkan
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan Triangle", nullptr, nullptr);
 }
 
-void initVulkan() {
-    
-    
-    // Vulkan app Instance
-    //struttura dati utile a vulkan per avere info sull'applicazione
+void createInstance() {
+    //creates an App info struct
     VkApplicationInfo appInfo{};
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    //appInfo.pApplicationName = "Triangle App";  
+    appInfo.pApplicationName = "Hello Triangle";
+    appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+    appInfo.pEngineName = "No Engine";
+    //appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
     //appInfo.apiVersion = VK_API_VERSION_1_0;
 
-    //Vulkan instance
-    //effettiva instanza di un contesto di vulkan, utile per gestire i rendering 
-    VkInstanceCreateInfo InstanceVK{};
-    InstanceVK.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-    InstanceVK.pApplicationInfo = &appInfo;
+    //creates an crateInfo for global information 
+    VkInstanceCreateInfo createInfo{};
+    createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    createInfo.pApplicationInfo = &appInfo;
 
-    // Extensions required by GLFW
+    //extensions 
     uint32_t glfwExtensionCount = 0;
     const char** glfwExtensions;
-    glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-    InstanceVK.enabledExtensionCount = glfwExtensionCount;
-    InstanceVK.ppEnabledExtensionNames = glfwExtensions;
 
-    if (vkCreateInstance(&InstanceVK, nullptr, new VkInstance) != VK_SUCCESS) {
+    glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+
+    createInfo.enabledExtensionCount = glfwExtensionCount;
+    createInfo.ppEnabledExtensionNames = glfwExtensions;
+    createInfo.enabledLayerCount = 0;
+
+    if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS) {
         throw std::runtime_error("failed to create instance!");
     }
+}
+
+bool isDeviceSuitable(VkPhysicalDevice device) {
+    return true;
+}
+
+void pickPhysicalDevice()
+{
+    uint32_t deviceCount = 0;
+    vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr); //first call just to have number of devices
+    
+    if (deviceCount == 0) {
+        throw std::runtime_error("failed to find GPUs with Vulkan support!");
+    }else{
+        printf("device\n");
+    }
+
+    std::vector<VkPhysicalDevice> devices(deviceCount); 
+    vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data()); //actually writing devices to the list
+
+    for (const auto& device : devices) {
+        if (isDeviceSuitable(device)) {
+            physicalDevice = device;
+            break;
+        }
+    }
+
+    if (physicalDevice == VK_NULL_HANDLE) {
+        throw std::runtime_error("failed to find a suitable GPU!");
+    }
+    
+}
+
+void initVulkan() {
+    printf("ciao\n");
+    createInstance();
+    //validation layers 
+    pickPhysicalDevice();
+
 }
 
 void mainLoop() {
@@ -52,7 +98,9 @@ void mainLoop() {
 }
 
 void cleanup() {
-    glfwDestroyWindow(window);
+    vkDestroyInstance(instance, nullptr); //destroy vk instance 
+    //no cleanup for the device, automatically destroyed after destroy instance
+    glfwDestroyWindow(window); //destroy window instance 
     glfwTerminate();
 }
 

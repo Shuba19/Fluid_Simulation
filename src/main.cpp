@@ -3,6 +3,8 @@
 #include <stdexcept>
 #include <vector>
 #include <iostream>
+#include <optional>
+
 
 const int WIDTH = 800;
 const int HEIGHT = 600;
@@ -10,6 +12,9 @@ const int HEIGHT = 600;
 GLFWwindow* window;
 VkInstance instance;
 VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+VkDevice device;
+VkQueue graphicsQueue;
+
 
 
 
@@ -50,8 +55,59 @@ void createInstance() {
     }
 }
 
+//funzione per vedere che tipo di proprieta e informazioni si possono richiedere dalla gpu
+// bool isDeviceSuitable(VkPhysicalDevice device) {
+//     VkPhysicalDeviceProperties deviceProperties; //struttura per proprietà base del device (es nome, tipo etc)
+//     VkPhysicalDeviceFeatures deviceFeatures;  //struttura per feature aggiuntive del device (es texture compression and 64bit float op.)
+//     vkGetPhysicalDeviceProperties(device, &deviceProperties);
+//     vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+
+//     //return deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU && deviceFeatures.geometryShader;
+//     //return deviceFeatures.geometryShader; //il dispositivo supporta geometry shaders?
+//     //return deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU; // il dispositivo è una gpu esterna?
+//     return true; //false entrambe su mac perche la gpu è integrata e vulkan interagisce con metal che non supporta direttamente geometry shaders
+// }
+
+struct QueueFamilyIndices {
+    std::optional<uint32_t> graphicsFamily;
+    // ogni device ha un array di famiglie di code ogniuna che supporta operazioni diverse,
+    // a sua volta ogni famiglia di code ha piu code.
+    // quindi una volta restituito l'array con tutte le famiglie si sceglie l'indice della famiglia
+    // che ci serve e da li si prende una coda per fare quello che ci serve
+
+    bool isComplete() {
+        return graphicsFamily.has_value();
+    }
+};
+
+QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) {
+    //stesso pattern di find devices 
+    QueueFamilyIndices indices;
+    uint32_t queueFamilyCount = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+
+    std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());//punto data passa il puntatore al primo elemento del vettore da riempire
+    
+    int i = 0;
+    for (const auto& queueFamily : queueFamilies) {
+        if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
+            indices.graphicsFamily = i;
+        }
+
+        if (indices.isComplete()) {
+            break;
+        }        
+
+        i++;
+    }
+    return indices;
+}
+
 bool isDeviceSuitable(VkPhysicalDevice device) {
-    return true;
+    QueueFamilyIndices indices = findQueueFamilies(device);
+
+    return indices.isComplete();
 }
 
 void pickPhysicalDevice()
@@ -81,13 +137,49 @@ void pickPhysicalDevice()
     
 }
 
+void createLogicalDevice()
+{
+    QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
+    float queuePriority = 1.0f;
+
+    VkDeviceQueueCreateInfo queueCreateInfo{};
+    queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+    queueCreateInfo.queueFamilyIndex = indices.graphicsFamily.value();
+    queueCreateInfo.queueCount = 1;
+    queueCreateInfo.pQueuePriorities = &queuePriority;
+
+    VkPhysicalDeviceFeatures deviceFeatures{};
+
+    VkDeviceCreateInfo createDeviceInfo{};
+    createDeviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+    createDeviceInfo.pQueueCreateInfos = &queueCreateInfo;
+    createDeviceInfo.queueCreateInfoCount = 1;
+    createDeviceInfo.pEnabledFeatures = &deviceFeatures;
+    createDeviceInfo.enabledExtensionCount = 0;
+
+    //validation steps, commented because skipped
+    // if (enableValidationLayers) {
+    //     createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+    //     createInfo.ppEnabledLayerNames = validationLayers.data();
+    // } else {
+        createDeviceInfo.enabledLayerCount = 0;
+    //}
+    if (vkCreateDevice(physicalDevice, &createDeviceInfo, nullptr, &device) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create logical device!");
+    }
+    vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &graphicsQueue);
+
+}
+
 void initVulkan() {
     printf("ciao\n");
     createInstance();
     //validation layers 
     pickPhysicalDevice();
-
+    createLogicalDevice();
 }
+
+
 
 void mainLoop() {
     while (!glfwWindowShouldClose(window)) {
@@ -99,8 +191,11 @@ void mainLoop() {
 
 void cleanup() {
     vkDestroyInstance(instance, nullptr); //destroy vk instance 
-    //no cleanup for the device, automatically destroyed after destroy instance
+    //no cleanup for the phisical device, automatically destroyed after destroy of instance
     glfwDestroyWindow(window); //destroy window instance 
+    vkDestroyDevice(device, nullptr); //destroy the logical device 
+    //no cleanup for VkQueue, automatically destroyed after destroy of device
+
     glfwTerminate();
 }
 

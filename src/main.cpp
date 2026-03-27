@@ -192,10 +192,10 @@ void mainLoop() {
 void cleanup() {
     vkDestroyInstance(instance, nullptr); //destroy vk instance 
     //no cleanup for the phisical device, automatically destroyed after destroy of instance
-    glfwDestroyWindow(window); //destroy window instance 
     vkDestroyDevice(device, nullptr); //destroy the logical device 
     //no cleanup for VkQueue, automatically destroyed after destroy of device
-
+    
+    glfwDestroyWindow(window); //destroy window instance 
     glfwTerminate();
 }
 

@@ -10,6 +10,9 @@
 #include <limits> // Necessary for std::numeric_limits
 #include <algorithm> // Necessary for std::clamp
 
+#include <fstream>
+
+
 
 const int WIDTH = 800;
 const int HEIGHT = 600;
@@ -35,6 +38,29 @@ VkFormat swapChainImageFormat;
 VkExtent2D swapChainExtent;
 std::vector<VkImageView> swapChainImageViews;
 
+
+#pragma region utils
+
+//funzione utils che ritorna il contenuto di un file 
+//usata ad esempio per leggere gli shaders compilati
+static std::vector<char> readFile(const std::string& filename) {
+    std::ifstream file(filename, std::ios::ate | std::ios::binary);
+
+    if (!file.is_open()) {
+        throw std::runtime_error("failed to open file!");
+    }
+
+    size_t fileSize = (size_t) file.tellg();
+    std::vector<char> buffer(fileSize);
+
+    file.seekg(0);
+    file.read(buffer.data(), fileSize);
+
+    file.close();
+
+    return buffer;
+}
+#pragma endregion utils
 
 #pragma region initVulkan
 void initWindow() {
@@ -106,6 +132,8 @@ struct SwapChainSupportDetails {
     std::vector<VkSurfaceFormatKHR> formats;
     std::vector<VkPresentModeKHR> presentModes;
 };
+
+
 
 QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) {
     //stesso pattern di find devices 
@@ -419,6 +447,75 @@ void createImageViews()
 
 #pragma endregion swapChain
 
+#pragma region pipeline
+
+VkShaderModule createShaderModule(const std::vector<char>& code) {
+    
+    VkShaderModuleCreateInfo createInfo{};
+
+    createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+    createInfo.codeSize = code.size();
+    createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data()); //cast da pinter u32 del vettore a char del file
+
+    VkShaderModule shaderModule;
+    if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create shader module!");
+    }
+
+    return shaderModule;
+}
+
+void createGraphicsPipeline(){
+
+    //gli shaders vengono passati come byte code non come compilati 
+    //vengono compilati alla creazione della graphic pipeline 
+    //quindi appena termina la creazione della pipeline possono essere distrutti 
+
+    auto vertShaderCode = readFile("../../src/shaders/vert.spv");
+    auto fragShaderCode = readFile("../../src/shaders/frag.spv");
+
+    VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
+    VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
+
+    //vert create info
+    VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
+    vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
+    vertShaderStageInfo.module = vertShaderModule;
+    vertShaderStageInfo.pName = "main"; 
+    //vertShaderStageInfo.pSpecializationInfo usefull to sets constants at compile time instead of render time
+
+    //frag create info
+    VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
+    fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+    fragShaderStageInfo.module = fragShaderModule;
+    fragShaderStageInfo.pName = "main";
+
+    
+    VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};
+
+    std::vector<VkDynamicState> dynamicStates = {
+        VK_DYNAMIC_STATE_VIEWPORT,
+        VK_DYNAMIC_STATE_SCISSOR
+    };
+
+    //dynami state is essential for parameters that changes at drawing time (not constants)
+    //aiuta a modificare certi parametri senza dover ricreare la pipeline
+    VkPipelineDynamicStateCreateInfo dynamicState{};
+    dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+    dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
+    dynamicState.pDynamicStates = dynamicStates.data();
+
+
+
+    vkDestroyShaderModule(device, fragShaderModule, nullptr);
+    vkDestroyShaderModule(device, vertShaderModule, nullptr);
+}
+
+#pragma endregion pipeline
+
+
 void createSurface()
 {
     if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS) {
@@ -435,6 +532,8 @@ void initVulkan() {
     createLogicalDevice();
     createSwapChain();
     createImageViews();
+    createGraphicsPipeline();
+
 }
 #pragma endregion initVulkan
 
@@ -453,7 +552,7 @@ void cleanup() {
     //no cleanup for the phisical device, automatically destroyed after destroy of instance
     vkDestroySwapchainKHR(device, swapChain, nullptr);
     //no cleanup for swapChainImages becouse done in vkDestroySwapchainKHR
-    
+
     for (auto imageView : swapChainImageViews) {
         vkDestroyImageView(device, imageView, nullptr);
     }
@@ -462,7 +561,7 @@ void cleanup() {
     
     glfwDestroyWindow(window); //destroy window instance 
     glfwTerminate();
-}
+} 
 
 int main() {
     try {

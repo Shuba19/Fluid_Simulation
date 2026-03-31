@@ -1,0 +1,4 @@
+{
+  "glsllint.glslangValidatorPath": "/usr/local/bin/glslangValidator",
+  "glsllint.additionalValidatorArgs": ["--target-env", "vulkan1.2"]
+}

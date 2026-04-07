@@ -42,6 +42,9 @@ VkPipelineLayout pipelineLayout;
 VkRenderPass renderPass;
 VkPipeline graphicsPipeline;
 
+std::vector<VkFramebuffer> swapChainFramebuffers;
+
+
 #pragma region utils
 
 //funzione utils che ritorna il contenuto di un file 
@@ -135,7 +138,6 @@ struct SwapChainSupportDetails {
     std::vector<VkSurfaceFormatKHR> formats;
     std::vector<VkPresentModeKHR> presentModes;
 };
-
 
 
 QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) {
@@ -704,6 +706,29 @@ void createSurface()
     }
 }
 
+void createFramebuffers() {
+    swapChainFramebuffers.resize(swapChainImageViews.size());
+
+    for (size_t i = 0; i < swapChainImageViews.size(); i++) {
+        VkImageView attachments[] = {
+            swapChainImageViews[i]
+        };
+
+        VkFramebufferCreateInfo framebufferInfo{};
+        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebufferInfo.renderPass = renderPass;
+        framebufferInfo.attachmentCount = 1;
+        framebufferInfo.pAttachments = attachments;
+        framebufferInfo.width = swapChainExtent.width;
+        framebufferInfo.height = swapChainExtent.height;
+        framebufferInfo.layers = 1;
+
+        if (vkCreateFramebuffer(device, &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
+            throw std::runtime_error("failed to create framebuffer!");
+        }
+    }
+}
+
 void initVulkan() {
     printf("ciao\n");
     createInstance();
@@ -715,6 +740,8 @@ void initVulkan() {
     createImageViews();
     createRenderPass();
     createGraphicsPipeline();
+    createFramebuffers();
+
 }
 #pragma endregion initVulkan
 
@@ -741,6 +768,10 @@ void cleanup() {
 
     for (auto imageView : swapChainImageViews) {
         vkDestroyImageView(device, imageView, nullptr);
+    }
+    
+    for (auto framebuffer : swapChainFramebuffers) {
+        vkDestroyFramebuffer(device, framebuffer, nullptr);
     }
     vkDestroyDevice(device, nullptr); //destroy the logical device 
     //no cleanup for VkQueue, automatically destroyed after destroy of device

@@ -44,6 +44,11 @@ VkPipeline graphicsPipeline;
 
 std::vector<VkFramebuffer> swapChainFramebuffers;
 
+VkCommandPool commandPool; //insieme di command buffer diversi
+VkCommandBuffer commandBuffer; 
+
+
+
 
 #pragma region utils
 
@@ -706,7 +711,8 @@ void createSurface()
     }
 }
 
-void createFramebuffers() {
+void createFramebuffers() 
+{
     swapChainFramebuffers.resize(swapChainImageViews.size());
 
     for (size_t i = 0; i < swapChainImageViews.size(); i++) {
@@ -729,6 +735,81 @@ void createFramebuffers() {
     }
 }
 
+void createCommandPool(){
+    QueueFamilyIndices queueFamilyIndices = findQueueFamilies(physicalDevice);
+
+    VkCommandPoolCreateInfo poolInfo{};
+    poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT; //usato per buffer più duraturi e persistenti 
+    poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
+
+    if (vkCreateCommandPool(device, &poolInfo, nullptr, &commandPool) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create command pool!");
+    }
+}
+
+void createCommandBuffer()
+{
+    VkCommandBufferAllocateInfo allocInfo{};
+    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    allocInfo.commandPool = commandPool;
+    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY; // specifica se sono primari o secondari
+    allocInfo.commandBufferCount = 1;
+
+    if (vkAllocateCommandBuffers(device, &allocInfo, &commandBuffer) != VK_SUCCESS) {
+        throw std::runtime_error("failed to allocate command buffers!");
+    }
+}
+
+void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
+    VkCommandBufferBeginInfo beginInfo{};
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags = 0; // Optional
+    beginInfo.pInheritanceInfo = nullptr; // Optional usefull for secondary buffer to inherit stuff
+
+    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
+        throw std::runtime_error("failed to begin recording command buffer!");
+    }
+
+    VkRenderPassBeginInfo renderPassInfo{};
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    renderPassInfo.renderPass = renderPass;
+    renderPassInfo.framebuffer = swapChainFramebuffers[imageIndex];
+    renderPassInfo.renderArea.offset = {0, 0};
+    renderPassInfo.renderArea.extent = swapChainExtent;
+
+    VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
+    renderPassInfo.clearValueCount = 1;
+    renderPassInfo.pClearValues = &clearColor; //specifica che colore usare per il clear
+
+    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);//no error handling neaded
+    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);//bind della graphic pipeline
+
+    //viewport & scissors details since declared as dynamic 
+    VkViewport viewport{};
+    viewport.x = 0.0f;
+    viewport.y = 0.0f;
+    viewport.width = static_cast<float>(swapChainExtent.width);
+    viewport.height = static_cast<float>(swapChainExtent.height);
+    viewport.minDepth = 0.0f;
+    viewport.maxDepth = 1.0f;
+    vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+
+    VkRect2D scissor{};
+    scissor.offset = {0, 0};
+    scissor.extent = swapChainExtent;
+    vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
+
+    vkCmdDraw(commandBuffer, 3, 1, 0, 0); //Actual draw call!!
+
+    vkCmdEndRenderPass(commandBuffer);
+
+    if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
+        throw std::runtime_error("failed to record command buffer!");
+    }
+}
+
+
 void initVulkan() {
     printf("ciao\n");
     createInstance();
@@ -741,16 +822,23 @@ void initVulkan() {
     createRenderPass();
     createGraphicsPipeline();
     createFramebuffers();
+    createCommandPool();
+    createCommandBuffer();
+
 
 }
 #pragma endregion initVulkan
 
+#pragma region loop
+void drawFrame(){}
+
+#pragma endregion loop
 
 void mainLoop() {
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
-        // Qui normalmente renderizzeresti il triangolo
-        // Per semplicità al momento non facciamo il rendering completo
+        drawFrame();
+
     }
 }
 
@@ -775,6 +863,9 @@ void cleanup() {
 
     vkDestroyDevice(device, nullptr); //destroy the logical device 
     //no cleanup for VkQueue, automatically destroyed after destroy of device
+
+    vkDestroyCommandPool(device, commandPool, nullptr);
+    //no cleanup of the command buffer bc destroyed when pool destroyed
     
     glfwDestroyWindow(window); //destroy window instance 
     glfwTerminate();

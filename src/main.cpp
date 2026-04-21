@@ -45,7 +45,17 @@ VkPipeline graphicsPipeline;
 std::vector<VkFramebuffer> swapChainFramebuffers;
 
 VkCommandPool commandPool; //insieme di command buffer diversi
-VkCommandBuffer commandBuffer; 
+
+std::vector<VkCommandBuffer> commandBuffers;
+
+std::vector<VkSemaphore> imageAvailableSemaphores;
+std::vector<VkSemaphore> renderFinishedSemaphores;
+std::vector<VkFence> inFlightFences;
+bool framebufferResized = false;
+
+
+const int MAX_FRAMES_IN_FLIGHT = 2;
+uint32_t currentFrame = 0;
 
 
 
@@ -74,12 +84,20 @@ static std::vector<char> readFile(const std::string& filename) {
 #pragma endregion utils
 
 #pragma region initVulkan
+
+static void framebufferResizeCallback(GLFWwindow* window, int width, int height) {
+    framebufferResized = true;
+}
+
 void initWindow() {
     glfwInit();
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API); //tells GLFW we're using Vulkan
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-    window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan Triangle", nullptr, nullptr);
+    //glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    //window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan Triangle", nullptr, nullptr);
+    window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
+    glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
 }
+
 
 void createInstance() {
     //creates an App info struct
@@ -311,6 +329,7 @@ void createLogicalDevice()
         throw std::runtime_error("failed to create logical device!");
     }
     vkGetDeviceQueue(device, indices.presentFamily.value(), 0, &presentQueue);
+    vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &graphicsQueue);
 
 
 }
@@ -424,6 +443,18 @@ void createSwapChain() {
 
 }
 
+void cleanupSwapChain() {
+    for (auto framebuffer : swapChainFramebuffers) {
+        vkDestroyFramebuffer(device, framebuffer, nullptr);
+    }
+
+    for (auto imageView : swapChainImageViews) {
+        vkDestroyImageView(device, imageView, nullptr);
+    }
+
+    vkDestroySwapchainKHR(device, swapChain, nullptr);
+}
+
 void createImageViews()
 {
     //una per ongi imagine della swapchain
@@ -454,6 +485,41 @@ void createImageViews()
         }
     }
 }
+
+void createFramebuffers() 
+{
+    swapChainFramebuffers.resize(swapChainImageViews.size());
+
+    for (size_t i = 0; i < swapChainImageViews.size(); i++) {
+        VkImageView attachments[] = {
+            swapChainImageViews[i]
+        };
+
+        VkFramebufferCreateInfo framebufferInfo{};
+        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebufferInfo.renderPass = renderPass;
+        framebufferInfo.attachmentCount = 1;
+        framebufferInfo.pAttachments = attachments;
+        framebufferInfo.width = swapChainExtent.width;
+        framebufferInfo.height = swapChainExtent.height;
+        framebufferInfo.layers = 1;
+
+        if (vkCreateFramebuffer(device, &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
+            throw std::runtime_error("failed to create framebuffer!");
+        }
+    }
+}
+
+void recreateSwapChain() {
+    vkDeviceWaitIdle(device);
+
+    cleanupSwapChain();
+
+    createSwapChain();
+    createImageViews();
+    createFramebuffers();
+}
+
 
 #pragma endregion swapChain
 
@@ -689,12 +755,23 @@ void createRenderPass(){
     subpass.colorAttachmentCount = 1;
     subpass.pColorAttachments = &colorAttachmentRef;
 
+    VkSubpassDependency dependency{};
+    dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+    dependency.dstSubpass = 0;
+    dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency.srcAccessMask = 0;
+    dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+
+
     VkRenderPassCreateInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
     renderPassInfo.attachmentCount = 1;
     renderPassInfo.pAttachments = &colorAttachment;
     renderPassInfo.subpassCount = 1;
     renderPassInfo.pSubpasses = &subpass;
+    renderPassInfo.dependencyCount = 1;
+    renderPassInfo.pDependencies = &dependency;
 
     if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
         throw std::runtime_error("failed to create render pass!");
@@ -711,29 +788,6 @@ void createSurface()
     }
 }
 
-void createFramebuffers() 
-{
-    swapChainFramebuffers.resize(swapChainImageViews.size());
-
-    for (size_t i = 0; i < swapChainImageViews.size(); i++) {
-        VkImageView attachments[] = {
-            swapChainImageViews[i]
-        };
-
-        VkFramebufferCreateInfo framebufferInfo{};
-        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        framebufferInfo.renderPass = renderPass;
-        framebufferInfo.attachmentCount = 1;
-        framebufferInfo.pAttachments = attachments;
-        framebufferInfo.width = swapChainExtent.width;
-        framebufferInfo.height = swapChainExtent.height;
-        framebufferInfo.layers = 1;
-
-        if (vkCreateFramebuffer(device, &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
-            throw std::runtime_error("failed to create framebuffer!");
-        }
-    }
-}
 
 void createCommandPool(){
     QueueFamilyIndices queueFamilyIndices = findQueueFamilies(physicalDevice);
@@ -750,13 +804,15 @@ void createCommandPool(){
 
 void createCommandBuffer()
 {
+    commandBuffers.resize(MAX_FRAMES_IN_FLIGHT);
+
     VkCommandBufferAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     allocInfo.commandPool = commandPool;
     allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY; // specifica se sono primari o secondari
-    allocInfo.commandBufferCount = 1;
+    allocInfo.commandBufferCount = (uint32_t) commandBuffers.size();
 
-    if (vkAllocateCommandBuffers(device, &allocInfo, &commandBuffer) != VK_SUCCESS) {
+    if (vkAllocateCommandBuffers(device, &allocInfo, commandBuffers.data()) != VK_SUCCESS) {
         throw std::runtime_error("failed to allocate command buffers!");
     }
 }
@@ -809,6 +865,27 @@ void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
     }
 }
 
+void createSyncObjects(){
+    imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+    renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+    inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
+
+    VkSemaphoreCreateInfo semaphoreInfo{};
+    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+    VkFenceCreateInfo fenceInfo{};
+    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+    fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;//crea una fence gia "segnalata" per superare il wait alla prima iterazione 
+
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
+            vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
+            vkCreateFence(device, &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
+
+            throw std::runtime_error("failed to create synchronization objects for a frame!");
+        }
+    }
+}
 
 void initVulkan() {
     printf("ciao\n");
@@ -824,13 +901,80 @@ void initVulkan() {
     createFramebuffers();
     createCommandPool();
     createCommandBuffer();
-
-
+    createSyncObjects();
 }
 #pragma endregion initVulkan
 
 #pragma region loop
-void drawFrame(){}
+void drawFrame(){
+    vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
+    
+    uint32_t imageIndex;
+    VkResult result = vkAcquireNextImageKHR(device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+    
+    if (result == VK_ERROR_OUT_OF_DATE_KHR || 
+        result == VK_SUBOPTIMAL_KHR || 
+        framebufferResized)
+    {
+        framebufferResized = false;
+        recreateSwapChain();
+        return;
+    } else if (result != VK_SUCCESS) {
+        throw std::runtime_error("failed to acquire swap chain image!");
+    }
+    //reset fences only if submit work
+    vkResetFences(device, 1, &inFlightFences[currentFrame]);
+    
+    vkResetCommandBuffer(commandBuffers[currentFrame],  0);
+    recordCommandBuffer(commandBuffers[currentFrame], imageIndex);
+
+    VkSemaphore waitSemaphores[] = {imageAvailableSemaphores[currentFrame]};
+    VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+    
+    VkSubmitInfo submitInfo{};
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.waitSemaphoreCount = 1;
+    submitInfo.pWaitSemaphores = waitSemaphores;
+    submitInfo.pWaitDstStageMask = waitStages;
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers = &commandBuffers[currentFrame];
+
+
+    VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentFrame]};
+    submitInfo.signalSemaphoreCount = 1;
+    submitInfo.pSignalSemaphores = signalSemaphores;
+
+    if (vkQueueSubmit(graphicsQueue, 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
+        throw std::runtime_error("failed to submit draw command buffer!");
+    }
+
+
+    VkSwapchainKHR swapChains[] = {swapChain};
+    
+    VkPresentInfoKHR presentInfo{};
+    presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+
+    presentInfo.waitSemaphoreCount = 1;
+    presentInfo.pWaitSemaphores = signalSemaphores;
+
+    presentInfo.swapchainCount = 1;
+    presentInfo.pSwapchains = swapChains;
+    presentInfo.pImageIndices = &imageIndex;
+
+    presentInfo.pResults = nullptr; // Optional
+
+
+    result = vkQueuePresentKHR(presentQueue, &presentInfo);
+
+    if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
+        recreateSwapChain();
+    } else if (result != VK_SUCCESS) {
+        throw std::runtime_error("failed to present swap chain image!");
+    }
+
+    currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+
+}
 
 #pragma endregion loop
 
@@ -838,38 +982,58 @@ void mainLoop() {
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         drawFrame();
-
     }
+    vkDeviceWaitIdle(device);
+
 }
 
 void cleanup() {
-    vkDestroySurfaceKHR(instance, surface, nullptr);
-    vkDestroyInstance(instance, nullptr); //destroy vk instance 
-    //no cleanup for the phisical device, automatically destroyed after destroy of instance
-    vkDestroySwapchainKHR(device, swapChain, nullptr);
-    //no cleanup for swapChainImages becouse done in vkDestroySwapchainKHR
+    cleanupSwapChain();
+
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
+        vkDestroySemaphore(device, imageAvailableSemaphores[i], nullptr);
+        vkDestroyFence(device, inFlightFences[i], nullptr);
+    }
+
+    // Command resources
+    vkDestroyCommandPool(device, commandPool, nullptr);
+    //no cleanup of the command buffer bc destroyed when pool destroyed
+
+    // Framebuffers
+    // for (auto framebuffer : swapChainFramebuffers) {
+    //     vkDestroyFramebuffer(device, framebuffer, nullptr);
+    // }
+
+    // Pipeline
     vkDestroyPipeline(device, graphicsPipeline, nullptr);
     vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
     vkDestroyRenderPass(device, renderPass, nullptr);
 
-    for (auto framebuffer : swapChainFramebuffers) {
-        vkDestroyFramebuffer(device, framebuffer, nullptr);
-    }
+    // Image views
+    // for (auto imageView : swapChainImageViews) {
+    //     vkDestroyImageView(device, imageView, nullptr);
+    // }
 
-    for (auto imageView : swapChainImageViews) {
-        vkDestroyImageView(device, imageView, nullptr);
-    }
+    // Swapchain
+    //vkDestroySwapchainKHR(device, swapChain, nullptr);
+    //no cleanup for swapChainImages becouse done in vkDestroySwapchainKHR
 
-
-    vkDestroyDevice(device, nullptr); //destroy the logical device 
+    // Device
+    vkDestroyDevice(device, nullptr);
     //no cleanup for VkQueue, automatically destroyed after destroy of device
 
-    vkDestroyCommandPool(device, commandPool, nullptr);
-    //no cleanup of the command buffer bc destroyed when pool destroyed
-    
-    glfwDestroyWindow(window); //destroy window instance 
+    // Surface (dopo device!)
+    vkDestroySurfaceKHR(instance, surface, nullptr);
+
+    // Instance (ULTIMO)
+    vkDestroyInstance(instance, nullptr);
+    //no cleanup for the phisical device, automatically destroyed after destroy of instance 
+
+    // GLFW
+    glfwDestroyWindow(window);
     glfwTerminate();
-} 
+}
 
 int main() {
     try {

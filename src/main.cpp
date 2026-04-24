@@ -12,6 +12,8 @@
 
 #include <fstream>
 
+#include <glm/glm.hpp> //for matrices
+#include <array>
 
 
 const int WIDTH = 800;
@@ -57,6 +59,9 @@ bool framebufferResized = false;
 const int MAX_FRAMES_IN_FLIGHT = 2;
 uint32_t currentFrame = 0;
 
+VkBuffer vertexBuffer;
+VkDeviceMemory vertexBufferMemory;
+
 
 
 
@@ -82,6 +87,114 @@ static std::vector<char> readFile(const std::string& filename) {
     return buffer;
 }
 #pragma endregion utils
+
+#pragma region Vertex Buffer
+
+struct Vertex {
+    glm::vec2 pos;
+    glm::vec3 color;
+
+    //la bind configura la gpu in modo da ottimizzare il passaggio dei dati
+    //alla gpu, è come se configurasse uno stato della gpu dicendo qualcosa tipo
+    //prendi i dati da qua
+    static VkVertexInputBindingDescription getBindingDescription() {
+        VkVertexInputBindingDescription bindingDescription{};
+
+        bindingDescription.binding = 0; //start Index in the binding array
+        bindingDescription.stride = sizeof(Vertex); 
+        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX; //change if we want to pass to instance rendering
+
+        return bindingDescription;
+    }
+
+    //specifica come gestire ottenrere le informazioni dal blocco di vertici della bind
+    static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions() {
+        std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
+
+        //data pos
+        attributeDescriptions[0].binding = 0; //which binding to take
+        attributeDescriptions[0].location = 0; //reference alla direttiva del vertex shader 
+        attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT; //deve matchare il numero di componenti in di shader 
+        attributeDescriptions[0].offset = offsetof(Vertex, pos);
+
+        //data color
+        attributeDescriptions[1].binding = 0;
+        attributeDescriptions[1].location = 1;
+        attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+        attributeDescriptions[1].offset = offsetof(Vertex, color);
+
+        return attributeDescriptions;
+    }
+};
+
+const std::vector<Vertex> vertices = {
+    {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+    {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+    {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+};
+
+//Graphics cards can offer different types of memory to allocate from.
+//we use the function to return the most appropriate one based on the buffer and the applicaiton
+uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
+    //struct that helps the retrival of all memory tipes available in the device
+    VkPhysicalDeviceMemoryProperties memProperties;
+    vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProperties);
+
+    for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
+        //filtra per ciascun tipo di memoria quelle che non vogliamo 
+        //e verifica abbia le proprietà che vogliamo
+        if ((typeFilter & (1 << i)) && 
+            (memProperties.memoryTypes[i].propertyFlags & properties) == properties) 
+        {
+            return i;
+        }
+    }
+
+    throw std::runtime_error("failed to find suitable memory type!");
+}
+
+void createVertexBuffer() {
+
+    VkBufferCreateInfo bufferInfo{};
+    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufferInfo.size = sizeof(vertices[0]) * vertices.size();
+    bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT; //specify what is the usage of the Vbuff
+    bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE; //just one que family owns the 
+    //there is also a flag buffer for sparse regions my be usefull 
+
+    if (vkCreateBuffer(device, &bufferInfo, nullptr, &vertexBuffer) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create vertex buffer!");
+    }
+
+    //this section actually assign memory to the buffer
+    VkMemoryRequirements memRequirements;
+    vkGetBufferMemoryRequirements(device, vertexBuffer, &memRequirements);
+
+    VkMemoryAllocateInfo allocInfo{};
+    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocInfo.allocationSize = memRequirements.size;
+    allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits,
+                                            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | 
+                                            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    //change VK_MEMORY_PROPERTY_HOST_COHERENT_BIT for better performance if neaded
+
+    if (vkAllocateMemory(device, &allocInfo, nullptr, &vertexBufferMemory) != VK_SUCCESS) {
+        throw std::runtime_error("failed to allocate vertex buffer memory!");
+    }
+
+    vkBindBufferMemory(device, vertexBuffer, vertexBufferMemory, 0);
+
+    //data time
+    void* data;
+    //map the memory in order to have a reference for memcpy
+    //then we copy the datas
+    //then we unmap the memory
+    vkMapMemory(device, vertexBufferMemory, 0, bufferInfo.size, 0, &data);
+    memcpy(data, vertices.data(), (size_t) bufferInfo.size);
+    vkUnmapMemory(device, vertexBufferMemory);
+}
+#pragma endregion Vertex Buffer
+
 
 #pragma region initVulkan
 
@@ -587,14 +700,18 @@ void createGraphicsPipeline(){
     dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
     dynamicState.pDynamicStates = dynamicStates.data();
 
+    auto bindingDescription = Vertex::getBindingDescription();
+    auto attributeDescriptions = Vertex::getAttributeDescriptions();
 
     //al momento non specificato perche i vertici sono hardcodati nel vertex shader
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    vertexInputInfo.vertexBindingDescriptionCount = 0;
-    vertexInputInfo.pVertexBindingDescriptions = nullptr; // Optional
-    vertexInputInfo.vertexAttributeDescriptionCount = 0;
-    vertexInputInfo.pVertexAttributeDescriptions = nullptr; // Optional
+    vertexInputInfo.vertexBindingDescriptionCount = 1;
+    vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
+    vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
+    vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
+
+
 
     //specifies how to  kind of geometry if primitive restart should be enabled
     VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
@@ -856,7 +973,15 @@ void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
     scissor.extent = swapChainExtent;
     vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-    vkCmdDraw(commandBuffer, 3, 1, 0, 0); //Actual draw call!!
+    
+
+    //bind del vertex buffer ai bindings
+    VkBuffer vertexBuffers[] = {vertexBuffer};
+    VkDeviceSize offsets[] = {0};
+    vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+
+    //Actual draw call!!
+    vkCmdDraw(commandBuffer, static_cast<uint32_t>(vertices.size()), 1, 0, 0);
 
     vkCmdEndRenderPass(commandBuffer);
 
@@ -900,6 +1025,7 @@ void initVulkan() {
     createGraphicsPipeline();
     createFramebuffers();
     createCommandPool();
+    createVertexBuffer();
     createCommandBuffer();
     createSyncObjects();
 }
@@ -989,6 +1115,10 @@ void mainLoop() {
 
 void cleanup() {
     cleanupSwapChain();
+
+    vkDestroyBuffer(device, vertexBuffer, nullptr);
+    vkFreeMemory(device, vertexBufferMemory, nullptr);
+
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);

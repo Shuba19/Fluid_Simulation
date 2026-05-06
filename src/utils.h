@@ -10,6 +10,7 @@ struct appState{
 
     GLFWwindow* window;
     VkInstance instance;
+    VkSurfaceKHR surface;
 
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
     VkDevice device;

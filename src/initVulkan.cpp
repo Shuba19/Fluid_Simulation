@@ -74,3 +74,10 @@ void createInstance(appState & state) {
     }
 }
 
+void createSurface(appState & state)
+{
+    if (glfwCreateWindowSurface(state.instance, state.window, nullptr, &state.surface) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create window surface!");
+    }
+}
+

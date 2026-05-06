@@ -36,7 +36,7 @@ const std::vector<const char*> deviceExtensions = {
 };
 
 // GLFWwindow* window;
-VkSurfaceKHR surface;
+// VkSurfaceKHR surface;
 // VkInstance instance;
 // VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 // VkDevice device;
@@ -260,7 +260,7 @@ QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) {
 
         //sets the present family
         VkBool32 presentSupport = false;
-        vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &presentSupport);
+        vkGetPhysicalDeviceSurfaceSupportKHR(device, i, state.surface, &presentSupport);
         if (presentSupport) {
             indices.presentFamily = i;
         }
@@ -280,24 +280,24 @@ SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device) {
     SwapChainSupportDetails details;
 
     //capabilities
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &details.capabilities);
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, state.surface, &details.capabilities);
 
     //formats
     uint32_t formatCount;
-    vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, nullptr);
+    vkGetPhysicalDeviceSurfaceFormatsKHR(device, state.surface, &formatCount, nullptr);
 
     if (formatCount != 0) {
         details.formats.resize(formatCount);
-        vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, details.formats.data());
+        vkGetPhysicalDeviceSurfaceFormatsKHR(device, state.surface, &formatCount, details.formats.data());
     }
 
     //presentModes
     uint32_t presentModeCount;
-    vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, nullptr);
+    vkGetPhysicalDeviceSurfacePresentModesKHR(device, state.surface, &presentModeCount, nullptr);
 
     if (presentModeCount != 0) {
         details.presentModes.resize(presentModeCount);
-        vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, details.presentModes.data());
+        vkGetPhysicalDeviceSurfacePresentModesKHR(device, state.surface, &presentModeCount, details.presentModes.data());
     }
 
 
@@ -475,7 +475,7 @@ void createSwapChain() {
     //create infos
     VkSwapchainCreateInfoKHR createInfo{};
     createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    createInfo.surface = surface;
+    createInfo.surface = state.surface;
 
     createInfo.minImageCount = imageCount;
     createInfo.imageFormat = surfaceFormat.format;
@@ -864,12 +864,7 @@ void createRenderPass(){
 #pragma endregion pipeline
 
 
-void createSurface()
-{
-    if (glfwCreateWindowSurface(state.instance, state.window, nullptr, &surface) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create window surface!");
-    }
-}
+
 
 
 void createCommandPool(){
@@ -985,15 +980,16 @@ void createSyncObjects(){
 void initVulkan() {
     printf("ciao\n");
     createInstance(state);
-    createSurface();
-    //validation layers 
+    createSurface(state);
     pickPhysicalDevice();
     createLogicalDevice();
+
     createSwapChain();
     createImageViews();
     createRenderPass();
     createDescriptorSetLayout();
     createGraphicsPipeline();
+
     createFramebuffers();
     createCommandPool();
     createVertexBuffer(vertices, state);
@@ -1001,8 +997,8 @@ void initVulkan() {
     createUniformBuffers();
     createDescriptorPool();
     createDescriptorSets();
-
     createCommandBuffer();
+    
     createSyncObjects();
 }
 #pragma endregion initVulkan
@@ -1153,7 +1149,7 @@ void cleanup() {
     //no cleanup for VkQueue, automatically destroyed after destroy of device
 
     // Surface (dopo device!)
-    vkDestroySurfaceKHR(state.instance, surface, nullptr);
+    vkDestroySurfaceKHR(state.instance, state.surface, nullptr);
 
     // Instance (ULTIMO)
     vkDestroyInstance(state.instance, nullptr);

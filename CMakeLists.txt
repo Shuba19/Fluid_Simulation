@@ -3,7 +3,11 @@ project(FluidSim)# nome del progetto usato generare target e file di output.
 
 set(CMAKE_CXX_STANDARD 17) #setta lo standard di cpp
 
-add_executable(FluidSymulation src/main.cpp)# crea un eseguibile chiamato app usando il file sorgente src/main.cpp.
+#add_executable(FluidSymulation src/main.cpp)# crea un eseguibile chiamato app usando il file sorgente src/main.cpp.
+add_executable(FluidSymulation
+    src/main.cpp
+    src/initVulkan.cpp
+)
 
 # Vulkan (deve essere installato)
 find_package(Vulkan REQUIRED) 

@@ -25,8 +25,8 @@
 #include <chrono>
 
 
-const int WIDTH = 800;
-const int HEIGHT = 600;
+// const int WIDTH = 800;
+// const int HEIGHT = 600;
 
 //vector of extensions to core vulkan 
 //core vulkan has just general device agnostics functions 
@@ -35,9 +35,9 @@ const std::vector<const char*> deviceExtensions = {
     VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
 
-GLFWwindow* window;
+// GLFWwindow* window;
 VkSurfaceKHR surface;
-VkInstance instance;
+// VkInstance instance;
 VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 VkDevice device;
 VkQueue graphicsQueue;
@@ -64,7 +64,7 @@ std::vector<VkCommandBuffer> commandBuffers;
 std::vector<VkSemaphore> imageAvailableSemaphores;
 std::vector<VkSemaphore> renderFinishedSemaphores;
 std::vector<VkFence> inFlightFences;
-bool framebufferResized = false;
+
 
 
 const int MAX_FRAMES_IN_FLIGHT = 2;
@@ -83,6 +83,10 @@ std::vector<void*> uniformBuffersMapped;
 VkDescriptorPool descriptorPool;
 std::vector<VkDescriptorSet> descriptorSets;
 
+#include "utils.h"
+#include "initVulkan.h"
+
+appState state;
 
 #pragma region utils
 
@@ -402,84 +406,6 @@ void createDescriptorSets() {
 
 #pragma region initVulkan
 
-static void framebufferResizeCallback(GLFWwindow* window, int width, int height) {
-    framebufferResized = true;
-}
-
-void initWindow() {
-    glfwInit();
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API); //tells GLFW we're using Vulkan
-    //glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-    //window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan Triangle", nullptr, nullptr);
-    window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
-    glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
-}
-
-
-void createInstance() {
-    //creates an App info struct
-    VkApplicationInfo appInfo{};
-    appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    appInfo.pApplicationName = "Hello Triangle";
-    appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-    appInfo.pEngineName = "No Engine";
-    //appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-    //appInfo.apiVersion = VK_API_VERSION_1_0;
-
-    //creates an crateInfo for global information 
-    VkInstanceCreateInfo createInfo{};
-    createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-    createInfo.pApplicationInfo = &appInfo;
-
-    //extensions 
-    uint32_t glfwExtensionCount = 0;
-    const char** glfwExtensions;
-    glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-
-    createInfo.enabledExtensionCount = glfwExtensionCount;
-    createInfo.ppEnabledExtensionNames = glfwExtensions;
-    createInfo.enabledLayerCount = 0;
-
-    if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create instance!");
-    }
-    
-
-}
-
-//funzione per vedere che tipo di proprieta e informazioni si possono richiedere dalla gpu
-// bool isDeviceSuitable(VkPhysicalDevice device) {
-//     VkPhysicalDeviceProperties deviceProperties; //struttura per proprietà base del device (es nome, tipo etc)
-//     VkPhysicalDeviceFeatures deviceFeatures;  //struttura per feature aggiuntive del device (es texture compression and 64bit float op.)
-//     vkGetPhysicalDeviceProperties(device, &deviceProperties);
-//     vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
-
-//     //return deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU && deviceFeatures.geometryShader;
-//     //return deviceFeatures.geometryShader; //il dispositivo supporta geometry shaders?
-//     //return deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU; // il dispositivo è una gpu esterna?
-//     return true; //false entrambe su mac perche la gpu è integrata e vulkan interagisce con metal che non supporta direttamente geometry shaders
-// }
-
-struct QueueFamilyIndices {
-    std::optional<uint32_t> graphicsFamily;
-    // ogni device ha un array di famiglie di code ogniuna che supporta operazioni diverse,
-    // a sua volta ogni famiglia di code ha piu code.
-    // quindi una volta restituito l'array con tutte le famiglie si sceglie l'indice della famiglia
-    // che ci serve e da li si prende una coda per fare quello che ci serve
-    std::optional<uint32_t> presentFamily;
-
-    bool isComplete() {
-        return graphicsFamily.has_value() && presentFamily.has_value();
-    }
-};
-
-struct SwapChainSupportDetails {
-    VkSurfaceCapabilitiesKHR capabilities;
-    std::vector<VkSurfaceFormatKHR> formats;
-    std::vector<VkPresentModeKHR> presentModes;
-};
-
-
 QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) {
     //stesso pattern di find devices 
     QueueFamilyIndices indices;
@@ -579,7 +505,7 @@ bool isDeviceSuitable(VkPhysicalDevice device) {
 void pickPhysicalDevice()
 {
     uint32_t deviceCount = 0;
-    vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr); //first call just to have number of devices
+    vkEnumeratePhysicalDevices(state.instance, &deviceCount, nullptr); //first call just to have number of devices
     
     if (deviceCount == 0) {
         throw std::runtime_error("failed to find GPUs with Vulkan support!");
@@ -588,7 +514,7 @@ void pickPhysicalDevice()
     }
 
     std::vector<VkPhysicalDevice> devices(deviceCount); 
-    vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data()); //actually writing devices to the list
+    vkEnumeratePhysicalDevices(state.instance, &deviceCount, devices.data()); //actually writing devices to the list
 
     for (const auto& device : devices) {
         if (isDeviceSuitable(device)) {
@@ -659,7 +585,7 @@ VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
         return capabilities.currentExtent;
     } else {
         int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
+        glfwGetFramebufferSize(state.window, &width, &height);
 
         VkExtent2D actualExtent = {
             static_cast<uint32_t>(width),
@@ -1104,7 +1030,7 @@ void createRenderPass(){
 
 void createSurface()
 {
-    if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS) {
+    if (glfwCreateWindowSurface(state.instance, state.window, nullptr, &surface) != VK_SUCCESS) {
         throw std::runtime_error("failed to create window surface!");
     }
 }
@@ -1223,7 +1149,7 @@ void createSyncObjects(){
 
 void initVulkan() {
     printf("ciao\n");
-    createInstance();
+    createInstance(state);
     createSurface();
     //validation layers 
     pickPhysicalDevice();
@@ -1255,9 +1181,9 @@ void drawFrame(){
     
     if (result == VK_ERROR_OUT_OF_DATE_KHR || 
         result == VK_SUBOPTIMAL_KHR || 
-        framebufferResized)
+        state.framebufferResized)
     {
-        framebufferResized = false;
+        state.framebufferResized = false;
         recreateSwapChain();
         return;
     } else if (result != VK_SUCCESS) {
@@ -1322,7 +1248,7 @@ void drawFrame(){
 #pragma endregion loop
 
 void mainLoop() {
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(state.window)) {
         glfwPollEvents();
         drawFrame();
     }
@@ -1383,20 +1309,20 @@ void cleanup() {
     //no cleanup for VkQueue, automatically destroyed after destroy of device
 
     // Surface (dopo device!)
-    vkDestroySurfaceKHR(instance, surface, nullptr);
+    vkDestroySurfaceKHR(state.instance, surface, nullptr);
 
     // Instance (ULTIMO)
-    vkDestroyInstance(instance, nullptr);
+    vkDestroyInstance(state.instance, nullptr);
     //no cleanup for the phisical device, automatically destroyed after destroy of instance 
 
     // GLFW
-    glfwDestroyWindow(window);
+    glfwDestroyWindow(state.window);
     glfwTerminate();
 }
 
 int main() {
     try {
-        initWindow();
+        initWindow(state);
         initVulkan();
         mainLoop();
         cleanup();

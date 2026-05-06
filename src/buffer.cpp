@@ -59,7 +59,6 @@ void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, appSt
 
     VkCommandBuffer commandBuffer;
     VkResult r = vkAllocateCommandBuffers(state.device, &allocInfo, &commandBuffer);
-    std::cout << "alloc result = " << r << std::endl;
     if (r != VK_SUCCESS) throw std::runtime_error("alloc failed");
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -67,7 +66,6 @@ void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, appSt
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
     VkResult r2 = vkBeginCommandBuffer(commandBuffer, &beginInfo);
-    std::cout << "begin result = " << r2 << std::endl;
     if (r2 != VK_SUCCESS) throw std::runtime_error("begin failed");
     
 
@@ -79,7 +77,6 @@ void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, appSt
     vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
 
     VkResult r3 = vkEndCommandBuffer(commandBuffer);
-    std::cout << "end result = " << r3 << std::endl;
     if (r3 != VK_SUCCESS) throw std::runtime_error("end failed");
 
     VkSubmitInfo submitInfo{};

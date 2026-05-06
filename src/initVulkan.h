@@ -1,4 +1,3 @@
-// initVulkan.h
 #pragma once
 
 struct appState;

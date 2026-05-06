@@ -3,12 +3,25 @@
 
 struct appState{
     bool framebufferResized = false;
+    float maxDuration = 5.0f;
     
     const int WIDTH = 800;
     const int HEIGHT = 600;
 
     GLFWwindow* window;
     VkInstance instance;
+
+    VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+    VkDevice device;
+    VkQueue graphicsQueue;
+    VkQueue presentQueue;
+
+    VkBuffer indexBuffer;
+    VkDeviceMemory indexBufferMemory;
+    VkBuffer vertexBuffer;
+    VkDeviceMemory vertexBufferMemory;
+
+    VkCommandPool commandPool; //insieme di command buffer diversi
 };
 
 struct QueueFamilyIndices {

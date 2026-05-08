@@ -9,6 +9,7 @@ add_executable(FluidSymulation
     src/initVulkan.cpp
     src/buffer.cpp
     src/pipeline.cpp
+    src/device.cpp
 )
 
 # Vulkan (deve essere installato)

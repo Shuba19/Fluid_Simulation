@@ -1,6 +1,10 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+const std::vector<const char*> deviceExtensions = {
+    VK_KHR_SWAPCHAIN_EXTENSION_NAME
+};
+
 struct appState{
     bool framebufferResized = false;
     float maxDuration = 5.0f;

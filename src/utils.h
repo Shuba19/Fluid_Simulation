@@ -5,63 +5,6 @@ const std::vector<const char*> deviceExtensions = {
     VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
 
-struct appState{
-    bool framebufferResized = false;
-    float maxDuration = 5.0f;
-    
-    const int WIDTH = 800;
-    const int HEIGHT = 600;
-
-    //vulkan basics
-    GLFWwindow* window;
-    VkInstance instance;
-    VkSurfaceKHR surface;
-
-    //device 
-    VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
-    VkDevice device;
-    VkQueue graphicsQueue;
-    VkQueue presentQueue;
-
-    //buffers
-    VkBuffer indexBuffer;
-    VkDeviceMemory indexBufferMemory;
-    VkBuffer vertexBuffer;
-    VkDeviceMemory vertexBufferMemory;
-
-    VkCommandPool commandPool; //insieme di command buffer diversi
-
-    //pipeline
-    VkPipeline graphicsPipeline;
-    
-    
-    VkPipelineLayout pipelineLayout;
-    VkDescriptorSetLayout descriptorSetLayout;
-    
-    VkRenderPass renderPass;
-    VkExtent2D swapChainExtent;
-    VkFormat swapChainImageFormat;
-};
-
-struct QueueFamilyIndices {
-    std::optional<uint32_t> graphicsFamily;
-    // ogni device ha un array di famiglie di code ogniuna che supporta operazioni diverse,
-    // a sua volta ogni famiglia di code ha piu code.
-    // quindi una volta restituito l'array con tutte le famiglie si sceglie l'indice della famiglia
-    // che ci serve e da li si prende una coda per fare quello che ci serve
-    std::optional<uint32_t> presentFamily;
-
-    bool isComplete() {
-        return graphicsFamily.has_value() && presentFamily.has_value();
-    }
-};
-
-struct SwapChainSupportDetails {
-    VkSurfaceCapabilitiesKHR capabilities;
-    std::vector<VkSurfaceFormatKHR> formats;
-    std::vector<VkPresentModeKHR> presentModes;
-};
-
 struct Vertex {
     glm::vec2 pos;
     glm::vec3 color;
@@ -97,6 +40,82 @@ struct Vertex {
 
         return attributeDescriptions;
     }
+};
+
+const std::vector<Vertex> vertices = {
+    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}}, // 0
+    {{0.5f, -0.5f},  {0.0f, 1.0f, 0.0f}}, // 1
+    {{0.5f, 0.5f},   {0.0f, 0.0f, 1.0f}}, // 2
+    {{-0.5f, 0.5f},  {1.0f, 1.0f, 1.0f}}  // 3
+};
+
+const std::vector<uint16_t> indices = {
+    0, 1, 2,
+    2, 3, 0
+};
+
+struct appState{
+    bool framebufferResized = false;
+    float maxDuration = 5.0f;
+    
+    const int WIDTH = 800;
+    const int HEIGHT = 600;
+
+    const int MAX_FRAMES_IN_FLIGHT = 2;
+    uint32_t currentFrame = 0;
+
+    //vulkan basics
+    GLFWwindow* window;
+    VkInstance instance;
+    VkSurfaceKHR surface;
+
+    //device 
+    VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+    VkDevice device;
+    VkQueue graphicsQueue;
+    VkQueue presentQueue;
+
+    //buffers
+    VkBuffer indexBuffer;
+    VkDeviceMemory indexBufferMemory;
+    VkBuffer vertexBuffer;
+    VkDeviceMemory vertexBufferMemory;
+    std::vector<VkCommandBuffer> commandBuffers;
+
+    VkCommandPool commandPool; //insieme di command buffer diversi
+
+    //pipeline
+    VkPipeline graphicsPipeline;
+    VkPipelineLayout pipelineLayout;
+    VkDescriptorSetLayout descriptorSetLayout;
+    
+    VkRenderPass renderPass;
+    VkExtent2D swapChainExtent;
+    VkFormat swapChainImageFormat;
+
+    std::vector<VkFramebuffer> swapChainFramebuffers;
+
+    VkDescriptorPool descriptorPool;
+    std::vector<VkDescriptorSet> descriptorSets;
+};
+
+struct QueueFamilyIndices {
+    std::optional<uint32_t> graphicsFamily;
+    // ogni device ha un array di famiglie di code ogniuna che supporta operazioni diverse,
+    // a sua volta ogni famiglia di code ha piu code.
+    // quindi una volta restituito l'array con tutte le famiglie si sceglie l'indice della famiglia
+    // che ci serve e da li si prende una coda per fare quello che ci serve
+    std::optional<uint32_t> presentFamily;
+
+    bool isComplete() {
+        return graphicsFamily.has_value() && presentFamily.has_value();
+    }
+};
+
+struct SwapChainSupportDetails {
+    VkSurfaceCapabilitiesKHR capabilities;
+    std::vector<VkSurfaceFormatKHR> formats;
+    std::vector<VkPresentModeKHR> presentModes;
 };
 
 #endif

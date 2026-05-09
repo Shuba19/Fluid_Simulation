@@ -53,11 +53,11 @@ std::vector<VkImageView> swapChainImageViews;
 // VkRenderPass renderPass; 
 // VkPipeline graphicsPipeline;
 
-std::vector<VkFramebuffer> swapChainFramebuffers;
+// std::vector<VkFramebuffer> swapChainFramebuffers;
 
 // VkCommandPool commandPool; //insieme di command buffer diversi
 
-std::vector<VkCommandBuffer> commandBuffers;
+//std::vector<VkCommandBuffer> commandBuffers;
 
 std::vector<VkSemaphore> imageAvailableSemaphores;
 std::vector<VkSemaphore> renderFinishedSemaphores;
@@ -65,8 +65,8 @@ std::vector<VkFence> inFlightFences;
 
 
 
-const int MAX_FRAMES_IN_FLIGHT = 2;
-uint32_t currentFrame = 0;
+// const int MAX_FRAMES_IN_FLIGHT = 2;
+// uint32_t currentFrame = 0;
 
 
 
@@ -74,8 +74,8 @@ std::vector<VkBuffer> uniformBuffers;
 std::vector<VkDeviceMemory> uniformBuffersMemory;
 std::vector<void*> uniformBuffersMapped;
 
-VkDescriptorPool descriptorPool;
-std::vector<VkDescriptorSet> descriptorSets;
+// VkDescriptorPool descriptorPool;
+// std::vector<VkDescriptorSet> descriptorSets;
 
 
 
@@ -89,23 +89,6 @@ std::vector<VkDescriptorSet> descriptorSets;
 appState state;
 
 
-#pragma region Vertex Buffer
-
-
-const std::vector<Vertex> vertices = {
-    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}}, // 0
-    {{0.5f, -0.5f},  {0.0f, 1.0f, 0.0f}}, // 1
-    {{0.5f, 0.5f},   {0.0f, 0.0f, 1.0f}}, // 2
-    {{-0.5f, 0.5f},  {1.0f, 1.0f, 1.0f}}  // 3
-};
-
-const std::vector<uint16_t> indices = {
-    0, 1, 2,
-    2, 3, 0
-};
-
-#pragma endregion Vertex Buffer
-
 #pragma region Uniform Buffers
 struct UniformBufferObject {
     alignas(16) glm::mat4 model;
@@ -113,14 +96,14 @@ struct UniformBufferObject {
     alignas(16) glm::mat4 proj;
 };
 
-void createUniformBuffers() {
+void createUniformBuffers(appState & state) {
     VkDeviceSize bufferSize = sizeof(UniformBufferObject);
 
-    uniformBuffers.resize(MAX_FRAMES_IN_FLIGHT);
-    uniformBuffersMemory.resize(MAX_FRAMES_IN_FLIGHT);
-    uniformBuffersMapped.resize(MAX_FRAMES_IN_FLIGHT);
+    uniformBuffers.resize(state.MAX_FRAMES_IN_FLIGHT);
+    uniformBuffersMemory.resize(state.MAX_FRAMES_IN_FLIGHT);
+    uniformBuffersMapped.resize(state.MAX_FRAMES_IN_FLIGHT);
 
-    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+    for (size_t i = 0; i < state.MAX_FRAMES_IN_FLIGHT; i++) {
         createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformBuffers[i], uniformBuffersMemory[i], state);
 
         vkMapMemory(state.device, uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffersMapped[i]);
@@ -164,38 +147,38 @@ void updateUniformBuffer(uint32_t currentImage) {
 
 }
 
-void createDescriptorPool() {
+void createDescriptorPool(appState & state) {
 
     VkDescriptorPoolSize poolSize{};
     poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    poolSize.descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+    poolSize.descriptorCount = static_cast<uint32_t>(state.MAX_FRAMES_IN_FLIGHT);
 
     VkDescriptorPoolCreateInfo poolInfo{};
     poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
     poolInfo.poolSizeCount = 1;
     poolInfo.pPoolSizes = &poolSize;
 
-    poolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
-    if (vkCreateDescriptorPool(state.device, &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
+    poolInfo.maxSets = static_cast<uint32_t>(state.MAX_FRAMES_IN_FLIGHT);
+    if (vkCreateDescriptorPool(state.device, &poolInfo, nullptr, &state.descriptorPool) != VK_SUCCESS) {
         throw std::runtime_error("failed to create descriptor pool!");
     }
 
 }
 
 void createDescriptorSets() { 
-    std::vector<VkDescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, state.descriptorSetLayout);
+    std::vector<VkDescriptorSetLayout> layouts(state.MAX_FRAMES_IN_FLIGHT, state.descriptorSetLayout);
     VkDescriptorSetAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-    allocInfo.descriptorPool = descriptorPool;
-    allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+    allocInfo.descriptorPool = state.descriptorPool;
+    allocInfo.descriptorSetCount = static_cast<uint32_t>(state.MAX_FRAMES_IN_FLIGHT);
     allocInfo.pSetLayouts = layouts.data();
 
-    descriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
-    if (vkAllocateDescriptorSets(state.device, &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
+    state.descriptorSets.resize(state.MAX_FRAMES_IN_FLIGHT);
+    if (vkAllocateDescriptorSets(state.device, &allocInfo, state.descriptorSets.data()) != VK_SUCCESS) {
         throw std::runtime_error("failed to allocate descriptor sets!");
     }
 
-    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+    for (size_t i = 0; i < state.MAX_FRAMES_IN_FLIGHT; i++) {
         VkDescriptorBufferInfo bufferInfo{};
         bufferInfo.buffer = uniformBuffers[i];
         bufferInfo.offset = 0;
@@ -203,7 +186,7 @@ void createDescriptorSets() {
 
         VkWriteDescriptorSet descriptorWrite{};
         descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        descriptorWrite.dstSet = descriptorSets[i];
+        descriptorWrite.dstSet = state.descriptorSets[i];
         descriptorWrite.dstBinding = 0;
         descriptorWrite.dstArrayElement = 0;
         descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -330,7 +313,7 @@ void createSwapChain() {
 }
 
 void cleanupSwapChain() {
-    for (auto framebuffer : swapChainFramebuffers) {
+    for (auto framebuffer : state.swapChainFramebuffers) {
         vkDestroyFramebuffer(state.device, framebuffer, nullptr);
     }
 
@@ -374,7 +357,7 @@ void createImageViews()
 
 void createFramebuffers() 
 {
-    swapChainFramebuffers.resize(swapChainImageViews.size());
+    state.swapChainFramebuffers.resize(swapChainImageViews.size());
 
     for (size_t i = 0; i < swapChainImageViews.size(); i++) {
         VkImageView attachments[] = {
@@ -390,7 +373,7 @@ void createFramebuffers()
         framebufferInfo.height = state.swapChainExtent.height;
         framebufferInfo.layers = 1;
 
-        if (vkCreateFramebuffer(state.device, &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
+        if (vkCreateFramebuffer(state.device, &framebufferInfo, nullptr, &state.swapChainFramebuffers[i]) != VK_SUCCESS) {
             throw std::runtime_error("failed to create framebuffer!");
         }
     }
@@ -418,98 +401,98 @@ void recreateSwapChain() {
 
 
 
-void createCommandPool(){
-    QueueFamilyIndices queueFamilyIndices = findQueueFamilies(state);
+// void createCommandPool(){
+//     QueueFamilyIndices queueFamilyIndices = findQueueFamilies(state);
 
-    VkCommandPoolCreateInfo poolInfo{};
-    poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT; //usato per buffer più duraturi e persistenti 
-    poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
+//     VkCommandPoolCreateInfo poolInfo{};
+//     poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+//     poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT; //usato per buffer più duraturi e persistenti 
+//     poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
 
-    if (vkCreateCommandPool(state.device, &poolInfo, nullptr, &state.commandPool) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create command pool!");
-    }
-}
+//     if (vkCreateCommandPool(state.device, &poolInfo, nullptr, &state.commandPool) != VK_SUCCESS) {
+//         throw std::runtime_error("failed to create command pool!");
+//     }
+// }
 
-void createCommandBuffer()
-{
-    commandBuffers.resize(MAX_FRAMES_IN_FLIGHT);
+// void createCommandBuffer()
+// {
+//     commandBuffers.resize(MAX_FRAMES_IN_FLIGHT);
 
-    VkCommandBufferAllocateInfo allocInfo{};
-    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    allocInfo.commandPool = state.commandPool;
-    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY; // specifica se sono primari o secondari
-    allocInfo.commandBufferCount = (uint32_t) commandBuffers.size();
+//     VkCommandBufferAllocateInfo allocInfo{};
+//     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+//     allocInfo.commandPool = state.commandPool;
+//     allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY; // specifica se sono primari o secondari
+//     allocInfo.commandBufferCount = (uint32_t) commandBuffers.size();
 
-    if (vkAllocateCommandBuffers(state.device, &allocInfo, commandBuffers.data()) != VK_SUCCESS) {
-        throw std::runtime_error("failed to allocate command buffers!");
-    }
-}
+//     if (vkAllocateCommandBuffers(state.device, &allocInfo, commandBuffers.data()) != VK_SUCCESS) {
+//         throw std::runtime_error("failed to allocate command buffers!");
+//     }
+// }
 
-void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
-    VkCommandBufferBeginInfo beginInfo{};
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags = 0; // Optional
-    beginInfo.pInheritanceInfo = nullptr; // Optional usefull for secondary buffer to inherit stuff
+// void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
+//     VkCommandBufferBeginInfo beginInfo{};
+//     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+//     beginInfo.flags = 0; // Optional
+//     beginInfo.pInheritanceInfo = nullptr; // Optional usefull for secondary buffer to inherit stuff
 
-    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
-        throw std::runtime_error("failed to begin recording command buffer!");
-    }
+//     if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
+//         throw std::runtime_error("failed to begin recording command buffer!");
+//     }
 
-    VkRenderPassBeginInfo renderPassInfo{};
-    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderPassInfo.renderPass = state.renderPass;
-    renderPassInfo.framebuffer = swapChainFramebuffers[imageIndex];
-    renderPassInfo.renderArea.offset = {0, 0};
-    renderPassInfo.renderArea.extent = state.swapChainExtent;
+//     VkRenderPassBeginInfo renderPassInfo{};
+//     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+//     renderPassInfo.renderPass = state.renderPass;
+//     renderPassInfo.framebuffer = swapChainFramebuffers[imageIndex];
+//     renderPassInfo.renderArea.offset = {0, 0};
+//     renderPassInfo.renderArea.extent = state.swapChainExtent;
 
-    VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
-    renderPassInfo.clearValueCount = 1;
-    renderPassInfo.pClearValues = &clearColor; //specifica che colore usare per il clear
+//     VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
+//     renderPassInfo.clearValueCount = 1;
+//     renderPassInfo.pClearValues = &clearColor; //specifica che colore usare per il clear
 
-    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);//no error handling neaded
-    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, state.graphicsPipeline);//bind della graphic pipeline
+//     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);//no error handling neaded
+//     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, state.graphicsPipeline);//bind della graphic pipeline
 
-    //viewport & scissors details since declared as dynamic 
-    VkViewport viewport{};
-    viewport.x = 0.0f;
-    viewport.y = 0.0f;
-    viewport.width = static_cast<float>(state.swapChainExtent.width);
-    viewport.height = static_cast<float>(state.swapChainExtent.height);
-    viewport.minDepth = 0.0f;
-    viewport.maxDepth = 1.0f;
-    vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+//     //viewport & scissors details since declared as dynamic 
+//     VkViewport viewport{};
+//     viewport.x = 0.0f;
+//     viewport.y = 0.0f;
+//     viewport.width = static_cast<float>(state.swapChainExtent.width);
+//     viewport.height = static_cast<float>(state.swapChainExtent.height);
+//     viewport.minDepth = 0.0f;
+//     viewport.maxDepth = 1.0f;
+//     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
 
-    VkRect2D scissor{};
-    scissor.offset = {0, 0};
-    scissor.extent = state.swapChainExtent;
-    vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
+//     VkRect2D scissor{};
+//     scissor.offset = {0, 0};
+//     scissor.extent = state.swapChainExtent;
+//     vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
     
-    //bind del vertex buffer ai bindings
-    VkBuffer vertexBuffers[] = {state.vertexBuffer};
-    VkDeviceSize offsets[] = {0};
-    vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+//     //bind del vertex buffer ai bindings
+//     VkBuffer vertexBuffers[] = {state.vertexBuffer};
+//     VkDeviceSize offsets[] = {0};
+//     vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
 
-    vkCmdBindIndexBuffer(commandBuffer, state.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
+//     vkCmdBindIndexBuffer(commandBuffer, state.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
 
-    //bind the descriptors sets to access uniforms
-    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, state.pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
-    //Actual draw call!!
-    vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
-    //vkCmdDraw(commandBuffer, static_cast<uint32_t>(vertices.size()), 1, 0, 0);
+//     //bind the descriptors sets to access uniforms
+//     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, state.pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
+//     //Actual draw call!!
+//     vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+//     //vkCmdDraw(commandBuffer, static_cast<uint32_t>(vertices.size()), 1, 0, 0);
 
-    vkCmdEndRenderPass(commandBuffer);
+//     vkCmdEndRenderPass(commandBuffer);
 
-    if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
-        throw std::runtime_error("failed to record command buffer!");
-    }
-}
+//     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
+//         throw std::runtime_error("failed to record command buffer!");
+//     }
+// }
 
 void createSyncObjects(){
-    imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
-    renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
-    inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
+    imageAvailableSemaphores.resize(state.MAX_FRAMES_IN_FLIGHT);
+    renderFinishedSemaphores.resize(state.MAX_FRAMES_IN_FLIGHT);
+    inFlightFences.resize(state.MAX_FRAMES_IN_FLIGHT);
 
     VkSemaphoreCreateInfo semaphoreInfo{};
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -518,7 +501,7 @@ void createSyncObjects(){
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;//crea una fence gia "segnalata" per superare il wait alla prima iterazione 
 
-    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+    for (size_t i = 0; i < state.MAX_FRAMES_IN_FLIGHT; i++) {
         if (vkCreateSemaphore(state.device, &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
             vkCreateSemaphore(state.device, &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
             vkCreateFence(state.device, &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
@@ -542,13 +525,13 @@ void initVulkan() {
     createGraphicsPipeline(state);
 
     createFramebuffers();
-    createCommandPool();
+    createCommandPool(state);
     createVertexBuffer(vertices, state);
     createIndexBuffer(indices, state);
-    createUniformBuffers();
-    createDescriptorPool();
+    createUniformBuffers(state);
+    createDescriptorPool(state);
     createDescriptorSets();
-    createCommandBuffer();
+    createCommandBuffer(state);
     
     createSyncObjects();
 }
@@ -556,9 +539,9 @@ void initVulkan() {
 
 #pragma region loop
 void drawFrame(){
-    vkWaitForFences(state.device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
+    vkWaitForFences(state.device, 1, &inFlightFences[state.currentFrame], VK_TRUE, UINT64_MAX);
     uint32_t imageIndex;
-    VkResult result = vkAcquireNextImageKHR(state.device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+    VkResult result = vkAcquireNextImageKHR(state.device, swapChain, UINT64_MAX, imageAvailableSemaphores[state.currentFrame], VK_NULL_HANDLE, &imageIndex);
     
     if (result == VK_ERROR_OUT_OF_DATE_KHR || 
         result == VK_SUBOPTIMAL_KHR || 
@@ -570,15 +553,15 @@ void drawFrame(){
         } else if (result != VK_SUCCESS) {
             throw std::runtime_error("failed to acquire swap chain image!");
         }
-        updateUniformBuffer(currentFrame);
+        updateUniformBuffer(state.currentFrame);
         
         //reset fences only if submit work
-        vkResetFences(state.device, 1, &inFlightFences[currentFrame]);
+        vkResetFences(state.device, 1, &inFlightFences[state.currentFrame]);
         
-        vkResetCommandBuffer(commandBuffers[currentFrame],  0);
-        recordCommandBuffer(commandBuffers[currentFrame], imageIndex);
+        vkResetCommandBuffer(state.commandBuffers[state.currentFrame],  0);
+        recordCommandBuffer(state.commandBuffers[state.currentFrame], imageIndex, state);
         
-        VkSemaphore waitSemaphores[] = {imageAvailableSemaphores[currentFrame]};
+        VkSemaphore waitSemaphores[] = {imageAvailableSemaphores[state.currentFrame]};
         VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
         
         VkSubmitInfo submitInfo{};
@@ -587,15 +570,15 @@ void drawFrame(){
         submitInfo.pWaitSemaphores = waitSemaphores;
         submitInfo.pWaitDstStageMask = waitStages;
         submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &commandBuffers[currentFrame];
+        submitInfo.pCommandBuffers = &state.commandBuffers[state.currentFrame];
         
         
-        VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentFrame]};
+        VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[state.currentFrame]};
         submitInfo.signalSemaphoreCount = 1;
         submitInfo.pSignalSemaphores = signalSemaphores;
         
 
-        if (vkQueueSubmit(state.graphicsQueue, 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
+        if (vkQueueSubmit(state.graphicsQueue, 1, &submitInfo, inFlightFences[state.currentFrame]) != VK_SUCCESS) {
             throw std::runtime_error("failed to submit draw command buffer!");
         }
 
@@ -623,7 +606,7 @@ void drawFrame(){
         throw std::runtime_error("failed to present swap chain image!");
     }
 
-    currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+    state.currentFrame = (state.currentFrame + 1) % state.MAX_FRAMES_IN_FLIGHT;
 
 }
 
@@ -650,13 +633,13 @@ void mainLoop() {
 void cleanup() {
     cleanupSwapChain();
 
-    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+    for (size_t i = 0; i < state.MAX_FRAMES_IN_FLIGHT; i++) {
         vkDestroyBuffer(state.device, uniformBuffers[i], nullptr);
         vkFreeMemory(state.device, uniformBuffersMemory[i], nullptr);
     }
     vkDestroyDescriptorSetLayout(state.device, state.descriptorSetLayout, nullptr);
 
-    vkDestroyDescriptorPool(state.device, descriptorPool, nullptr);
+    vkDestroyDescriptorPool(state.device, state.descriptorPool, nullptr);
     vkDestroyDescriptorSetLayout(state.device, state.descriptorSetLayout, nullptr);
 
     vkDestroyBuffer(state.device, state.indexBuffer, nullptr);
@@ -666,7 +649,7 @@ void cleanup() {
     vkFreeMemory(state.device, state.vertexBufferMemory, nullptr);
 
 
-    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+    for (size_t i = 0; i < state.MAX_FRAMES_IN_FLIGHT; i++) {
         vkDestroySemaphore(state.device, renderFinishedSemaphores[i], nullptr);
         vkDestroySemaphore(state.device, imageAvailableSemaphores[i], nullptr);
         vkDestroyFence(state.device, inFlightFences[i], nullptr);

@@ -7,6 +7,9 @@ set(CMAKE_CXX_STANDARD 17) #setta lo standard di cpp
 add_executable(FluidSymulation
     src/main.cpp
     src/initVulkan.cpp
+    src/buffer.cpp
+    src/pipeline.cpp
+    src/device.cpp
 )
 
 # Vulkan (deve essere installato)

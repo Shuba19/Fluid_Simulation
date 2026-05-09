@@ -88,15 +88,20 @@ struct appState{
     VkPipeline graphicsPipeline;
     VkPipelineLayout pipelineLayout;
     VkDescriptorSetLayout descriptorSetLayout;
-    
-    VkRenderPass renderPass;
-    VkExtent2D swapChainExtent;
-    VkFormat swapChainImageFormat;
-
-    std::vector<VkFramebuffer> swapChainFramebuffers;
-
     VkDescriptorPool descriptorPool;
     std::vector<VkDescriptorSet> descriptorSets;
+    VkRenderPass renderPass;
+
+
+    //swapchain
+    std::vector<VkFramebuffer> swapChainFramebuffers;
+    VkSwapchainKHR swapChain;
+    std::vector<VkImage> swapChainImages;
+    VkExtent2D swapChainExtent;
+    VkFormat swapChainImageFormat;
+    std::vector<VkImageView> swapChainImageViews;
+
+
 };
 
 struct QueueFamilyIndices {

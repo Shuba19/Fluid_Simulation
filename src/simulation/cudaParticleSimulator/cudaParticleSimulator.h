@@ -19,7 +19,7 @@ class cudaParticleSimulator
     public:
         cudaParticleSimulator(int numParticles, float deltaTime, vulkanData h_vkData, int deviceId = 0, fluidProperties fluidProps, int num_iterations = 1, gridSize grid_size = {10,10,10});
         ~cudaParticleSimulator();
-        void updateSystem(float delta_time);
+        void updateSystem();
         void calculateGridParticles();
         void calculateGridAdvection();
         void collisionHandling();

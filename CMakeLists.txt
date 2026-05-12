@@ -11,6 +11,7 @@ add_executable(FluidSymulation
     src/pipeline.cpp
     src/device.cpp
     src/swapChain.cpp
+    src/utils.cpp
 )
 
 # Vulkan (deve essere installato)

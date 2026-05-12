@@ -222,3 +222,35 @@ void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex, app
     }
 }
 
+
+void createUniformBuffers(appState & state) {
+    VkDeviceSize bufferSize = sizeof(UniformBufferObject);
+
+    state.uniformBuffers.resize(state.MAX_FRAMES_IN_FLIGHT);
+    state.uniformBuffersMemory.resize(state.MAX_FRAMES_IN_FLIGHT);
+    state.uniformBuffersMapped.resize(state.MAX_FRAMES_IN_FLIGHT);
+
+    for (size_t i = 0; i < state.MAX_FRAMES_IN_FLIGHT; i++) {
+        createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, state.uniformBuffers[i], state.uniformBuffersMemory[i], state);
+
+        vkMapMemory(state.device, state.uniformBuffersMemory[i], 0, bufferSize, 0, &state.uniformBuffersMapped[i]);
+    }
+}
+
+void updateUniformBuffer(uint32_t currentImage, appState & state) {
+    //basic time since start
+    static auto startTime = std::chrono::high_resolution_clock::now();
+
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+
+    UniformBufferObject ubo{};
+    ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    ubo.proj = glm::perspective(glm::radians(45.0f), state.swapChainExtent.width / (float) state.swapChainExtent.height, 0.1f, 10.0f);
+    ubo.proj[1][1] *= -1;//invert the y cordinate of the clip space since glm was designed for opengl
+    memcpy(state.uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
+
+
+
+}

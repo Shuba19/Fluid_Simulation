@@ -31,3 +31,5 @@ void createVertexBuffer(std::vector<Vertex> vertices, appState & state);
 void createCommandPool(appState & state);
 void createCommandBuffer(appState & state);
 void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex, appState & state) ;
+void createUniformBuffers(appState & state);
+void updateUniformBuffer(uint32_t currentImage, appState & state);

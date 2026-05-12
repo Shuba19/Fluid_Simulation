@@ -1,9 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-const std::vector<const char*> deviceExtensions = {
-    VK_KHR_SWAPCHAIN_EXTENSION_NAME
-};
+
 
 struct Vertex {
     glm::vec2 pos;
@@ -54,6 +52,14 @@ const std::vector<uint16_t> indices = {
     2, 3, 0
 };
 
+struct UniformBufferObject {
+    alignas(16) glm::mat4 model;
+    alignas(16) glm::mat4 view;
+    alignas(16) glm::mat4 proj;
+};
+
+
+
 struct appState{
     bool framebufferResized = false;
     float maxDuration = 5.0f;
@@ -101,6 +107,11 @@ struct appState{
     VkFormat swapChainImageFormat;
     std::vector<VkImageView> swapChainImageViews;
 
+    //uniform buffers
+    std::vector<VkBuffer> uniformBuffers;
+    std::vector<VkDeviceMemory> uniformBuffersMemory;
+    std::vector<void*> uniformBuffersMapped;
+
 
 };
 
@@ -123,4 +134,10 @@ struct SwapChainSupportDetails {
     std::vector<VkPresentModeKHR> presentModes;
 };
 
+const std::vector<const char*> deviceExtensions = {
+    VK_KHR_SWAPCHAIN_EXTENSION_NAME
+};
+
+
+std::vector<char> readFile(const std::string& filename);
 #endif

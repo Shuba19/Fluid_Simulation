@@ -31,6 +31,7 @@
 #include "swapChain.h"
 
 appState state;
+bool OBJ_INSTANCING = false;
 
 std::vector<VkSemaphore> imageAvailableSemaphores;
 std::vector<VkSemaphore> renderFinishedSemaphores;
@@ -67,6 +68,7 @@ void initVulkan() {
 
     createSwapChain(state);
     createImageViews(state);
+
     createRenderPass(state);
     createDescriptorSetLayout(state);
     createGraphicsPipeline(state);
@@ -75,9 +77,11 @@ void initVulkan() {
     createCommandPool(state);
     createVertexBuffer(vertices, state);
     createIndexBuffer(indices, state);
+
     createUniformBuffers(state);
     createDescriptorPool(state);
     createDescriptorSets(state);
+
     createCommandBuffer(state);
     
     createSyncObjects();
@@ -85,10 +89,14 @@ void initVulkan() {
 
 
 void drawFrame(){
+    //waits until the gpu has finished
     vkWaitForFences(state.device, 1, &inFlightFences[state.currentFrame], VK_TRUE, UINT64_MAX);
     uint32_t imageIndex;
+    //gets the image from swapchain
     VkResult result = vkAcquireNextImageKHR(state.device, state.swapChain, UINT64_MAX, imageAvailableSemaphores[state.currentFrame], VK_NULL_HANDLE, &imageIndex);
     
+    //checks if the swapchain needs to be recreate
+    //TODO check if can be optimized by producig result as soon as possible
     if (result == VK_ERROR_OUT_OF_DATE_KHR || 
         result == VK_SUBOPTIMAL_KHR || 
         state.framebufferResized)
@@ -96,37 +104,37 @@ void drawFrame(){
             state.framebufferResized = false;
             recreateSwapChain(state);
             return;
-        } else if (result != VK_SUCCESS) {
-            throw std::runtime_error("failed to acquire swap chain image!");
-        }
-        updateUniformBuffer(state.currentFrame, state);
-        
-        //reset fences only if submit work
-        vkResetFences(state.device, 1, &inFlightFences[state.currentFrame]);
-        
-        vkResetCommandBuffer(state.commandBuffers[state.currentFrame],  0);
-        recordCommandBuffer(state.commandBuffers[state.currentFrame], imageIndex, state);
-        
-        VkSemaphore waitSemaphores[] = {imageAvailableSemaphores[state.currentFrame]};
-        VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-        
-        VkSubmitInfo submitInfo{};
-        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        submitInfo.waitSemaphoreCount = 1;
-        submitInfo.pWaitSemaphores = waitSemaphores;
-        submitInfo.pWaitDstStageMask = waitStages;
-        submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &state.commandBuffers[state.currentFrame];
-        
-        
-        VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[state.currentFrame]};
-        submitInfo.signalSemaphoreCount = 1;
-        submitInfo.pSignalSemaphores = signalSemaphores;
-        
+    } else if (result != VK_SUCCESS) {
+        throw std::runtime_error("failed to acquire swap chain image!");
+    }
+    updateUniformBuffer(state.currentFrame, state);
+    
+    //reset fences only if submit work
+    vkResetFences(state.device, 1, &inFlightFences[state.currentFrame]);
+    
+    vkResetCommandBuffer(state.commandBuffers[state.currentFrame],  0);
+    recordCommandBuffer(state.commandBuffers[state.currentFrame], imageIndex, state);
+    
+    VkSemaphore waitSemaphores[] = {imageAvailableSemaphores[state.currentFrame]};
+    VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+    
+    VkSubmitInfo submitInfo{};
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.waitSemaphoreCount = 1;
+    submitInfo.pWaitSemaphores = waitSemaphores;
+    submitInfo.pWaitDstStageMask = waitStages;
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers = &state.commandBuffers[state.currentFrame];
+    
+    
+    VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[state.currentFrame]};
+    submitInfo.signalSemaphoreCount = 1;
+    submitInfo.pSignalSemaphores = signalSemaphores;
+    
 
-        if (vkQueueSubmit(state.graphicsQueue, 1, &submitInfo, inFlightFences[state.currentFrame]) != VK_SUCCESS) {
-            throw std::runtime_error("failed to submit draw command buffer!");
-        }
+    if (vkQueueSubmit(state.graphicsQueue, 1, &submitInfo, inFlightFences[state.currentFrame]) != VK_SUCCESS) {
+        throw std::runtime_error("failed to submit draw command buffer!");
+    }
 
 
     VkSwapchainKHR swapChains[] = {state.swapChain};
@@ -143,7 +151,7 @@ void drawFrame(){
 
     presentInfo.pResults = nullptr; // Optional
 
-
+    //present the image to window via sys call
     result = vkQueuePresentKHR(state.presentQueue, &presentInfo);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {

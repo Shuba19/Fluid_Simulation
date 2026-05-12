@@ -65,10 +65,12 @@ VkShaderModule createShaderModule(const std::vector<char>& code, appState& state
 
 void createGraphicsPipeline(appState& state){
 
-    //gli shaders vengono passati come byte code non come compilati 
-    //vengono compilati alla creazione della graphic pipeline 
-    //quindi appena termina la creazione della pipeline possono essere distrutti 
-
+    //shaders
+    /*
+    gli shaders vengono passati come byte code non come compilati 
+    vengono compilati alla creazione della graphic pipeline 
+    quindi appena termina la creazione della pipeline possono essere distrutti 
+    */
     auto vertShaderCode = readFile("../../src/shaders/vert.spv");
     auto fragShaderCode = readFile("../../src/shaders/frag.spv");
 
@@ -191,7 +193,7 @@ void createGraphicsPipeline(appState& state){
     colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO; // Optional
     colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD; // Optional
 
-    //logica di come funziona il colorBlending 
+    /* logica di come funziona il colorBlending 
     //solo pseudocodice 
     // if (blendEnable) {
     //     finalColor.rgb = (srcColorBlendFactor * newColor.rgb) <colorBlendOp> (dstColorBlendFactor * oldColor.rgb);
@@ -199,7 +201,7 @@ void createGraphicsPipeline(appState& state){
     // } else {
     //     finalColor = newColor;
     // }
-    // finalColor = finalColor & colorWriteMask;
+    finalColor = finalColor & colorWriteMask; */
 
     VkPipelineColorBlendStateCreateInfo colorBlending{};
     colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
@@ -302,7 +304,6 @@ void createRenderPass(appState& state){
         throw std::runtime_error("failed to create render pass!");
     }
 }
-
 
 void createDescriptorSetLayout(appState& state) {
     VkDescriptorSetLayoutBinding uboLayoutBinding{};

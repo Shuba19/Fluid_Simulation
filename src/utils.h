@@ -2,7 +2,7 @@
 #define UTILS_H
 
 
-
+#pragma region structs
 struct Vertex {
     glm::vec2 pos;
     glm::vec3 color;
@@ -40,6 +40,10 @@ struct Vertex {
     }
 };
 
+struct ParticleInstance {
+    glm::vec3 position;
+};
+
 const std::vector<Vertex> vertices = {
     {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}}, // 0
     {{0.5f, -0.5f},  {0.0f, 1.0f, 0.0f}}, // 1
@@ -52,12 +56,28 @@ const std::vector<uint16_t> indices = {
     2, 3, 0
 };
 
+const std::vector<glm::vec3> particlePositions = {
+    {0.0f, 0.0f, 0.0f},
+    {0.1f, 0.0f, 0.0f},
+    {0.2f, 0.0f, 0.0f},
+    {0.3f, 0.0f, 0.0f},
+
+    {0.0f, 0.1f, 0.0f},
+    {0.1f, 0.1f, 0.0f},
+    {0.2f, 0.1f, 0.0f},
+    {0.3f, 0.1f, 0.0f},
+
+    {0.0f, 0.2f, 0.0f},
+    {0.1f, 0.2f, 0.0f},
+    {0.2f, 0.2f, 0.0f},
+    {0.3f, 0.2f, 0.0f},
+};
+
 struct UniformBufferObject {
     alignas(16) glm::mat4 model;
     alignas(16) glm::mat4 view;
     alignas(16) glm::mat4 proj;
 };
-
 
 
 struct appState{
@@ -87,6 +107,11 @@ struct appState{
     VkBuffer vertexBuffer;
     VkDeviceMemory vertexBufferMemory;
     std::vector<VkCommandBuffer> commandBuffers;
+
+    //geometry instaincing 
+    VkBuffer instanceBuffer;
+    VkDeviceMemory instanceBufferMemory;
+    uint32_t particleCount;
 
     VkCommandPool commandPool; //insieme di command buffer diversi
 
@@ -137,7 +162,13 @@ struct SwapChainSupportDetails {
 const std::vector<const char*> deviceExtensions = {
     VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
+#pragma endregion structs
 
+
+#pragma region functions
 
 std::vector<char> readFile(const std::string& filename);
+
+#pragma endregion functions
+
 #endif

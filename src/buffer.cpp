@@ -133,6 +133,48 @@ void createVertexBuffer(std::vector<Vertex> vertices, appState & state ) {
     vkFreeMemory(state.device, stagingBufferMemory, nullptr);
 }
 
+void createInstanceBuffer(std::vector<glm::vec3> positions, appState& state) {
+    VkDeviceSize bufferSize = sizeof(positions[0]) * positions.size();
+
+    VkBuffer stagingBuffer;
+    VkDeviceMemory stagingBufferMemory;
+
+    // staging buffer (CPU → GPU transfer source)
+    createBuffer(
+        bufferSize,
+        VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+        stagingBuffer,
+        stagingBufferMemory,
+        state
+    );
+
+    // copy data to staging
+    void* data;
+    vkMapMemory(state.device, stagingBufferMemory, 0, bufferSize, 0, &data);
+    memcpy(data, positions.data(), (size_t)bufferSize);
+    vkUnmapMemory(state.device, stagingBufferMemory);
+
+    // GPU buffer (used as vertex buffer for instancing)
+    createBuffer(
+        bufferSize,
+        VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        state.instanceBuffer,
+        state.instanceBufferMemory,
+        state
+    );
+
+    // copy staging → GPU buffer
+    copyBuffer(stagingBuffer, state.instanceBuffer, bufferSize, state);
+
+    // cleanup staging
+    vkDestroyBuffer(state.device, stagingBuffer, nullptr);
+    vkFreeMemory(state.device, stagingBufferMemory, nullptr);
+
+    // store particle count
+    state.particleCount = static_cast<uint32_t>(positions.size());
+}
 
 void createCommandPool(appState & state){
     QueueFamilyIndices queueFamilyIndices = findQueueFamilies(state);

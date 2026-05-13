@@ -226,7 +226,9 @@ void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex, app
     renderPassInfo.pClearValues = &clearColor; //specifica che colore usare per il clear
 
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);//no error handling neaded
-    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, state.graphicsPipeline);//bind della graphic pipeline
+
+    //bind della graphic pipeline
+    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, state.graphicsPipeline);
 
     //viewport & scissors details since declared as dynamic 
     VkViewport viewport{};
@@ -253,9 +255,9 @@ void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex, app
 
     //bind the descriptors sets to access uniforms
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, state.pipelineLayout, 0, 1, &state.descriptorSets[state.currentFrame], 0, nullptr);
+    
     //Actual draw call!!
     vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
-    //vkCmdDraw(commandBuffer, static_cast<uint32_t>(vertices.size()), 1, 0, 0);
 
     vkCmdEndRenderPass(commandBuffer);
 

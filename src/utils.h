@@ -117,6 +117,8 @@ struct appState{
 
     //pipeline
     VkPipeline graphicsPipeline;
+    VkPipeline fluidPipeline;
+    VkPipeline particlePipeline;
     VkPipelineLayout pipelineLayout;
     VkDescriptorSetLayout descriptorSetLayout;
     VkDescriptorPool descriptorPool;

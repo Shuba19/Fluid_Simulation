@@ -27,25 +27,6 @@
 #include "utils.h"
 
 
-//funzione utils che ritorna il contenuto di un file 
-//usata ad esempio per leggere gli shaders compilati
-// static std::vector<char> readFile(const std::string& filename) {
-//     std::ifstream file(filename, std::ios::ate | std::ios::binary);
-
-//     if (!file.is_open()) {
-//         throw std::runtime_error("failed to open file!");
-//     }
-
-//     size_t fileSize = (size_t) file.tellg();
-//     std::vector<char> buffer(fileSize);
-
-//     file.seekg(0);
-//     file.read(buffer.data(), fileSize);
-
-//     file.close();
-
-//     return buffer;
-// }
 
 VkShaderModule createShaderModule(const std::vector<char>& code, appState& state) {
     
@@ -260,6 +241,8 @@ void createGraphicsPipeline(appState& state){
     vkDestroyShaderModule(state.device, fragShaderModule, nullptr);
     vkDestroyShaderModule(state.device, vertShaderModule, nullptr);
 }
+
+
 
 void createRenderPass(appState& state){
     VkAttachmentDescription colorAttachment{};

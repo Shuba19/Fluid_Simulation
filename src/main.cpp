@@ -31,7 +31,6 @@
 #include "swapChain.h"
 
 appState state;
-bool OBJ_INSTANCING = false;
 
 std::vector<VkSemaphore> imageAvailableSemaphores;
 std::vector<VkSemaphore> renderFinishedSemaphores;
@@ -71,11 +70,14 @@ void initVulkan() {
 
     createRenderPass(state);
     createDescriptorSetLayout(state);
-    createGraphicsPipeline(state);
+    
+    //createGraphicsPipeline(state);
+    createInstancingPipeline(state);
 
     createFramebuffers(state);
     createCommandPool(state);
     createVertexBuffer(vertices, state);
+    createInstanceBuffer(particlePositions ,state);
     createIndexBuffer(indices, state);
 
     createUniformBuffers(state);

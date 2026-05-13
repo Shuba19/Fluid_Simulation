@@ -246,10 +246,18 @@ void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex, app
     vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
     
-    //bind del vertex buffer ai bindings
-    VkBuffer vertexBuffers[] = {state.vertexBuffer};
-    VkDeviceSize offsets[] = {0};
-    vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+    if(OBJ_INSTANCING){
+        VkBuffer vertexBuffers[] = {  state.vertexBuffer, state.instanceBuffer };
+        VkDeviceSize offsets[] = {0, 0};
+        vkCmdBindVertexBuffers(commandBuffer, 0, 2, vertexBuffers, offsets);
+    }else{
+        //bind del vertex buffer ai bindings
+        VkBuffer vertexBuffers[] = {state.vertexBuffer};
+        VkDeviceSize offsets[] = {0};
+        vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+    }
+
+    
 
     vkCmdBindIndexBuffer(commandBuffer, state.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
 
@@ -257,7 +265,12 @@ void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex, app
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, state.pipelineLayout, 0, 1, &state.descriptorSets[state.currentFrame], 0, nullptr);
     
     //Actual draw call!!
-    vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+    if(OBJ_INSTANCING)
+    {
+        vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), particlePositions.size(), 0, 0, 0);
+    }else{
+        vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+    }
 
     vkCmdEndRenderPass(commandBuffer);
 

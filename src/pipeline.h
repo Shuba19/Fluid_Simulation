@@ -6,6 +6,7 @@
 std::vector<char> readFile(const std::string& filename);
 VkShaderModule createShaderModule(const std::vector<char>& code, appState& state);
 void createGraphicsPipeline(appState& state);
+void createInstancingPipeline(appState& state);
 void createRenderPass(appState& state);
 void createDescriptorSetLayout(appState& state);
 void createDescriptorPool(appState & state);

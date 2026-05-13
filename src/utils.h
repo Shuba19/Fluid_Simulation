@@ -1,6 +1,12 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#pragma region Debug
+
+// static bool OBJ_INSTANCING = false;
+static bool OBJ_INSTANCING = true;
+
+#pragma endregion Debug
 
 #pragma region structs
 struct Vertex {
@@ -10,12 +16,22 @@ struct Vertex {
     //la bind configura la gpu in modo da ottimizzare il passaggio dei dati
     //alla gpu, è come se configurasse uno stato della gpu dicendo qualcosa tipo
     //prendi i dati da qua
-    static VkVertexInputBindingDescription getBindingDescription() {
+    static VkVertexInputBindingDescription getVertexBindingDescription() {
         VkVertexInputBindingDescription bindingDescription{};
 
         bindingDescription.binding = 0; //start Index in the binding array
         bindingDescription.stride = sizeof(Vertex); 
         bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX; //change if we want to pass to instance rendering
+
+        return bindingDescription;
+    }
+
+    static VkVertexInputBindingDescription getInstancingBindingDescription() {
+        VkVertexInputBindingDescription bindingDescription{};
+
+        bindingDescription.binding = 1; //start Index in the binding array
+        bindingDescription.stride = sizeof(glm::vec3);
+        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE; //instance rendering
 
         return bindingDescription;
     }
@@ -35,6 +51,31 @@ struct Vertex {
         attributeDescriptions[1].location = 1;
         attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
         attributeDescriptions[1].offset = offsetof(Vertex, color);
+
+        return attributeDescriptions;
+    }
+
+    //specifica come gestire ottenrere le informazioni dal blocco di vertici della bind
+    static std::array<VkVertexInputAttributeDescription, 3> getInstanceAttributeDescriptions() {
+        std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
+
+        //data pos
+        attributeDescriptions[0].binding = 0; //which binding to take
+        attributeDescriptions[0].location = 0; //reference alla direttiva del vertex shader 
+        attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT; //deve matchare il numero di componenti in di shader 
+        attributeDescriptions[0].offset = offsetof(Vertex, pos);
+
+        //data color
+        attributeDescriptions[1].binding = 0;
+        attributeDescriptions[1].location = 1;
+        attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+        attributeDescriptions[1].offset = offsetof(Vertex, color);
+
+        // instance position
+        attributeDescriptions[2].binding = 1;
+        attributeDescriptions[2].location = 2;
+        attributeDescriptions[2].format = VK_FORMAT_R32G32B32_SFLOAT;
+        attributeDescriptions[2].offset = 0;
 
         return attributeDescriptions;
     }
@@ -58,19 +99,19 @@ const std::vector<uint16_t> indices = {
 
 const std::vector<glm::vec3> particlePositions = {
     {0.0f, 0.0f, 0.0f},
-    {0.1f, 0.0f, 0.0f},
-    {0.2f, 0.0f, 0.0f},
-    {0.3f, 0.0f, 0.0f},
+    {1.0f, 0.0f, 1.0f},
+    {0.0f, 1.0f, 2.0f},
+    {1.0f, 1.0f, 3.0f},
 
-    {0.0f, 0.1f, 0.0f},
-    {0.1f, 0.1f, 0.0f},
-    {0.2f, 0.1f, 0.0f},
-    {0.3f, 0.1f, 0.0f},
+    // {0.0f, 0.1f, 0.0f},
+    // {0.1f, 0.1f, 0.0f},
+    // {0.2f, 0.1f, 0.0f},
+    // {0.3f, 0.1f, 0.0f},
 
-    {0.0f, 0.2f, 0.0f},
-    {0.1f, 0.2f, 0.0f},
-    {0.2f, 0.2f, 0.0f},
-    {0.3f, 0.2f, 0.0f},
+    // {0.0f, 0.2f, 0.0f},
+    // {0.1f, 0.2f, 0.0f},
+    // {0.2f, 0.2f, 0.0f},
+    // {0.3f, 0.2f, 0.0f},
 };
 
 struct UniformBufferObject {

@@ -133,49 +133,102 @@ void createVertexBuffer(std::vector<Vertex> vertices, appState & state ) {
     vkFreeMemory(state.device, stagingBufferMemory, nullptr);
 }
 
+// void createInstanceBuffer(std::vector<glm::vec3> positions, appState& state) {
+//     VkDeviceSize bufferSize = sizeof(positions[0]) * positions.size();
+
+//     VkBuffer stagingBuffer;
+//     VkDeviceMemory stagingBufferMemory;
+
+//     // staging buffer (CPU → GPU transfer source)
+//     createBuffer(
+//         bufferSize,
+//         VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+//         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+//         stagingBuffer,
+//         stagingBufferMemory,
+//         state
+//     );
+
+//     // copy data to staging
+//     void* data;
+//     vkMapMemory(state.device, stagingBufferMemory, 0, bufferSize, 0, &data);
+//     memcpy(data, positions.data(), (size_t)bufferSize);
+//     vkUnmapMemory(state.device, stagingBufferMemory);
+
+//     // GPU buffer (used as vertex buffer for instancing)
+//     createBuffer(
+//         bufferSize,
+//         VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+//         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+//         state.instanceBuffer,
+//         state.instanceBufferMemory,
+//         state
+//     );
+
+//     // copy staging → GPU buffer
+//     copyBuffer(stagingBuffer, state.instanceBuffer, bufferSize, state);
+
+//     // cleanup staging
+//     vkDestroyBuffer(state.device, stagingBuffer, nullptr);
+//     vkFreeMemory(state.device, stagingBufferMemory, nullptr);
+
+//     // store particle count
+//     state.particleCount = static_cast<uint32_t>(positions.size());
+// }
+
 void createInstanceBuffer(std::vector<glm::vec3> positions, appState& state) {
     VkDeviceSize bufferSize = sizeof(positions[0]) * positions.size();
 
-    VkBuffer stagingBuffer;
-    VkDeviceMemory stagingBufferMemory;
+    state.instanceBuffers.resize(state.MAX_FRAMES_IN_FLIGHT);
+    state.instanceBuffersMemory.resize(state.MAX_FRAMES_IN_FLIGHT);
+    state.instanceBuffersMapped.resize(state.MAX_FRAMES_IN_FLIGHT);
 
-    // staging buffer (CPU → GPU transfer source)
-    createBuffer(
-        bufferSize,
-        VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-        stagingBuffer,
-        stagingBufferMemory,
-        state
-    );
-
-    // copy data to staging
-    void* data;
-    vkMapMemory(state.device, stagingBufferMemory, 0, bufferSize, 0, &data);
-    memcpy(data, positions.data(), (size_t)bufferSize);
-    vkUnmapMemory(state.device, stagingBufferMemory);
-
-    // GPU buffer (used as vertex buffer for instancing)
-    createBuffer(
-        bufferSize,
-        VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        state.instanceBuffer,
-        state.instanceBufferMemory,
-        state
-    );
-
-    // copy staging → GPU buffer
-    copyBuffer(stagingBuffer, state.instanceBuffer, bufferSize, state);
-
-    // cleanup staging
-    vkDestroyBuffer(state.device, stagingBuffer, nullptr);
-    vkFreeMemory(state.device, stagingBufferMemory, nullptr);
-
-    // store particle count
+    for (size_t i = 0; i < state.MAX_FRAMES_IN_FLIGHT; i++) {
+        //Discuti VK_BUFFER_USAGE_TRANSFER_DST_BIT
+        createBuffer( bufferSize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, state.instanceBuffers[i], state.instanceBuffersMemory[i], state );
+        vkMapMemory(state.device, state.instanceBuffersMemory[i], 0, bufferSize, 0, &state.instanceBuffersMapped[i]);
+        memcpy(state.instanceBuffersMapped[i], positions.data(), bufferSize);
+    }
     state.particleCount = static_cast<uint32_t>(positions.size());
 }
 
+
+
+
+
+// void updateInstanceBuffer(uint32_t currentImage, appState& state) {
+//     static auto startTime = std::chrono::high_resolution_clock::now();
+//     auto currentTime = std::chrono::high_resolution_clock::now();
+//     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+
+//     std::vector<glm::vec3> positions(state.particleCount);
+//     for (size_t i = 0; i < state.particleCount; i++) {
+//         glm::vec3 p = particleBasePositions[i];  // ← leggi sempre dalla base
+//         p.z += 0.5f * cos(time + i);
+//         positions[i] = p;
+//     }
+//     memcpy(state.instanceBuffersMapped[currentImage], positions.data(),
+//            sizeof(positions[0]) * positions.size());
+// }
+
+void updateInstanceBuffer(uint32_t currentImage, appState& state) {
+    static auto startTime = std::chrono::high_resolution_clock::now();
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+
+    // oscilla tra 0 e 1, tutte le particelle usano lo stesso valore
+    float t = (sin(time) + 1.0f) / 2.0f;
+
+    std::vector<glm::vec3> positions(state.particleCount);
+    for (size_t i = 0; i < state.particleCount; i++) {
+        glm::vec3 p = particleBasePositions[i];
+        p.z = particleBasePositions[i].z * t;  // scala per z_base, va da 0 a z
+        positions[i] = p;
+    }
+
+    memcpy(state.instanceBuffersMapped[currentImage], positions.data(),
+           sizeof(positions[0]) * positions.size());
+}
 void createCommandPool(appState & state){
     QueueFamilyIndices queueFamilyIndices = findQueueFamilies(state);
 
@@ -247,7 +300,7 @@ void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex, app
 
     
     if(OBJ_INSTANCING){
-        VkBuffer vertexBuffers[] = {  state.vertexBuffer, state.instanceBuffer };
+        VkBuffer vertexBuffers[] = { state.vertexBuffer, state.instanceBuffers[state.currentFrame] };
         VkDeviceSize offsets[] = {0, 0};
         vkCmdBindVertexBuffers(commandBuffer, 0, 2, vertexBuffers, offsets);
     }else{
@@ -267,7 +320,7 @@ void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex, app
     //Actual draw call!!
     if(OBJ_INSTANCING)
     {
-        vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), particlePositions.size(), 0, 0, 0);
+        vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), particleInitialPositions.size(), 0, 0, 0);
     }else{
         vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
     }
@@ -302,12 +355,10 @@ void updateUniformBuffer(uint32_t currentImage, appState & state) {
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
     UniformBufferObject ubo{};
-    ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    // ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    ubo.model = glm::mat4(1.0f);
     ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     ubo.proj = glm::perspective(glm::radians(45.0f), state.swapChainExtent.width / (float) state.swapChainExtent.height, 0.1f, 10.0f);
     ubo.proj[1][1] *= -1;//invert the y cordinate of the clip space since glm was designed for opengl
     memcpy(state.uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
-
-
-
 }

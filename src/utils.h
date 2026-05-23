@@ -4,7 +4,7 @@
 #pragma region Debug
 
 // static bool OBJ_INSTANCING = false;
-static bool OBJ_INSTANCING = true;
+extern bool OBJ_INSTANCING;
 
 #pragma endregion Debug
 
@@ -85,34 +85,40 @@ struct ParticleInstance {
     glm::vec3 position;
 };
 
-const std::vector<Vertex> vertices = {
-    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}}, // 0
-    {{0.5f, -0.5f},  {0.0f, 1.0f, 0.0f}}, // 1
-    {{0.5f, 0.5f},   {0.0f, 0.0f, 1.0f}}, // 2
-    {{-0.5f, 0.5f},  {1.0f, 1.0f, 1.0f}}  // 3
-};
+// extern const std::vector<Vertex> vertices = {
+//     {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}}, // 0
+//     {{0.5f, -0.5f},  {0.0f, 1.0f, 0.0f}}, // 1
+//     {{0.5f, 0.5f},   {0.0f, 0.0f, 1.0f}}, // 2
+//     {{-0.5f, 0.5f},  {1.0f, 1.0f, 1.0f}}  // 3
+// };
 
-const std::vector<uint16_t> indices = {
-    0, 1, 2,
-    2, 3, 0
-};
+// extern const std::vector<uint16_t> indices = {
+//     0, 1, 2,
+//     2, 3, 0
+// };
 
-const std::vector<glm::vec3> particlePositions = {
-    {0.0f, 0.0f, 0.0f},
-    {1.0f, 0.0f, 1.0f},
-    {0.0f, 1.0f, 2.0f},
-    {1.0f, 1.0f, 3.0f},
+// extern std::vector<glm::vec3> particleInitialPositions = {
+//     {0.0f, 0.0f, 0.0f},
+//     {1.0f, 0.0f, 1.0f},
+//     {0.0f, 1.0f, 2.0f},
+//     {1.0f, 1.0f, 3.0f},
 
-    // {0.0f, 0.1f, 0.0f},
-    // {0.1f, 0.1f, 0.0f},
-    // {0.2f, 0.1f, 0.0f},
-    // {0.3f, 0.1f, 0.0f},
+//     // {0.0f, 0.1f, 0.0f},
+//     // {0.1f, 0.1f, 0.0f},
+//     // {0.2f, 0.1f, 0.0f},
+//     // {0.3f, 0.1f, 0.0f},
 
-    // {0.0f, 0.2f, 0.0f},
-    // {0.1f, 0.2f, 0.0f},
-    // {0.2f, 0.2f, 0.0f},
-    // {0.3f, 0.2f, 0.0f},
-};
+//     // {0.0f, 0.2f, 0.0f},
+//     // {0.1f, 0.2f, 0.0f},
+//     // {0.2f, 0.2f, 0.0f},
+//     // {0.3f, 0.2f, 0.0f},
+// };
+
+extern const std::vector<Vertex> vertices;
+extern const std::vector<uint16_t> indices;
+extern std::vector<glm::vec3> particleInitialPositions;
+extern std::vector<glm::vec3> particleBasePositions;
+
 
 struct UniformBufferObject {
     alignas(16) glm::mat4 model;
@@ -123,12 +129,13 @@ struct UniformBufferObject {
 
 struct appState{
     bool framebufferResized = false;
-    float maxDuration = 5.0f;
+    float maxDuration = 15.0f;
     
     const int WIDTH = 800;
     const int HEIGHT = 600;
 
-    const int MAX_FRAMES_IN_FLIGHT = 2;
+    const int MAX_FRAMES_IN_FLIGHT = 1;
+    // const int MAX_FRAMES_IN_FLIGHT = 2;
     uint32_t currentFrame = 0;
 
     //vulkan basics
@@ -150,8 +157,10 @@ struct appState{
     std::vector<VkCommandBuffer> commandBuffers;
 
     //geometry instaincing 
-    VkBuffer instanceBuffer;
-    VkDeviceMemory instanceBufferMemory;
+    std::vector<VkBuffer> instanceBuffers;
+    std::vector<VkDeviceMemory> instanceBuffersMemory;
+    std::vector<void*> instanceBuffersMapped;
+
     uint32_t particleCount;
 
     VkCommandPool commandPool; //insieme di command buffer diversi

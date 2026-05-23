@@ -77,7 +77,7 @@ void initVulkan() {
     createFramebuffers(state);
     createCommandPool(state);
     createVertexBuffer(vertices, state);
-    createInstanceBuffer(particlePositions ,state);
+    createInstanceBuffer(particleInitialPositions ,state);
     createIndexBuffer(indices, state);
 
     createUniformBuffers(state);
@@ -110,6 +110,7 @@ void drawFrame(){
         throw std::runtime_error("failed to acquire swap chain image!");
     }
     updateUniformBuffer(state.currentFrame, state);
+    updateInstanceBuffer(state.currentFrame, state);
     
     //reset fences only if submit work
     vkResetFences(state.device, 1, &inFlightFences[state.currentFrame]);
@@ -207,7 +208,13 @@ void cleanup() {
         vkDestroySemaphore(state.device, renderFinishedSemaphores[i], nullptr);
         vkDestroySemaphore(state.device, imageAvailableSemaphores[i], nullptr);
         vkDestroyFence(state.device, inFlightFences[i], nullptr);
+        
+        //instance buffer cleanup
+        vkDestroyBuffer(state.device, state.instanceBuffers[i], nullptr);
+        vkFreeMemory(state.device, state.instanceBuffersMemory[i], nullptr);
     }
+
+
 
     // Command resources
     vkDestroyCommandPool(state.device, state.commandPool, nullptr);

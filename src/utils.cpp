@@ -23,6 +23,38 @@
 #include <array>
 #include "utils.h"
 
+#include "utils.h"
+
+bool OBJ_INSTANCING = true;
+
+std::vector<glm::vec3> particleInitialPositions = {
+    {0.0f, 0.0f, 0.0f},
+    {1.0f, 0.0f, 1.0f},
+    {0.0f, 1.0f, 2.0f},
+    {1.0f, 1.0f, 3.0f},
+};
+
+std::vector<glm::vec3> particleBasePositions = {
+    {0.0f, 0.0f, 0.0f},
+    {1.0f, 0.0f, 1.0f},
+    {0.0f, 1.0f, 2.0f},
+    {1.0f, 1.0f, 3.0f},
+};
+
+const std::vector<Vertex> vertices = {
+    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+    {{ 0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+    {{ 0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}},
+    {{-0.5f,  0.5f}, {1.0f, 1.0f, 1.0f}},
+};
+
+const std::vector<uint16_t> indices = {
+    0, 1, 2,
+    2, 3, 0
+};
+
+// std::vector<glm::vec3> particleBasePositions = particleInitialPositions;
+
 std::vector<char> readFile(const std::string& filename) {
     std::ifstream file(filename, std::ios::ate | std::ios::binary);
 
@@ -40,3 +72,4 @@ std::vector<char> readFile(const std::string& filename) {
 
     return buffer;
 }
+

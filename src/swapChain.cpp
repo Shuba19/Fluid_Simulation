@@ -26,6 +26,8 @@
 #include "initVulkan.h"
 #include "device.h"
 #include "utils.h"
+#include "offscreen.h"
+
 
 
 #pragma region swapChain
@@ -141,6 +143,10 @@ void cleanupSwapChain(appState& state) {
         vkDestroyFramebuffer(state.device, framebuffer, nullptr);
     }
 
+    // In off-screen mode the framebuffers reference our off-screen image views,
+    // not the swapchain views, so skip the swapchain-specific teardown.
+    if (USE_OFF_SCREEN_RENDERING) return;
+
     for (auto imageView : state.swapChainImageViews) {
         vkDestroyImageView(state.device, imageView, nullptr);
     }
@@ -181,11 +187,20 @@ void createImageViews(appState& state)
 
 void createFramebuffers(appState& state) 
 {
-    state.swapChainFramebuffers.resize(state.swapChainImageViews.size());
+    //state.swapChainFramebuffers.resize(state.swapChainImageViews.size());
+        // Off-screen: one framebuffer per frame-in-flight backed by our off-screen images.
+    // Windowed:   one framebuffer per swapchain image as usual.
+    size_t count = USE_OFF_SCREEN_RENDERING
+                       ? (size_t)state.MAX_FRAMES_IN_FLIGHT
+                       : state.swapChainImageViews.size();
+    state.swapChainFramebuffers.resize(count);
 
-    for (size_t i = 0; i < state.swapChainImageViews.size(); i++) {
+    //for (size_t i = 0; i < state.swapChainImageViews.size(); i++) 
+    for (size_t i = 0; i < count; i++)
+    {
         VkImageView attachments[] = {
-            state.swapChainImageViews[i]
+            USE_OFF_SCREEN_RENDERING ? state.offscreenImageViews[i]
+                                     : state.swapChainImageViews[i]
         };
 
         VkFramebufferCreateInfo framebufferInfo{};

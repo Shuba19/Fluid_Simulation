@@ -20,6 +20,8 @@
 
 #include <array>
 #include <chrono>
+#include <cstdlib>   // system()
+#include <sys/stat.h> // mkdir
 
 
 //project modules
@@ -29,6 +31,8 @@
 #include "pipeline.h"
 #include "device.h"
 #include "swapChain.h"
+#include "offscreen.h"
+
 
 appState state;
 
@@ -74,10 +78,19 @@ void initVulkan() {
     //createGraphicsPipeline(state);
     createInstancingPipeline(state);
 
+    // Off-screen resources must exist before createFramebuffers so the
+    // framebuffers can reference the off-screen image views.
+    if (USE_OFF_SCREEN_RENDERING) {
+        createOffscreenResources(state);
+    }
+
     createFramebuffers(state);
     createCommandPool(state);
     createVertexBuffer(vertices, state);
     createInstanceBuffer(particleInitialPositions ,state);
+    //init particle(state.InstanceBuffer)
+
+
     createIndexBuffer(indices, state);
 
     createUniformBuffers(state);
@@ -91,6 +104,46 @@ void initVulkan() {
 
 
 void drawFrame(){
+    if (USE_OFF_SCREEN_RENDERING) {
+        // -----------------------------------------------------------------
+        // Off-screen path: no swapchain acquire/present.
+        // We just submit the command buffer, wait, then save the frame.
+        // -----------------------------------------------------------------
+        vkWaitForFences(state.device, 1, &inFlightFences[state.currentFrame], VK_TRUE, UINT64_MAX);
+        vkResetFences(state.device, 1, &inFlightFences[state.currentFrame]);
+
+        updateUniformBuffer(state.currentFrame, state);
+        updateInstanceBuffer(state.currentFrame, state);
+
+        vkResetCommandBuffer(state.commandBuffers[state.currentFrame], 0);
+        // imageIndex doesn't matter for off-screen (framebuffer is chosen by currentFrame)
+        recordCommandBuffer(state.commandBuffers[state.currentFrame], 0, state);
+
+        VkSubmitInfo submitInfo{};
+        submitInfo.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers    = &state.commandBuffers[state.currentFrame];
+
+        if (vkQueueSubmit(state.graphicsQueue, 1, &submitInfo, inFlightFences[state.currentFrame]) != VK_SUCCESS)
+            throw std::runtime_error("failed to submit off-screen command buffer!");
+
+        // Wait for the frame to finish before reading back pixels.
+        vkWaitForFences(state.device, 1, &inFlightFences[state.currentFrame], VK_TRUE, UINT64_MAX);
+
+        saveFrame(state.offscreenFrameIndex, state);
+        state.offscreenFrameIndex++;
+
+        state.currentFrame = (state.currentFrame + 1) % state.MAX_FRAMES_IN_FLIGHT;
+        return;
+    }
+
+    // -----------------------------------------------------------------
+    // Windowed path: original code unchanged.
+    // -----------------------------------------------------------------
+
+
+
+    //------------------------
     //waits until the gpu has finished
     vkWaitForFences(state.device, 1, &inFlightFences[state.currentFrame], VK_TRUE, UINT64_MAX);
     uint32_t imageIndex;
@@ -168,6 +221,11 @@ void drawFrame(){
 }
 
 void mainLoop() {
+    //TODO check if can be moved in main()
+    if (USE_OFF_SCREEN_RENDERING) {
+        // Create the output directory for PNG frames (ignore error if it already exists).
+        mkdir("frames", 0755);
+    }
 
     auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -183,10 +241,35 @@ void mainLoop() {
         drawFrame();
     }
     vkDeviceWaitIdle(state.device);
+
+    if (USE_OFF_SCREEN_RENDERING) {
+        // Encode all saved PNG frames into a single MP4 with ffmpeg.
+        // -y           : overwrite output without asking
+        // -framerate   : matches the FPS we targeted during recording
+        // -i           : input pattern matching frame_00000.png … frame_NNNNN.png
+        // -c:v libx264 : H.264 codec (widely compatible)
+        // -pix_fmt     : required by libx264
+        char cmd[512];
+        snprintf(cmd, sizeof(cmd),
+            "ffmpeg -y -framerate %u -i frames/frame_%%05d.png "
+            "-c:v libx264 -pix_fmt yuv420p output.mp4",
+            state.videoFPS);
+        printf("[offscreen] running: %s\n", cmd);
+        int ret = system(cmd);
+        if (ret != 0)
+            fprintf(stderr, "[offscreen] ffmpeg exited with code %d — "
+                            "make sure ffmpeg is installed.\n", ret);
+        else
+            printf("[offscreen] video saved to output.mp4\n");
+    }
 }
 
 void cleanup() {
     cleanupSwapChain(state);
+
+    if (USE_OFF_SCREEN_RENDERING) {
+        cleanupOffscreenResources(state);
+    }
 
     for (size_t i = 0; i < state.MAX_FRAMES_IN_FLIGHT; i++) {
         vkDestroyBuffer(state.device, state.uniformBuffers[i], nullptr);

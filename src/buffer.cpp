@@ -270,7 +270,10 @@ void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex, app
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     renderPassInfo.renderPass = state.renderPass;
-    renderPassInfo.framebuffer = state.swapChainFramebuffers[imageIndex];
+    //renderPassInfo.framebuffer = state.swapChainFramebuffers[imageIndex];
+    renderPassInfo.framebuffer = USE_OFF_SCREEN_RENDERING
+                               ? state.swapChainFramebuffers[state.currentFrame]
+                               : state.swapChainFramebuffers[imageIndex];
     renderPassInfo.renderArea.offset = {0, 0};
     renderPassInfo.renderArea.extent = state.swapChainExtent;
 

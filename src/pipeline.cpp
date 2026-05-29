@@ -473,7 +473,10 @@ void createRenderPass(appState& state){
     colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; //stencil buffer
     colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    //colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    colorAttachment.finalLayout = USE_OFF_SCREEN_RENDERING 
+                                ? VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL 
+                                : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
     //un redner pass ha diversi subpass
     VkAttachmentReference colorAttachmentRef{};

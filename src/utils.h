@@ -1,12 +1,29 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#pragma region Debug
+#include <vector>
+#include <array>
+#include <optional>
+
+#include <vulkan/vulkan.h>
+
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+
+#include <glm/glm.hpp>
+
+#pragma region Config
 
 // static bool OBJ_INSTANCING = false;
 extern bool OBJ_INSTANCING;
 
-#pragma endregion Debug
+extern bool USE_OFF_SCREEN_RENDERING;
+
+
+
+#pragma endregion Config
+
+
 
 #pragma region structs
 struct Vertex {
@@ -128,8 +145,28 @@ struct UniformBufferObject {
 
 
 struct appState{
-    bool framebufferResized = false;
+
+    // ---- off-screen video recording ----
     float maxDuration = 15.0f;
+
+    // One VkImage per frame-in-flight used as color attachment instead of a swapchain image.
+    std::vector<VkImage>        offscreenImages;
+    std::vector<VkDeviceMemory> offscreenImageMemories;
+    std::vector<VkImageView>    offscreenImageViews;
+
+    // Host-visible staging buffer for pixel readback.
+    VkBuffer       readbackBuffer       = VK_NULL_HANDLE;
+    VkDeviceMemory readbackBufferMemory = VK_NULL_HANDLE;
+
+    // Sequential counter incremented every saved frame (used for filenames).
+    uint32_t offscreenFrameIndex = 0;
+
+    // Target frames-per-second for the output video.
+    uint32_t videoFPS = 60;
+
+    
+    //app info
+    bool framebufferResized = false;
     
     const int WIDTH = 800;
     const int HEIGHT = 600;

@@ -25,7 +25,11 @@
 
 #include "utils.h"
 
+#pragma region Config
 bool OBJ_INSTANCING = true;
+//bool USE_OFF_SCREEN_RENDERING = false;
+bool USE_OFF_SCREEN_RENDERING = true;
+#pragma endregion Config
 
 std::vector<glm::vec3> particleInitialPositions = {
     {0.0f, 0.0f, 0.0f},

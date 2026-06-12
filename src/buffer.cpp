@@ -2,6 +2,8 @@
 
 #include "buffer.h"
 #include "utils.h"
+#include "device.h"
+#include <chrono>
 #include <cstring>
 
 //Graphics cards can offer different types of memory to allocate from.
@@ -131,4 +133,237 @@ void createVertexBuffer(std::vector<Vertex> vertices, appState & state ) {
 
     vkDestroyBuffer(state.device, stagingBuffer, nullptr);
     vkFreeMemory(state.device, stagingBufferMemory, nullptr);
+}
+
+// void createInstanceBuffer(std::vector<glm::vec3> positions, appState& state) {
+//     VkDeviceSize bufferSize = sizeof(positions[0]) * positions.size();
+
+//     VkBuffer stagingBuffer;
+//     VkDeviceMemory stagingBufferMemory;
+
+//     // staging buffer (CPU → GPU transfer source)
+//     createBuffer(
+//         bufferSize,
+//         VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+//         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+//         stagingBuffer,
+//         stagingBufferMemory,
+//         state
+//     );
+
+//     // copy data to staging
+//     void* data;
+//     vkMapMemory(state.device, stagingBufferMemory, 0, bufferSize, 0, &data);
+//     memcpy(data, positions.data(), (size_t)bufferSize);
+//     vkUnmapMemory(state.device, stagingBufferMemory);
+
+//     // GPU buffer (used as vertex buffer for instancing)
+//     createBuffer(
+//         bufferSize,
+//         VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+//         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+//         state.instanceBuffer,
+//         state.instanceBufferMemory,
+//         state
+//     );
+
+//     // copy staging → GPU buffer
+//     copyBuffer(stagingBuffer, state.instanceBuffer, bufferSize, state);
+
+//     // cleanup staging
+//     vkDestroyBuffer(state.device, stagingBuffer, nullptr);
+//     vkFreeMemory(state.device, stagingBufferMemory, nullptr);
+
+//     // store particle count
+//     state.particleCount = static_cast<uint32_t>(positions.size());
+// }
+
+void createInstanceBuffer(std::vector<glm::vec3> positions, appState& state) {
+    VkDeviceSize bufferSize = sizeof(positions[0]) * positions.size();
+
+    state.instanceBuffers.resize(state.MAX_FRAMES_IN_FLIGHT);
+    state.instanceBuffersMemory.resize(state.MAX_FRAMES_IN_FLIGHT);
+    state.instanceBuffersMapped.resize(state.MAX_FRAMES_IN_FLIGHT);
+
+    for (size_t i = 0; i < state.MAX_FRAMES_IN_FLIGHT; i++) {
+        //Discuti VK_BUFFER_USAGE_TRANSFER_DST_BIT
+        createBuffer( bufferSize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, state.instanceBuffers[i], state.instanceBuffersMemory[i], state );
+        vkMapMemory(state.device, state.instanceBuffersMemory[i], 0, bufferSize, 0, &state.instanceBuffersMapped[i]);
+        memcpy(state.instanceBuffersMapped[i], positions.data(), bufferSize);
+    }
+    state.particleCount = static_cast<uint32_t>(positions.size());
+}
+
+
+
+
+
+// void updateInstanceBuffer(uint32_t currentImage, appState& state) {
+//     static auto startTime = std::chrono::high_resolution_clock::now();
+//     auto currentTime = std::chrono::high_resolution_clock::now();
+//     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+
+//     std::vector<glm::vec3> positions(state.particleCount);
+//     for (size_t i = 0; i < state.particleCount; i++) {
+//         glm::vec3 p = particleBasePositions[i];  // ← leggi sempre dalla base
+//         p.z += 0.5f * cos(time + i);
+//         positions[i] = p;
+//     }
+//     memcpy(state.instanceBuffersMapped[currentImage], positions.data(),
+//            sizeof(positions[0]) * positions.size());
+// }
+
+void updateInstanceBuffer(uint32_t currentImage, appState& state) {
+    static auto startTime = std::chrono::high_resolution_clock::now();
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+
+    // oscilla tra 0 e 1, tutte le particelle usano lo stesso valore
+    float t = (sin(time) + 1.0f) / 2.0f;
+
+    std::vector<glm::vec3> positions(state.particleCount);
+    for (size_t i = 0; i < state.particleCount; i++) {
+        glm::vec3 p = particleBasePositions[i];
+        p.z = particleBasePositions[i].z * t;  // scala per z_base, va da 0 a z
+        positions[i] = p;
+    }
+
+    memcpy(state.instanceBuffersMapped[currentImage], positions.data(),
+           sizeof(positions[0]) * positions.size());
+}
+void createCommandPool(appState & state){
+    QueueFamilyIndices queueFamilyIndices = findQueueFamilies(state);
+
+    VkCommandPoolCreateInfo poolInfo{};
+    poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT; //usato per buffer più duraturi e persistenti 
+    poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
+
+    if (vkCreateCommandPool(state.device, &poolInfo, nullptr, &state.commandPool) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create command pool!");
+    }
+}
+
+void createCommandBuffer(appState & state)
+{
+    state.commandBuffers.resize(state.MAX_FRAMES_IN_FLIGHT);
+
+    VkCommandBufferAllocateInfo allocInfo{};
+    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    allocInfo.commandPool = state.commandPool;
+    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY; // specifica se sono primari o secondari
+    allocInfo.commandBufferCount = (uint32_t) state.commandBuffers.size();
+
+    if (vkAllocateCommandBuffers(state.device, &allocInfo, state.commandBuffers.data()) != VK_SUCCESS) {
+        throw std::runtime_error("failed to allocate command buffers!");
+    }
+}
+
+void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex, appState & state) {
+    VkCommandBufferBeginInfo beginInfo{};
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags = 0; // Optional
+    beginInfo.pInheritanceInfo = nullptr; // Optional usefull for secondary buffer to inherit stuff
+
+    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
+        throw std::runtime_error("failed to begin recording command buffer!");
+    }
+
+    VkRenderPassBeginInfo renderPassInfo{};
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    renderPassInfo.renderPass = state.renderPass;
+    //renderPassInfo.framebuffer = state.swapChainFramebuffers[imageIndex];
+    renderPassInfo.framebuffer = USE_OFF_SCREEN_RENDERING
+                               ? state.swapChainFramebuffers[state.currentFrame]
+                               : state.swapChainFramebuffers[imageIndex];
+    renderPassInfo.renderArea.offset = {0, 0};
+    renderPassInfo.renderArea.extent = state.swapChainExtent;
+
+    VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
+    renderPassInfo.clearValueCount = 1;
+    renderPassInfo.pClearValues = &clearColor; //specifica che colore usare per il clear
+
+    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);//no error handling neaded
+
+    //bind della graphic pipeline
+    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, state.graphicsPipeline);
+
+    //viewport & scissors details since declared as dynamic 
+    VkViewport viewport{};
+    viewport.x = 0.0f;
+    viewport.y = 0.0f;
+    viewport.width = static_cast<float>(state.swapChainExtent.width);
+    viewport.height = static_cast<float>(state.swapChainExtent.height);
+    viewport.minDepth = 0.0f;
+    viewport.maxDepth = 1.0f;
+    vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+
+    VkRect2D scissor{};
+    scissor.offset = {0, 0};
+    scissor.extent = state.swapChainExtent;
+    vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
+
+    
+    if(OBJ_INSTANCING){
+        VkBuffer vertexBuffers[] = { state.vertexBuffer, state.instanceBuffers[state.currentFrame] };
+        VkDeviceSize offsets[] = {0, 0};
+        vkCmdBindVertexBuffers(commandBuffer, 0, 2, vertexBuffers, offsets);
+    }else{
+        //bind del vertex buffer ai bindings
+        VkBuffer vertexBuffers[] = {state.vertexBuffer};
+        VkDeviceSize offsets[] = {0};
+        vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+    }
+
+    
+
+    vkCmdBindIndexBuffer(commandBuffer, state.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
+
+    //bind the descriptors sets to access uniforms
+    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, state.pipelineLayout, 0, 1, &state.descriptorSets[state.currentFrame], 0, nullptr);
+    
+    //Actual draw call!!
+    if(OBJ_INSTANCING)
+    {
+        vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), particleInitialPositions.size(), 0, 0, 0);
+    }else{
+        vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+    }
+
+    vkCmdEndRenderPass(commandBuffer);
+
+    if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
+        throw std::runtime_error("failed to record command buffer!");
+    }
+}
+
+
+void createUniformBuffers(appState & state) {
+    VkDeviceSize bufferSize = sizeof(UniformBufferObject);
+
+    state.uniformBuffers.resize(state.MAX_FRAMES_IN_FLIGHT);
+    state.uniformBuffersMemory.resize(state.MAX_FRAMES_IN_FLIGHT);
+    state.uniformBuffersMapped.resize(state.MAX_FRAMES_IN_FLIGHT);
+
+    for (size_t i = 0; i < state.MAX_FRAMES_IN_FLIGHT; i++) {
+        createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, state.uniformBuffers[i], state.uniformBuffersMemory[i], state);
+
+        vkMapMemory(state.device, state.uniformBuffersMemory[i], 0, bufferSize, 0, &state.uniformBuffersMapped[i]);
+    }
+}
+
+void updateUniformBuffer(uint32_t currentImage, appState & state) {
+    //basic time since start
+    static auto startTime = std::chrono::high_resolution_clock::now();
+
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+
+    UniformBufferObject ubo{};
+    // ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    ubo.model = glm::mat4(1.0f);
+    ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    ubo.proj = glm::perspective(glm::radians(45.0f), state.swapChainExtent.width / (float) state.swapChainExtent.height, 0.1f, 10.0f);
+    ubo.proj[1][1] *= -1;//invert the y cordinate of the clip space since glm was designed for opengl
+    memcpy(state.uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
 }

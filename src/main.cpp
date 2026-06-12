@@ -85,6 +85,7 @@ std::vector<VkDescriptorSet> descriptorSets;
 #include "buffer.h"
 #include "pipeline.h"
 #include "device.h"
+#include <cstring>
 
 appState state;
 

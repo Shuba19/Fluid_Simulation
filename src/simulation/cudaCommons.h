@@ -42,11 +42,6 @@ struct gridSize{
 
 struct vulkanData{
     VkBuffer posBuffer;
-    VkBuffer velBuffer;
-    VkBuffer accBuffer;
-    VkDeviceMemory posBufferMemory;
-    VkDeviceMemory velBufferMemory;
-    VkDeviceMemory accBufferMemory;
 };
 
 

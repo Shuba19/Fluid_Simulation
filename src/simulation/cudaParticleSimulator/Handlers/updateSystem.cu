@@ -251,7 +251,7 @@ void cudaParticleSimulator::p2g() {
     cudaMemset(grid_data.wWeight, 0,  nx*ny*(nz+1)    * sizeof(float));
 
     cudaMemset(grid_data.cellType, (int)cellType::AIR, nx*ny*nz * sizeof(int));
-        computeBoundary();
+    computeBoundary();
 
     // P2G kernel — 1 thread per particella
     int blockSize = 256;

@@ -21,6 +21,8 @@ class cudaParticleSimulator
         int deviceId;
         float deltaTime;
         int num_iterations;
+        int v_bufferPos;
+        int v_buggerLen;
         gridSize grid;
 
     public:
@@ -38,6 +40,7 @@ class cudaParticleSimulator
         void applyPressureGradient();
         void g2p();
         void computeAdvection();
+        void writeVulkanBuffer();
 };
 
 

@@ -2,6 +2,7 @@
 
 #include "buffer.h"
 #include "utils.h"
+#include <cstring>
 
 //Graphics cards can offer different types of memory to allocate from.
 //we use the function to return the most appropriate one based on the buffer and the applicaiton

@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.15)# versione minima
 project(FluidSim)# nome del progetto usato generare target e file di output.
 
 set(CMAKE_CXX_STANDARD 17) #setta lo standard di cpp
+set(CMAKE_CUDA_STANDARD 17) #setta lo standard di cuda
+set(CMAKE_CUDA_ARCHITECTURES "60;70;80;86;89") #setta le architetture supportate
 
 #add_executable(FluidSymulation src/main.cpp)# crea un eseguibile chiamato app usando il file sorgente src/main.cpp.
 add_executable(FluidSymulation

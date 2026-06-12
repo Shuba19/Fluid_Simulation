@@ -61,7 +61,7 @@ const std::vector<uint16_t> indices = {
 
 std::vector<char> readFile(const std::string& filename) {
     std::ifstream file(filename, std::ios::ate | std::ios::binary);
-
+    std::cout<<"Reading file: " << filename << std::endl;
     if (!file.is_open()) {
         throw std::runtime_error("failed to open file!");
     }

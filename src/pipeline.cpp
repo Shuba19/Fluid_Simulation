@@ -52,8 +52,8 @@ void createGraphicsPipeline(appState& state){
     vengono compilati alla creazione della graphic pipeline 
     quindi appena termina la creazione della pipeline possono essere distrutti 
     */
-    auto vertShaderCode = readFile("../../src/shaders/vert.spv");
-    auto fragShaderCode = readFile("../../src/shaders/frag.spv");
+    auto vertShaderCode = readFile("../src/shaders/vert.spv");
+    auto fragShaderCode = readFile("../src/shaders/frag.spv");
 
     VkShaderModule vertShaderModule = createShaderModule(vertShaderCode, state);
     VkShaderModule fragShaderModule = createShaderModule(fragShaderCode, state);
@@ -253,12 +253,12 @@ void createInstancingPipeline(appState& state){
     std::vector<char> vertShaderCode;
 
     if (OBJ_INSTANCING) {
-        vertShaderCode = readFile("../../src/shaders/instanceVert.spv");
+        vertShaderCode = readFile("../src/shaders/instanceVert.spv");
     } else {
-        vertShaderCode = readFile("../../src/shaders/vert.spv");
+        vertShaderCode = readFile("../src/shaders/vert.spv");
     }
 
-    auto fragShaderCode = readFile("../../src/shaders/frag.spv");
+    auto fragShaderCode = readFile("../src/shaders/frag.spv");
 
     VkShaderModule vertShaderModule = createShaderModule(vertShaderCode, state);
     VkShaderModule fragShaderModule = createShaderModule(fragShaderCode, state);

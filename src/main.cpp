@@ -32,6 +32,7 @@
 #include "device.h"
 #include "swapChain.h"
 #include "offscreen.h"
+#include <cstring>
 
 
 appState state;

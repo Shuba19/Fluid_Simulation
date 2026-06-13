@@ -1,8 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
 
-# ALWAYS set overrides before the project() call
-set(CMAKE_CXX_COMPILER /usr/bin/g++-13)
-
 project(FluidSim LANGUAGES CXX CUDA)
 
 set(CMAKE_CXX_STANDARD 17)

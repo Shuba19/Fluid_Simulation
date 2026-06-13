@@ -7,7 +7,7 @@ project(FluidSim LANGUAGES CXX CUDA)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CUDA_STANDARD 17)
-set(CMAKE_CUDA_ARCHITECTURES "86;89")
+set(CMAKE_CUDA_ARCHITECTURES "80;86;89")
 
 add_executable(FluidSymulation
     src/main.cpp

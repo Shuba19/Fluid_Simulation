@@ -162,20 +162,6 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-_deps/glfw-build/src/CMakeFiles/glfw.dir/rule:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _deps/glfw-build/src/CMakeFiles/glfw.dir/rule
-.PHONY : _deps/glfw-build/src/CMakeFiles/glfw.dir/rule
-
-# Convenience name for target.
-glfw: _deps/glfw-build/src/CMakeFiles/glfw.dir/rule
-.PHONY : glfw
-
-# fast build rule for target.
-glfw/fast:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/build
-.PHONY : glfw/fast
-
-# Convenience name for target.
 _deps/glfw-build/src/CMakeFiles/update_mappings.dir/rule:
 	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _deps/glfw-build/src/CMakeFiles/update_mappings.dir/rule
 .PHONY : _deps/glfw-build/src/CMakeFiles/update_mappings.dir/rule
@@ -188,6 +174,20 @@ update_mappings: _deps/glfw-build/src/CMakeFiles/update_mappings.dir/rule
 update_mappings/fast:
 	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/update_mappings.dir/build.make _deps/glfw-build/src/CMakeFiles/update_mappings.dir/build
 .PHONY : update_mappings/fast
+
+# Convenience name for target.
+_deps/glfw-build/src/CMakeFiles/glfw.dir/rule:
+	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _deps/glfw-build/src/CMakeFiles/glfw.dir/rule
+.PHONY : _deps/glfw-build/src/CMakeFiles/glfw.dir/rule
+
+# Convenience name for target.
+glfw: _deps/glfw-build/src/CMakeFiles/glfw.dir/rule
+.PHONY : glfw
+
+# fast build rule for target.
+glfw/fast:
+	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/build
+.PHONY : glfw/fast
 
 context.o: context.c.o
 .PHONY : context.o
@@ -357,102 +357,6 @@ monitor.c.s:
 	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/monitor.c.s
 .PHONY : monitor.c.s
 
-null_init.o: null_init.c.o
-.PHONY : null_init.o
-
-# target to build an object file
-null_init.c.o:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/null_init.c.o
-.PHONY : null_init.c.o
-
-null_init.i: null_init.c.i
-.PHONY : null_init.i
-
-# target to preprocess a source file
-null_init.c.i:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/null_init.c.i
-.PHONY : null_init.c.i
-
-null_init.s: null_init.c.s
-.PHONY : null_init.s
-
-# target to generate assembly for a file
-null_init.c.s:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/null_init.c.s
-.PHONY : null_init.c.s
-
-null_joystick.o: null_joystick.c.o
-.PHONY : null_joystick.o
-
-# target to build an object file
-null_joystick.c.o:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/null_joystick.c.o
-.PHONY : null_joystick.c.o
-
-null_joystick.i: null_joystick.c.i
-.PHONY : null_joystick.i
-
-# target to preprocess a source file
-null_joystick.c.i:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/null_joystick.c.i
-.PHONY : null_joystick.c.i
-
-null_joystick.s: null_joystick.c.s
-.PHONY : null_joystick.s
-
-# target to generate assembly for a file
-null_joystick.c.s:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/null_joystick.c.s
-.PHONY : null_joystick.c.s
-
-null_monitor.o: null_monitor.c.o
-.PHONY : null_monitor.o
-
-# target to build an object file
-null_monitor.c.o:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/null_monitor.c.o
-.PHONY : null_monitor.c.o
-
-null_monitor.i: null_monitor.c.i
-.PHONY : null_monitor.i
-
-# target to preprocess a source file
-null_monitor.c.i:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/null_monitor.c.i
-.PHONY : null_monitor.c.i
-
-null_monitor.s: null_monitor.c.s
-.PHONY : null_monitor.s
-
-# target to generate assembly for a file
-null_monitor.c.s:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/null_monitor.c.s
-.PHONY : null_monitor.c.s
-
-null_window.o: null_window.c.o
-.PHONY : null_window.o
-
-# target to build an object file
-null_window.c.o:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/null_window.c.o
-.PHONY : null_window.c.o
-
-null_window.i: null_window.c.i
-.PHONY : null_window.i
-
-# target to preprocess a source file
-null_window.c.i:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/null_window.c.i
-.PHONY : null_window.c.i
-
-null_window.s: null_window.c.s
-.PHONY : null_window.s
-
-# target to generate assembly for a file
-null_window.c.s:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/null_window.c.s
-.PHONY : null_window.c.s
-
 osmesa_context.o: osmesa_context.c.o
 .PHONY : osmesa_context.o
 
@@ -476,78 +380,6 @@ osmesa_context.s: osmesa_context.c.s
 osmesa_context.c.s:
 	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/osmesa_context.c.s
 .PHONY : osmesa_context.c.s
-
-platform.o: platform.c.o
-.PHONY : platform.o
-
-# target to build an object file
-platform.c.o:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/platform.c.o
-.PHONY : platform.c.o
-
-platform.i: platform.c.i
-.PHONY : platform.i
-
-# target to preprocess a source file
-platform.c.i:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/platform.c.i
-.PHONY : platform.c.i
-
-platform.s: platform.c.s
-.PHONY : platform.s
-
-# target to generate assembly for a file
-platform.c.s:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/platform.c.s
-.PHONY : platform.c.s
-
-posix_module.o: posix_module.c.o
-.PHONY : posix_module.o
-
-# target to build an object file
-posix_module.c.o:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/posix_module.c.o
-.PHONY : posix_module.c.o
-
-posix_module.i: posix_module.c.i
-.PHONY : posix_module.i
-
-# target to preprocess a source file
-posix_module.c.i:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/posix_module.c.i
-.PHONY : posix_module.c.i
-
-posix_module.s: posix_module.c.s
-.PHONY : posix_module.s
-
-# target to generate assembly for a file
-posix_module.c.s:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/posix_module.c.s
-.PHONY : posix_module.c.s
-
-posix_poll.o: posix_poll.c.o
-.PHONY : posix_poll.o
-
-# target to build an object file
-posix_poll.c.o:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/posix_poll.c.o
-.PHONY : posix_poll.c.o
-
-posix_poll.i: posix_poll.c.i
-.PHONY : posix_poll.i
-
-# target to preprocess a source file
-posix_poll.c.i:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/posix_poll.c.i
-.PHONY : posix_poll.c.i
-
-posix_poll.s: posix_poll.c.s
-.PHONY : posix_poll.s
-
-# target to generate assembly for a file
-posix_poll.c.s:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/posix_poll.c.s
-.PHONY : posix_poll.c.s
 
 posix_thread.o: posix_thread.c.o
 .PHONY : posix_thread.o
@@ -644,78 +476,6 @@ window.s: window.c.s
 window.c.s:
 	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/window.c.s
 .PHONY : window.c.s
-
-wl_init.o: wl_init.c.o
-.PHONY : wl_init.o
-
-# target to build an object file
-wl_init.c.o:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/wl_init.c.o
-.PHONY : wl_init.c.o
-
-wl_init.i: wl_init.c.i
-.PHONY : wl_init.i
-
-# target to preprocess a source file
-wl_init.c.i:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/wl_init.c.i
-.PHONY : wl_init.c.i
-
-wl_init.s: wl_init.c.s
-.PHONY : wl_init.s
-
-# target to generate assembly for a file
-wl_init.c.s:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/wl_init.c.s
-.PHONY : wl_init.c.s
-
-wl_monitor.o: wl_monitor.c.o
-.PHONY : wl_monitor.o
-
-# target to build an object file
-wl_monitor.c.o:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/wl_monitor.c.o
-.PHONY : wl_monitor.c.o
-
-wl_monitor.i: wl_monitor.c.i
-.PHONY : wl_monitor.i
-
-# target to preprocess a source file
-wl_monitor.c.i:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/wl_monitor.c.i
-.PHONY : wl_monitor.c.i
-
-wl_monitor.s: wl_monitor.c.s
-.PHONY : wl_monitor.s
-
-# target to generate assembly for a file
-wl_monitor.c.s:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/wl_monitor.c.s
-.PHONY : wl_monitor.c.s
-
-wl_window.o: wl_window.c.o
-.PHONY : wl_window.o
-
-# target to build an object file
-wl_window.c.o:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/wl_window.c.o
-.PHONY : wl_window.c.o
-
-wl_window.i: wl_window.c.i
-.PHONY : wl_window.i
-
-# target to preprocess a source file
-wl_window.c.i:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/wl_window.c.i
-.PHONY : wl_window.c.i
-
-wl_window.s: wl_window.c.s
-.PHONY : wl_window.s
-
-# target to generate assembly for a file
-wl_window.c.s:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/wl_window.c.s
-.PHONY : wl_window.c.s
 
 x11_init.o: x11_init.c.o
 .PHONY : x11_init.o
@@ -848,30 +608,9 @@ help:
 	@echo "... monitor.o"
 	@echo "... monitor.i"
 	@echo "... monitor.s"
-	@echo "... null_init.o"
-	@echo "... null_init.i"
-	@echo "... null_init.s"
-	@echo "... null_joystick.o"
-	@echo "... null_joystick.i"
-	@echo "... null_joystick.s"
-	@echo "... null_monitor.o"
-	@echo "... null_monitor.i"
-	@echo "... null_monitor.s"
-	@echo "... null_window.o"
-	@echo "... null_window.i"
-	@echo "... null_window.s"
 	@echo "... osmesa_context.o"
 	@echo "... osmesa_context.i"
 	@echo "... osmesa_context.s"
-	@echo "... platform.o"
-	@echo "... platform.i"
-	@echo "... platform.s"
-	@echo "... posix_module.o"
-	@echo "... posix_module.i"
-	@echo "... posix_module.s"
-	@echo "... posix_poll.o"
-	@echo "... posix_poll.i"
-	@echo "... posix_poll.s"
 	@echo "... posix_thread.o"
 	@echo "... posix_thread.i"
 	@echo "... posix_thread.s"
@@ -884,15 +623,6 @@ help:
 	@echo "... window.o"
 	@echo "... window.i"
 	@echo "... window.s"
-	@echo "... wl_init.o"
-	@echo "... wl_init.i"
-	@echo "... wl_init.s"
-	@echo "... wl_monitor.o"
-	@echo "... wl_monitor.i"
-	@echo "... wl_monitor.s"
-	@echo "... wl_window.o"
-	@echo "... wl_window.i"
-	@echo "... wl_window.s"
 	@echo "... x11_init.o"
 	@echo "... x11_init.i"
 	@echo "... x11_init.s"

@@ -21,7 +21,7 @@ set_property(GLOBAL PROPERTY _CMAKE_FindGit_GIT_EXECUTABLE_VERSION
 
 include(ExternalProject)
 ExternalProject_Add(glfw-populate
-                     "UPDATE_DISCONNECTED" "False" "GIT_REPOSITORY" "https://github.com/glfw/glfw.git"
+                     "UPDATE_DISCONNECTED" "False" "GIT_REPOSITORY" "https://github.com/glfw/glfw.git" "GIT_TAG" "3.3.8"
                     SOURCE_DIR          "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/_deps/glfw-src"
                     BINARY_DIR          "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/_deps/glfw-build"
                     CONFIGURE_COMMAND   ""

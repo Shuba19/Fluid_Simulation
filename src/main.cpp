@@ -67,14 +67,14 @@ void createSyncObjects()
     }
 }
 
-#define NUM_PARTICLES 1000
+#define NUM_PARTICLES 10000
 void initCuda()
 {
     float deltaTime = 0.016f; // Assuming 60 FPS
     int deviceId = 0;         // Use the first CUDA device
     fluidProperties fluidProps{1000.0f, 1.0f, 0.1f};
     int num_iterations = 10;                                // Number of iterations for the simulation
-    gridSize grid_size{30, 30, 30, 0.03f};                  // Example grid size
+    gridSize grid_size{100, 100, 100, 0.03f};                  // Example grid size
     state.gridWorldSize = grid_size.x * grid_size.cellSize; // Update global grid world size
     cPS = cudaParticleSimulator(NUM_PARTICLES, deltaTime, deviceId, fluidProps, num_iterations, grid_size);
     cPS.initParticles();

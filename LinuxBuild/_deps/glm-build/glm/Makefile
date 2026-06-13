@@ -161,44 +161,6 @@ depend:
 	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-# Convenience name for target.
-_deps/glm-build/glm/CMakeFiles/glm.dir/rule:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _deps/glm-build/glm/CMakeFiles/glm.dir/rule
-.PHONY : _deps/glm-build/glm/CMakeFiles/glm.dir/rule
-
-# Convenience name for target.
-glm: _deps/glm-build/glm/CMakeFiles/glm.dir/rule
-.PHONY : glm
-
-# fast build rule for target.
-glm/fast:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glm-build/glm/CMakeFiles/glm.dir/build.make _deps/glm-build/glm/CMakeFiles/glm.dir/build
-.PHONY : glm/fast
-
-detail/glm.o: detail/glm.cpp.o
-.PHONY : detail/glm.o
-
-# target to build an object file
-detail/glm.cpp.o:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glm-build/glm/CMakeFiles/glm.dir/build.make _deps/glm-build/glm/CMakeFiles/glm.dir/detail/glm.cpp.o
-.PHONY : detail/glm.cpp.o
-
-detail/glm.i: detail/glm.cpp.i
-.PHONY : detail/glm.i
-
-# target to preprocess a source file
-detail/glm.cpp.i:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glm-build/glm/CMakeFiles/glm.dir/build.make _deps/glm-build/glm/CMakeFiles/glm.dir/detail/glm.cpp.i
-.PHONY : detail/glm.cpp.i
-
-detail/glm.s: detail/glm.cpp.s
-.PHONY : detail/glm.s
-
-# target to generate assembly for a file
-detail/glm.cpp.s:
-	cd /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild && $(MAKE) $(MAKESILENT) -f _deps/glm-build/glm/CMakeFiles/glm.dir/build.make _deps/glm-build/glm/CMakeFiles/glm.dir/detail/glm.cpp.s
-.PHONY : detail/glm.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -211,10 +173,6 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... glm"
-	@echo "... detail/glm.o"
-	@echo "... detail/glm.i"
-	@echo "... detail/glm.s"
 .PHONY : help
 
 

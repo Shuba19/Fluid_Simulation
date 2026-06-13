@@ -42,6 +42,7 @@ public:
     void g2p();
     void computeAdvection();
     void cuda2vulkan(uint32_t currentImage, appState& state);
+    float getDeltaTime() const { return deltaTime; }
 };
 
 #endif

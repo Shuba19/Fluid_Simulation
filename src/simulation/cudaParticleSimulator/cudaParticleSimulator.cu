@@ -40,7 +40,7 @@ cudaParticleSimulator::cudaParticleSimulator(int numParticles, float deltaTime, 
     cudaMalloc(&deviceData.pos, numParticles * sizeof(float3));
     cudaMalloc(&deviceData.vel, numParticles * sizeof(float3));
     cudaMalloc(&deviceData.old_vel, numParticles * sizeof(float3));
-
+    
     // MAc num components calculations
     // Si aggiunge una cella extra per ogni dimensione per le velocità sulle facce
     // Se ho N celle, avrò N+1 velocità
@@ -128,9 +128,9 @@ void cudaParticleSimulator::initParticles()
 
                 if (distSq <= radius * radius)
                 {
-                    float jitterx = ((rand() / (float)RAND_MAX) - 0.5f) * p_spacing * 0.01f; // Jitter fino al 10% della spaziatura
-                    float jittery = ((rand() / (float)RAND_MAX) - 0.5f) * p_spacing * 0.01f; // Jitter fino al 10% della spaziatura
-                    float jitterz = ((rand() / (float)RAND_MAX) - 0.5f) * p_spacing * 0.01f; // Jitter fino al 10% della spaziatura
+                    float jitterx = ((rand() / (float)RAND_MAX) - 0.5f) * p_spacing * 0.1f; // Jitter fino al 10% della spaziatura
+                    float jittery = ((rand() / (float)RAND_MAX) - 0.5f) * p_spacing * 0.1f; // Jitter fino al 10% della spaziatura
+                    float jitterz = ((rand() / (float)RAND_MAX) - 0.5f) * p_spacing * 0.1f; // Jitter fino al 10% della spaziatura
                     h_pos.push_back({x + jitterx, y + jittery, z + jitterz});
                     h_vel.push_back({0.0f, 0.0f, 0.0f}); // Fluido inizialmente fermo
                 }
@@ -139,6 +139,13 @@ void cudaParticleSimulator::initParticles()
     }
 
     int generatedCount = h_pos.size();
+    if(generatedCount == 0)
+    {
+        std::cerr << "Error: No particles generated. Check the sphere parameters and grid size." << std::endl;
+        return;
+    }
+    auto max = generatedCount > this->numParticles ? generatedCount : this->numParticles;
+    printf("Generated %d particles, but the simulator is set to handle %d. Using the smaller of the two.\n", generatedCount, this->numParticles);
     if (generatedCount > this->numParticles)
 
         generatedCount = this->numParticles;

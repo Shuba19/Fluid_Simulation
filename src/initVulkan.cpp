@@ -36,10 +36,9 @@ static void framebufferResizeCallback(GLFWwindow* window, int width, int height)
 }
 
 void initWindow(appState & state) {
+    if (USE_OFF_SCREEN_RENDERING) return;
     glfwInit();
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API); //tells GLFW we're using Vulkan
-    //glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-    //window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan Triangle", nullptr, nullptr);
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     state.window = glfwCreateWindow(state.WIDTH, state.HEIGHT, "Vulkan", nullptr, nullptr);
     glfwSetFramebufferSizeCallback(state.window, framebufferResizeCallback);
     glfwSetWindowUserPointer(state.window, &state);
@@ -60,13 +59,15 @@ void createInstance(appState & state) {
     createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     createInfo.pApplicationInfo = &appInfo;
 
-    //extensions 
-    uint32_t glfwExtensionCount = 0;
-    const char** glfwExtensions;
-    glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-
-    createInfo.enabledExtensionCount = glfwExtensionCount;
-    createInfo.ppEnabledExtensionNames = glfwExtensions;
+    if (!USE_OFF_SCREEN_RENDERING) {
+        uint32_t glfwExtensionCount = 0;
+        const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+        createInfo.enabledExtensionCount = glfwExtensionCount;
+        createInfo.ppEnabledExtensionNames = glfwExtensions;
+    } else {
+        createInfo.enabledExtensionCount = 0;
+        createInfo.ppEnabledExtensionNames = nullptr;
+    }
     createInfo.enabledLayerCount = 0;
 
     if (vkCreateInstance(&createInfo, nullptr, &state.instance) != VK_SUCCESS) {
@@ -76,6 +77,10 @@ void createInstance(appState & state) {
 
 void createSurface(appState & state)
 {
+    if (USE_OFF_SCREEN_RENDERING) {
+        state.surface = VK_NULL_HANDLE;
+        return;
+    }
     if (glfwCreateWindowSurface(state.instance, state.window, nullptr, &state.surface) != VK_SUCCESS) {
         throw std::runtime_error("failed to create window surface!");
     }

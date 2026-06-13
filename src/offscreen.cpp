@@ -1,15 +1,10 @@
 #include "offscreen.h"
 #include "buffer.h"   // findMemoryType, createBuffer
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
-
 #include <stdexcept>
 #include <cstring>
 #include <cstdio>
 
-// ---------------------------------------------------------------------------
-// Helper: create a VkImage + bind memory
 // ---------------------------------------------------------------------------
 static void createImage(uint32_t width, uint32_t height,
                         VkFormat format,
@@ -58,10 +53,8 @@ void createOffscreenResources(appState& state)
     uint32_t w = state.swapChainExtent.width;
     uint32_t h = state.swapChainExtent.height;
 
-    // We reuse swapChainImageFormat so the render pass stays identical.
     VkFormat fmt = state.swapChainImageFormat;
 
-    // One off-screen image per frame-in-flight (mirrors the swapchain images approach).
     state.offscreenImages.resize(state.MAX_FRAMES_IN_FLIGHT);
     state.offscreenImageMemories.resize(state.MAX_FRAMES_IN_FLIGHT);
     state.offscreenImageViews.resize(state.MAX_FRAMES_IN_FLIGHT);
@@ -70,7 +63,6 @@ void createOffscreenResources(appState& state)
         createImage(
             w, h, fmt,
             VK_IMAGE_TILING_OPTIMAL,
-            // COLOR_ATTACHMENT: render target  |  TRANSFER_SRC: copy to readback buffer
             VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
             state.offscreenImages[i],
@@ -93,8 +85,7 @@ void createOffscreenResources(appState& state)
             throw std::runtime_error("failed to create off-screen image view!");
     }
 
-    // One host-visible readback buffer shared across all frames (we wait idle before reading).
-    VkDeviceSize bufSize = (VkDeviceSize)w * h * 4; // 4 bytes per pixel (BGRA / RGBA)
+    VkDeviceSize bufSize = (VkDeviceSize)w * h * 4;
     createBuffer(
         bufSize,
         VK_BUFFER_USAGE_TRANSFER_DST_BIT,
@@ -119,16 +110,16 @@ void cleanupOffscreenResources(appState& state)
 }
 
 // ---------------------------------------------------------------------------
-// saveFrame: copies the rendered VkImage to the CPU readback buffer, then
-// writes a PNG.  Must be called AFTER vkQueueWaitIdle for the current frame.
+// Copies the rendered image to the host readback buffer, then writes raw BGRA
+// pixels straight into the ffmpeg pipe — no PNG encoding, no temp files.
 // ---------------------------------------------------------------------------
-void saveFrame(uint32_t frameIndex, appState& state)
+void writeFrameToFfmpeg(FILE* pipe, appState& state)
 {
     uint32_t w = state.swapChainExtent.width;
     uint32_t h = state.swapChainExtent.height;
     VkDeviceSize bufSize = (VkDeviceSize)w * h * 4;
 
-    // --- single-use command buffer ---
+    // --- single-use command buffer for image → buffer copy ---
     VkCommandBufferAllocateInfo allocInfo{};
     allocInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     allocInfo.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
@@ -143,7 +134,7 @@ void saveFrame(uint32_t frameIndex, appState& state)
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
     vkBeginCommandBuffer(cmd, &beginInfo);
 
-    // Transition image: COLOR_ATTACHMENT_OPTIMAL → TRANSFER_SRC_OPTIMAL
+    // Transition: COLOR_ATTACHMENT_OPTIMAL → TRANSFER_SRC_OPTIMAL
     VkImageMemoryBarrier barrier{};
     barrier.sType                           = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
     barrier.oldLayout                       = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -167,7 +158,7 @@ void saveFrame(uint32_t frameIndex, appState& state)
     // Copy image → host buffer
     VkBufferImageCopy region{};
     region.bufferOffset      = 0;
-    region.bufferRowLength   = 0; // tightly packed
+    region.bufferRowLength   = 0;
     region.bufferImageHeight = 0;
     region.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
     region.imageSubresource.mipLevel       = 0;
@@ -193,23 +184,9 @@ void saveFrame(uint32_t frameIndex, appState& state)
 
     vkFreeCommandBuffers(state.device, state.commandPool, 1, &cmd);
 
-    // --- Map and write PNG ---
+    // --- write raw BGRA directly into ffmpeg pipe (no conversion needed) ---
     void* mapped;
     vkMapMemory(state.device, state.readbackBufferMemory, 0, bufSize, 0, &mapped);
-
-    // Vulkan typically gives us BGRA; stb_image_write wants RGBA — swap channels.
-    std::vector<uint8_t> pixels(bufSize);
-    uint8_t* src = reinterpret_cast<uint8_t*>(mapped);
-    for (uint32_t i = 0; i < w * h; i++) {
-        pixels[i * 4 + 0] = src[i * 4 + 2]; // R ← B
-        pixels[i * 4 + 1] = src[i * 4 + 1]; // G
-        pixels[i * 4 + 2] = src[i * 4 + 0]; // B ← R
-        pixels[i * 4 + 3] = src[i * 4 + 3]; // A
-    }
-
+    fwrite(mapped, 1, bufSize, pipe);
     vkUnmapMemory(state.device, state.readbackBufferMemory);
-
-    char filename[64];
-    snprintf(filename, sizeof(filename), "frames/frame_%05u.png", frameIndex);
-    stbi_write_png(filename, (int)w, (int)h, 4, pixels.data(), (int)(w * 4));
 }

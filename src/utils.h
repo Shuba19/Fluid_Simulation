@@ -4,6 +4,8 @@
 #include <vector>
 #include <array>
 #include <optional>
+#include <string>
+#include <cstdio>
 
 #include <vulkan/vulkan.h>
 
@@ -27,72 +29,58 @@ extern bool USE_OFF_SCREEN_RENDERING;
 
 #pragma region structs
 struct Vertex {
-    glm::vec2 pos;
+    glm::vec3 pos;
     glm::vec3 color;
 
-    //la bind configura la gpu in modo da ottimizzare il passaggio dei dati
-    //alla gpu, è come se configurasse uno stato della gpu dicendo qualcosa tipo
-    //prendi i dati da qua
     static VkVertexInputBindingDescription getVertexBindingDescription() {
         VkVertexInputBindingDescription bindingDescription{};
-
-        bindingDescription.binding = 0; //start Index in the binding array
-        bindingDescription.stride = sizeof(Vertex); 
-        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX; //change if we want to pass to instance rendering
-
+        bindingDescription.binding   = 0;
+        bindingDescription.stride    = sizeof(Vertex);
+        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
         return bindingDescription;
     }
 
     static VkVertexInputBindingDescription getInstancingBindingDescription() {
         VkVertexInputBindingDescription bindingDescription{};
-
-        bindingDescription.binding = 1; //start Index in the binding array
-        bindingDescription.stride = sizeof(glm::vec3);
-        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE; //instance rendering
-
+        bindingDescription.binding   = 1;
+        bindingDescription.stride    = sizeof(glm::vec3);
+        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
         return bindingDescription;
     }
 
-    //specifica come gestire ottenrere le informazioni dal blocco di vertici della bind
     static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions() {
         std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
 
-        //data pos
-        attributeDescriptions[0].binding = 0; //which binding to take
-        attributeDescriptions[0].location = 0; //reference alla direttiva del vertex shader 
-        attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT; //deve matchare il numero di componenti in di shader 
-        attributeDescriptions[0].offset = offsetof(Vertex, pos);
+        attributeDescriptions[0].binding  = 0;
+        attributeDescriptions[0].location = 0;
+        attributeDescriptions[0].format   = VK_FORMAT_R32G32B32_SFLOAT;
+        attributeDescriptions[0].offset   = offsetof(Vertex, pos);
 
-        //data color
-        attributeDescriptions[1].binding = 0;
+        attributeDescriptions[1].binding  = 0;
         attributeDescriptions[1].location = 1;
-        attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attributeDescriptions[1].offset = offsetof(Vertex, color);
+        attributeDescriptions[1].format   = VK_FORMAT_R32G32B32_SFLOAT;
+        attributeDescriptions[1].offset   = offsetof(Vertex, color);
 
         return attributeDescriptions;
     }
 
-    //specifica come gestire ottenrere le informazioni dal blocco di vertici della bind
     static std::array<VkVertexInputAttributeDescription, 3> getInstanceAttributeDescriptions() {
         std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
 
-        //data pos
-        attributeDescriptions[0].binding = 0; //which binding to take
-        attributeDescriptions[0].location = 0; //reference alla direttiva del vertex shader 
-        attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT; //deve matchare il numero di componenti in di shader 
-        attributeDescriptions[0].offset = offsetof(Vertex, pos);
+        attributeDescriptions[0].binding  = 0;
+        attributeDescriptions[0].location = 0;
+        attributeDescriptions[0].format   = VK_FORMAT_R32G32B32_SFLOAT;
+        attributeDescriptions[0].offset   = offsetof(Vertex, pos);
 
-        //data color
-        attributeDescriptions[1].binding = 0;
+        attributeDescriptions[1].binding  = 0;
         attributeDescriptions[1].location = 1;
-        attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attributeDescriptions[1].offset = offsetof(Vertex, color);
+        attributeDescriptions[1].format   = VK_FORMAT_R32G32B32_SFLOAT;
+        attributeDescriptions[1].offset   = offsetof(Vertex, color);
 
-        // instance position
-        attributeDescriptions[2].binding = 1;
+        attributeDescriptions[2].binding  = 1;
         attributeDescriptions[2].location = 2;
-        attributeDescriptions[2].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attributeDescriptions[2].offset = 0;
+        attributeDescriptions[2].format   = VK_FORMAT_R32G32B32_SFLOAT;
+        attributeDescriptions[2].offset   = 0;
 
         return attributeDescriptions;
     }
@@ -131,8 +119,8 @@ struct ParticleInstance {
 //     // {0.3f, 0.2f, 0.0f},
 // };
 
-extern const std::vector<Vertex> vertices;
-extern const std::vector<uint16_t> indices;
+extern std::vector<Vertex>   vertices;
+extern std::vector<uint16_t> indices;
 extern std::vector<glm::vec3> particleInitialPositions;
 extern std::vector<glm::vec3> particleBasePositions;
 
@@ -146,8 +134,13 @@ struct UniformBufferObject {
 
 struct appState{
 
+    // ---- sphere mesh resolution ----
+    int sphereStacks   = 16;
+    int sphereSectors  = 32;
+    float sphereRadius = 0.08f;
+
     // ---- off-screen video recording ----
-    float maxDuration = 15.0f;
+    float maxDuration = 5.0f;
 
     // One VkImage per frame-in-flight used as color attachment instead of a swapchain image.
     std::vector<VkImage>        offscreenImages;
@@ -158,8 +151,11 @@ struct appState{
     VkBuffer       readbackBuffer       = VK_NULL_HANDLE;
     VkDeviceMemory readbackBufferMemory = VK_NULL_HANDLE;
 
-    // Sequential counter incremented every saved frame (used for filenames).
+    // Sequential counter incremented every saved frame.
     uint32_t offscreenFrameIndex = 0;
+
+    // Pipe to a running ffmpeg process (opened in mainLoop, closed after the loop).
+    FILE* ffmpegPipe = nullptr;
 
     // Target frames-per-second for the output video.
     uint32_t videoFPS = 60;
@@ -171,8 +167,8 @@ struct appState{
     //app info
     bool framebufferResized = false;
     
-    const int WIDTH = 800;
-    const int HEIGHT = 600;
+    const int WIDTH = 1200;
+    const int HEIGHT = 800;
 
     const int MAX_FRAMES_IN_FLIGHT = 1;
     // const int MAX_FRAMES_IN_FLIGHT = 2;
@@ -241,6 +237,8 @@ struct QueueFamilyIndices {
     std::optional<uint32_t> presentFamily;
 
     bool isComplete() {
+        if (USE_OFF_SCREEN_RENDERING)
+            return graphicsFamily.has_value();
         return graphicsFamily.has_value() && presentFamily.has_value();
     }
 };
@@ -260,6 +258,10 @@ const std::vector<const char*> deviceExtensions = {
 #pragma region functions
 
 std::vector<char> readFile(const std::string& filename);
+
+// Populates vertices and indices with a UV-sphere using state.sphere* params.
+// Must be called before initVulkan().
+void buildSphereMesh(appState& state);
 
 #pragma endregion functions
 

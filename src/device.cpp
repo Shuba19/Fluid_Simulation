@@ -49,11 +49,14 @@ QueueFamilyIndices findQueueFamilies(appState & state) {
             indices.graphicsFamily = i;
         }
 
-        //sets the present family
-        VkBool32 presentSupport = false;
-        vkGetPhysicalDeviceSurfaceSupportKHR(state.physicalDevice, i, state.surface, &presentSupport);
-        if (presentSupport) {
-            indices.presentFamily = i;
+        if (USE_OFF_SCREEN_RENDERING) {
+            if (indices.graphicsFamily.has_value())
+                indices.presentFamily = indices.graphicsFamily;
+        } else {
+            VkBool32 presentSupport = false;
+            vkGetPhysicalDeviceSurfaceSupportKHR(state.physicalDevice, i, state.surface, &presentSupport);
+            if (presentSupport)
+                indices.presentFamily = i;
         }
 
         if (indices.isComplete()) {
@@ -111,20 +114,16 @@ bool checkDeviceExtensionSupport(appState & state) {
 }
 
 bool isDeviceSuitable(appState & state) {
-
-    //verifica che i buffer siano disponibili
     QueueFamilyIndices indices = findQueueFamilies(state);
+    if (USE_OFF_SCREEN_RENDERING)
+        return indices.isComplete();
 
-    //verifica che il device supporti le estensioni 
     bool extensionsSupported = checkDeviceExtensionSupport(state);
-
-    //verifica che il device abbia la swapchain
     bool swapChainAdequate = false;
     if (extensionsSupported) {
         SwapChainSupportDetails swapChainSupport = querySwapChainSupport(state);
         swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
     }
-
     return indices.isComplete() && extensionsSupported && swapChainAdequate;
 }
 

@@ -67,14 +67,14 @@ void createSyncObjects()
     }
 }
 
-#define NUM_PARTICLES 500000
+#define NUM_PARTICLES 1000
 void initCuda()
 {
-    float deltaTime = 0.016f;                     // Assuming 60 FPS
-    int deviceId = 0;                             // Use the first CUDA device
-    fluidProperties fluidProps{1000.0f, 0.1f, 0.9f};
-    int num_iterations = 10;                      // Number of iterations for the simulation
-    gridSize grid_size{50, 50, 50, 0.03f};            // Example grid size
+    float deltaTime = 0.016f; // Assuming 60 FPS
+    int deviceId = 0;         // Use the first CUDA device
+    fluidProperties fluidProps{1000.0f, 1.0f, 0.1f};
+    int num_iterations = 10;                                // Number of iterations for the simulation
+    gridSize grid_size{30, 30, 30, 0.03f};                  // Example grid size
     state.gridWorldSize = grid_size.x * grid_size.cellSize; // Update global grid world size
     cPS = cudaParticleSimulator(NUM_PARTICLES, deltaTime, deviceId, fluidProps, num_iterations, grid_size);
     cPS.initParticles();
@@ -107,7 +107,7 @@ void initVulkan()
     createFramebuffers(state);
     createCommandPool(state);
     createVertexBuffer(vertices, state);
-    //questo da moficare
+    // questo da moficare
     std::vector<glm::vec3> cudaInitPos(NUM_PARTICLES, glm::vec3(0.0f));
     createInstanceBuffer(cudaInitPos, state);
     // init particle(state.InstanceBuffer)
@@ -133,13 +133,15 @@ void drawFrame()
         // We just submit the command buffer, wait, then save the frame.
         // -----------------------------------------------------------------
         vkWaitForFences(state.device, 1, &inFlightFences[state.currentFrame], VK_TRUE, UINT64_MAX);
-        vkResetFences(state.device, 1, &inFlightFences[state.currentFrame]);
 
+        cPS.updateSystem();
         updateUniformBuffer(state.currentFrame, state);
-        updateInstanceBuffer(state.currentFrame, state);
+        cPS.cuda2vulkan(state.currentFrame, state);
+        cudaDeviceSynchronize(); // ← assicura che CUDA abbia finito
+
+        vkResetFences(state.device, 1, &inFlightFences[state.currentFrame]); // ← spostata qui
 
         vkResetCommandBuffer(state.commandBuffers[state.currentFrame], 0);
-        // imageIndex doesn't matter for off-screen (framebuffer is chosen by currentFrame)
         recordCommandBuffer(state.commandBuffers[state.currentFrame], 0, state);
 
         VkSubmitInfo submitInfo{};
@@ -153,7 +155,7 @@ void drawFrame()
         // Wait for the frame to finish before reading back pixels.
         vkWaitForFences(state.device, 1, &inFlightFences[state.currentFrame], VK_TRUE, UINT64_MAX);
 
-        saveFrame(state.offscreenFrameIndex, state);
+        writeFrameToFfmpeg(state.ffmpegPipe, state);
         state.offscreenFrameIndex++;
 
         state.currentFrame = (state.currentFrame + 1) % state.MAX_FRAMES_IN_FLIGHT;
@@ -189,8 +191,8 @@ void drawFrame()
     cPS.updateSystem();
 
     updateUniformBuffer(state.currentFrame, state);
-    //updateInstanceBuffer(state.currentFrame, state);
-     cPS.cuda2vulkan(state.currentFrame, state);
+    // updateInstanceBuffer(state.currentFrame, state);
+    cPS.cuda2vulkan(state.currentFrame, state);
     // reset fences only if submit work
     vkResetFences(state.device, 1, &inFlightFences[state.currentFrame]);
 
@@ -248,50 +250,59 @@ void drawFrame()
 
 void mainLoop()
 {
-    // TODO check if can be moved in main()
     if (USE_OFF_SCREEN_RENDERING)
     {
-        // Create the output directory for PNG frames (ignore error if it already exists).
-        mkdir("frames", 0755);
-    }
-
-    auto startTime = std::chrono::high_resolution_clock::now();
-    while (!glfwWindowShouldClose(state.window))
-    {
-        auto currentTime = std::chrono::high_resolution_clock::now();
-        float elapsed = std::chrono::duration<float>(currentTime - startTime).count();
-        // printf("%f\n", elapsed);
-        if (elapsed > state.maxDuration)
-        {
-            glfwSetWindowShouldClose(state.window, true); // oppure break;
-        }
-
-        glfwPollEvents();
-        drawFrame();
-    }
-    vkDeviceWaitIdle(state.device);
-
-    if (USE_OFF_SCREEN_RENDERING)
-    {
-        // Encode all saved PNG frames into a single MP4 with ffmpeg.
-        // -y           : overwrite output without asking
-        // -framerate   : matches the FPS we targeted during recording
-        // -i           : input pattern matching frame_00000.png … frame_NNNNN.png
-        // -c:v libx264 : H.264 codec (widely compatible)
-        // -pix_fmt     : required by libx264
+        // Open ffmpeg pipe: reads raw BGRA frames from stdin and encodes to MP4.
         char cmd[512];
         snprintf(cmd, sizeof(cmd),
-                 "ffmpeg -y -framerate %u -i frames/frame_%%05d.png "
+                 "ffmpeg -y -f rawvideo -pixel_format bgra "
+                 "-video_size %ux%u -framerate %u -i pipe:0 "
                  "-c:v libx264 -pix_fmt yuv420p output.mp4",
-                 state.videoFPS);
-        printf("[offscreen] running: %s\n", cmd);
-        int ret = system(cmd);
+                 state.swapChainExtent.width, state.swapChainExtent.height, state.videoFPS);
+        printf("[offscreen] opening pipe: %s\n", cmd);
+        state.ffmpegPipe = popen(cmd, "w");
+        if (!state.ffmpegPipe)
+            throw std::runtime_error("failed to open ffmpeg pipe!");
+
+        uint32_t totalFrames = static_cast<uint32_t>(state.maxDuration * state.videoFPS);
+        printf("max duration = %f, fps = %u, total frames = %u\n", state.maxDuration, state.videoFPS, totalFrames);
+        while (state.offscreenFrameIndex < totalFrames)
+        {
+            glfwPollEvents();
+            drawFrame();
+        }
+
+        vkDeviceWaitIdle(state.device);
+        int ret = pclose(state.ffmpegPipe);
+        state.ffmpegPipe = nullptr;
         if (ret != 0)
             fprintf(stderr, "[offscreen] ffmpeg exited with code %d — "
                             "make sure ffmpeg is installed.\n",
                     ret);
         else
             printf("[offscreen] video saved to output.mp4\n");
+    }
+    else
+    {
+        auto startTime = std::chrono::high_resolution_clock::now();
+        float duration = 15.0f;
+        float counter = 0.0f;
+        while (!glfwWindowShouldClose(state.window))
+        {
+            // float elapsed = std::chrono::duration<float>(
+            //     std::chrono::high_resolution_clock::now() - startTime).count();
+            // //printf("%f\n", elapsed);
+            // if (elapsed > state.maxDuration)
+            //     glfwSetWindowShouldClose(state.window, true);
+            counter += cPS.getDeltaTime();
+            if (counter >= state.maxDuration)
+            {
+                glfwSetWindowShouldClose(state.window, true);
+            }
+            glfwPollEvents();
+            drawFrame();
+        }
+        vkDeviceWaitIdle(state.device);
     }
 }
 
@@ -358,22 +369,26 @@ void cleanup()
     vkDestroyDevice(state.device, nullptr);
     // no cleanup for VkQueue, automatically destroyed after destroy of device
 
-    // Surface (dopo device!)
-    vkDestroySurfaceKHR(state.instance, state.surface, nullptr);
+    if (!USE_OFF_SCREEN_RENDERING)
+    {
+        vkDestroySurfaceKHR(state.instance, state.surface, nullptr);
+    }
 
     // Instance (ULTIMO)
     vkDestroyInstance(state.instance, nullptr);
-    // no cleanup for the phisical device, automatically destroyed after destroy of instance
 
-    // GLFW
-    glfwDestroyWindow(state.window);
-    glfwTerminate();
+    if (!USE_OFF_SCREEN_RENDERING)
+    {
+        glfwDestroyWindow(state.window);
+        glfwTerminate();
+    }
 }
 
 int main()
 {
     try
     {
+        buildSphereMesh(state);
         initWindow(state);
         initCuda();
         initVulkan();

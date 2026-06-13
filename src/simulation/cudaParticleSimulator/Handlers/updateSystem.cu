@@ -19,10 +19,8 @@ void cudaParticleSimulator::cuda2vulkan(uint32_t currentImage, appState& state)
 {
     //printf("Transferring data from CUDA to Vulkan...\n");
     std::vector<glm::vec3> positions(this->numParticles);
-    cudaMemcpy(positions.data(), deviceData.pos, this->numParticles * sizeof(float3), cudaMemcpyDeviceToHost);
+    cudaMemcpy(state.instanceBuffersMapped[currentImage], deviceData.pos, this->numParticles * sizeof(float3), cudaMemcpyDeviceToHost);
     cudaDeviceSynchronize();
-    memcpy(state.instanceBuffersMapped[currentImage], positions.data(),
-            sizeof(positions[0]) * positions.size());
 }
 
 __global__ void p2gNormalizeKernel(

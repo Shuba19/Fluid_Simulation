@@ -223,8 +223,10 @@ void createInstanceBuffer(std::vector<glm::vec3> positions, appState &state)
 void updateInstanceBuffer(uint32_t currentImage, appState &state)
 {
     static auto startTime = std::chrono::high_resolution_clock::now();
-    auto currentTime = std::chrono::high_resolution_clock::now();
-    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+    float time = USE_OFF_SCREEN_RENDERING
+        ? static_cast<float>(state.offscreenFrameIndex) / state.videoFPS
+        : std::chrono::duration<float, std::chrono::seconds::period>(
+              std::chrono::high_resolution_clock::now() - startTime).count();
 
     // oscilla tra 0 e 1, tutte le particelle usano lo stesso valore
     float t = (sin(time) + 1.0f) / 2.0f;
@@ -375,19 +377,18 @@ void createUniformBuffers(appState &state)
     }
 }
 
-void updateUniformBuffer(uint32_t currentImage, appState &state)
-{
-    // basic time since start
+void updateUniformBuffer(uint32_t currentImage, appState & state) {
     static auto startTime = std::chrono::high_resolution_clock::now();
-
-    auto currentTime = std::chrono::high_resolution_clock::now();
-    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+    float time = USE_OFF_SCREEN_RENDERING
+        ? static_cast<float>(state.offscreenFrameIndex) / state.videoFPS
+        : std::chrono::duration<float, std::chrono::seconds::period>(
+              std::chrono::high_resolution_clock::now() - startTime).count();
 
     UniformBufferObject ubo{};
     // ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     ubo.model = glm::mat4(1.0f);
-    ubo.view = glm::lookAt(glm::vec3(3.0f, 2.0f, 3.0f), glm::vec3(1.0f, 0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    ubo.proj = glm::perspective(glm::radians(30.0f), state.swapChainExtent.width / (float)state.swapChainExtent.height, 0.2f, 70.0f);
-    ubo.proj[1][1] *= -1; // invert the y cordinate of the clip space since glm was designed for opengl
+    ubo.view = glm::lookAt(glm::vec3(3.5f, 3.5f, 5.5f), glm::vec3(0.5f, 0.5f, 1.5f), glm::vec3(0.0f, 1.0f, 0.0f));
+    ubo.proj = glm::perspective(glm::radians(45.0f), state.swapChainExtent.width / (float) state.swapChainExtent.height, 0.1f, 20.0f);
+    ubo.proj[1][1] *= -1;//invert the y cordinate of the clip space since glm was designed for opengl
     memcpy(state.uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
 }

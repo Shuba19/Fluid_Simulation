@@ -2,6 +2,9 @@
 #include <vector>
 #include <cmath>
 #include <iostream>
+#include <numeric>
+#include <algorithm>
+#include <random>
 #define CHECK(call)                                                         \
     {                                                                       \
         const cudaError_t error = call;                                     \
@@ -144,11 +147,23 @@ void cudaParticleSimulator::initParticles()
         std::cerr << "Error: No particles generated. Check the sphere parameters and grid size." << std::endl;
         return;
     }
-    auto max = generatedCount > this->numParticles ? generatedCount : this->numParticles;
     printf("Generated %d particles, but the simulator is set to handle %d. Using the smaller of the two.\n", generatedCount, this->numParticles);
     if (generatedCount > this->numParticles)
-
+    {
+        // Shuffle so truncation doesn't cut a spatial slice off the sphere
+        std::vector<int> idx(generatedCount);
+        std::iota(idx.begin(), idx.end(), 0);
+        std::mt19937 rng(42);
+        std::shuffle(idx.begin(), idx.end(), rng);
+        std::vector<float3> tmp_pos(this->numParticles), tmp_vel(this->numParticles);
+        for (int i = 0; i < this->numParticles; ++i) {
+            tmp_pos[i] = h_pos[idx[i]];
+            tmp_vel[i] = h_vel[idx[i]];
+        }
+        h_pos = std::move(tmp_pos);
+        h_vel = std::move(tmp_vel);
         generatedCount = this->numParticles;
+    }
     else
         this->numParticles = generatedCount; // Aggiorna il numero reale di particelle attive
 

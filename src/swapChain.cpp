@@ -73,6 +73,11 @@ VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>
 }
 
 void createSwapChain(appState& state) {
+    if (USE_OFF_SCREEN_RENDERING) {
+        state.swapChainExtent = {(uint32_t)state.WIDTH, (uint32_t)state.HEIGHT};
+        state.swapChainImageFormat = VK_FORMAT_B8G8R8A8_SRGB;
+        return;
+    }
     //swapChainSupport struct
     SwapChainSupportDetails swapChainSupport = querySwapChainSupport(state);
 
@@ -156,6 +161,7 @@ void cleanupSwapChain(appState& state) {
 
 void createImageViews(appState& state)
 {
+    if (USE_OFF_SCREEN_RENDERING) return;
     //una per ongi imagine della swapchain
     state.swapChainImageViews.resize(state.swapChainImages.size());
 

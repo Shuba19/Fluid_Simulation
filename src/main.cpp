@@ -325,16 +325,17 @@ void cleanup() {
     vkDestroyDevice(state.device, nullptr);
     //no cleanup for VkQueue, automatically destroyed after destroy of device
 
-    // Surface (dopo device!)
-    vkDestroySurfaceKHR(state.instance, state.surface, nullptr);
+    if (!USE_OFF_SCREEN_RENDERING) {
+        vkDestroySurfaceKHR(state.instance, state.surface, nullptr);
+    }
 
     // Instance (ULTIMO)
     vkDestroyInstance(state.instance, nullptr);
-    //no cleanup for the phisical device, automatically destroyed after destroy of instance 
 
-    // GLFW
-    glfwDestroyWindow(state.window);
-    glfwTerminate();
+    if (!USE_OFF_SCREEN_RENDERING) {
+        glfwDestroyWindow(state.window);
+        glfwTerminate();
+    }
 }
 
 int main() {

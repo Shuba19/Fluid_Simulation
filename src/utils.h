@@ -233,6 +233,8 @@ struct QueueFamilyIndices {
     std::optional<uint32_t> presentFamily;
 
     bool isComplete() {
+        if (USE_OFF_SCREEN_RENDERING)
+            return graphicsFamily.has_value();
         return graphicsFamily.has_value() && presentFamily.has_value();
     }
 };

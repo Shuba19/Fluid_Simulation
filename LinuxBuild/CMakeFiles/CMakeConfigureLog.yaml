@@ -61,8 +61,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-8JyxIu"
-      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-8JyxIu"
+      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-10MNbm"
+      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-10MNbm"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -71,12 +71,12 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-8JyxIu
+        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-10MNbm
         
-        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_cced2/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_cced2.dir/build.make CMakeFiles/cmTC_cced2.dir/build
-        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-8JyxIu'
-        Building C object CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o
-        /share/apps/gcc/12.4.0/bin/gcc   -v -o CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o -c /share/apps/cmake/3.26/share/cmake-3.26/Modules/CMakeCCompilerABI.c
+        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_5d4a3/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_5d4a3.dir/build.make CMakeFiles/cmTC_5d4a3.dir/build
+        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-10MNbm'
+        Building C object CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o
+        /share/apps/gcc/12.4.0/bin/gcc   -v -o CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o -c /share/apps/cmake/3.26/share/cmake-3.26/Modules/CMakeCCompilerABI.c
         Using built-in specs.
         COLLECT_GCC=/share/apps/gcc/12.4.0/bin/gcc
         Target: x86_64-pc-linux-gnu
@@ -84,8 +84,8 @@ events:
         Thread model: posix
         Supported LTO compression algorithms: zlib zstd
         gcc version 12.4.0 (GCC) 
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_cced2.dir/'
-         /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/cc1 -quiet -v /share/apps/cmake/3.26/share/cmake-3.26/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_cced2.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -o /tmp/cc2Oa1qM.s
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_5d4a3.dir/'
+         /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/cc1 -quiet -v /share/apps/cmake/3.26/share/cmake-3.26/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_5d4a3.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -o /tmp/ccWjuTEG.s
         GNU C17 (GCC) version 12.4.0 (x86_64-pc-linux-gnu)
         	compiled by GNU C version 12.4.0, GMP version 6.2.1, MPFR version 4.1.0, MPC version 1.2.1, isl version isl-0.24-GMP
         
@@ -115,15 +115,15 @@ events:
         
         GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
         Compiler executable checksum: 268627811b927f783055e3706a232dc0
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_cced2.dir/'
-         as -v --64 -o CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o /tmp/cc2Oa1qM.s
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_5d4a3.dir/'
+         as -v --64 -o CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o /tmp/ccWjuTEG.s
         GNU assembler version 2.35.2 (x86_64-redhat-linux) using BFD version version 2.35.2-54.el9
         COMPILER_PATH=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/
         LIBRARY_PATH=/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../:/lib/:/usr/lib/
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.'
-        Linking C executable cmTC_cced2
-        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cced2.dir/link.txt --verbose=1
-        /share/apps/gcc/12.4.0/bin/gcc  -v CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o -o cmTC_cced2 
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.'
+        Linking C executable cmTC_5d4a3
+        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5d4a3.dir/link.txt --verbose=1
+        /share/apps/gcc/12.4.0/bin/gcc  -v CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o -o cmTC_5d4a3 
         Using built-in specs.
         COLLECT_GCC=/share/apps/gcc/12.4.0/bin/gcc
         COLLECT_LTO_WRAPPER=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/lto-wrapper
@@ -134,10 +134,10 @@ events:
         gcc version 12.4.0 (GCC) 
         COMPILER_PATH=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/
         LIBRARY_PATH=/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../:/lib/:/usr/lib/
-        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_cced2' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_cced2.'
-         /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/collect2 -plugin /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/liblto_plugin.so -plugin-opt=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccV1g64h.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_cced2 /lib/../lib64/crt1.o /lib/../lib64/crti.o /share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtbegin.o -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0 -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../.. CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtend.o /lib/../lib64/crtn.o
-        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_cced2' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_cced2.'
-        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-8JyxIu'
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_5d4a3' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_5d4a3.'
+         /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/collect2 -plugin /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/liblto_plugin.so -plugin-opt=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccvKfq8s.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_5d4a3 /lib/../lib64/crt1.o /lib/../lib64/crti.o /share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtbegin.o -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0 -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../.. CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtend.o /lib/../lib64/crtn.o
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_5d4a3' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_5d4a3.'
+        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-10MNbm'
         
       exitCode: 0
   -
@@ -179,12 +179,12 @@ events:
     message: |
       Parsed C implicit link information:
         link line regex: [^( *|.*[/\\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
-        ignore line: [Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-8JyxIu]
+        ignore line: [Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-10MNbm]
         ignore line: []
-        ignore line: [Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_cced2/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_cced2.dir/build.make CMakeFiles/cmTC_cced2.dir/build]
-        ignore line: [gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-8JyxIu']
-        ignore line: [Building C object CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o]
-        ignore line: [/share/apps/gcc/12.4.0/bin/gcc   -v -o CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o -c /share/apps/cmake/3.26/share/cmake-3.26/Modules/CMakeCCompilerABI.c]
+        ignore line: [Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_5d4a3/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_5d4a3.dir/build.make CMakeFiles/cmTC_5d4a3.dir/build]
+        ignore line: [gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-10MNbm']
+        ignore line: [Building C object CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o]
+        ignore line: [/share/apps/gcc/12.4.0/bin/gcc   -v -o CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o -c /share/apps/cmake/3.26/share/cmake-3.26/Modules/CMakeCCompilerABI.c]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/share/apps/gcc/12.4.0/bin/gcc]
         ignore line: [Target: x86_64-pc-linux-gnu]
@@ -192,8 +192,8 @@ events:
         ignore line: [Thread model: posix]
         ignore line: [Supported LTO compression algorithms: zlib zstd]
         ignore line: [gcc version 12.4.0 (GCC) ]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_cced2.dir/']
-        ignore line: [ /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/cc1 -quiet -v /share/apps/cmake/3.26/share/cmake-3.26/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_cced2.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -o /tmp/cc2Oa1qM.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_5d4a3.dir/']
+        ignore line: [ /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/cc1 -quiet -v /share/apps/cmake/3.26/share/cmake-3.26/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_5d4a3.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -o /tmp/ccWjuTEG.s]
         ignore line: [GNU C17 (GCC) version 12.4.0 (x86_64-pc-linux-gnu)]
         ignore line: [	compiled by GNU C version 12.4.0  GMP version 6.2.1  MPFR version 4.1.0  MPC version 1.2.1  isl version isl-0.24-GMP]
         ignore line: []
@@ -223,15 +223,15 @@ events:
         ignore line: []
         ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
         ignore line: [Compiler executable checksum: 268627811b927f783055e3706a232dc0]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_cced2.dir/']
-        ignore line: [ as -v --64 -o CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o /tmp/cc2Oa1qM.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_5d4a3.dir/']
+        ignore line: [ as -v --64 -o CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o /tmp/ccWjuTEG.s]
         ignore line: [GNU assembler version 2.35.2 (x86_64-redhat-linux) using BFD version version 2.35.2-54.el9]
         ignore line: [COMPILER_PATH=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/]
         ignore line: [LIBRARY_PATH=/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../:/lib/:/usr/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.']
-        ignore line: [Linking C executable cmTC_cced2]
-        ignore line: [/share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cced2.dir/link.txt --verbose=1]
-        ignore line: [/share/apps/gcc/12.4.0/bin/gcc  -v CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o -o cmTC_cced2 ]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.']
+        ignore line: [Linking C executable cmTC_5d4a3]
+        ignore line: [/share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5d4a3.dir/link.txt --verbose=1]
+        ignore line: [/share/apps/gcc/12.4.0/bin/gcc  -v CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o -o cmTC_5d4a3 ]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/share/apps/gcc/12.4.0/bin/gcc]
         ignore line: [COLLECT_LTO_WRAPPER=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/lto-wrapper]
@@ -242,13 +242,13 @@ events:
         ignore line: [gcc version 12.4.0 (GCC) ]
         ignore line: [COMPILER_PATH=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/]
         ignore line: [LIBRARY_PATH=/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../:/lib/:/usr/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_cced2' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_cced2.']
-        link line: [ /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/collect2 -plugin /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/liblto_plugin.so -plugin-opt=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccV1g64h.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_cced2 /lib/../lib64/crt1.o /lib/../lib64/crti.o /share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtbegin.o -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0 -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../.. CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtend.o /lib/../lib64/crtn.o]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_5d4a3' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_5d4a3.']
+        link line: [ /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/collect2 -plugin /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/liblto_plugin.so -plugin-opt=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccvKfq8s.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_5d4a3 /lib/../lib64/crt1.o /lib/../lib64/crti.o /share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtbegin.o -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0 -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../.. CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtend.o /lib/../lib64/crtn.o]
           arg [/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/collect2] ==> ignore
           arg [-plugin] ==> ignore
           arg [/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/liblto_plugin.so] ==> ignore
           arg [-plugin-opt=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/lto-wrapper] ==> ignore
-          arg [-plugin-opt=-fresolution=/tmp/ccV1g64h.res] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccvKfq8s.res] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
           arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -260,7 +260,7 @@ events:
           arg [-dynamic-linker] ==> ignore
           arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_cced2] ==> ignore
+          arg [cmTC_5d4a3] ==> ignore
           arg [/lib/../lib64/crt1.o] ==> obj [/lib/../lib64/crt1.o]
           arg [/lib/../lib64/crti.o] ==> obj [/lib/../lib64/crti.o]
           arg [/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtbegin.o] ==> obj [/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtbegin.o]
@@ -269,7 +269,7 @@ events:
           arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
           arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
           arg [-L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../..] ==> dir [/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../..]
-          arg [CMakeFiles/cmTC_cced2.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [CMakeFiles/cmTC_5d4a3.dir/CMakeCCompilerABI.c.o] ==> ignore
           arg [-lgcc] ==> lib [gcc]
           arg [--push-state] ==> ignore
           arg [--as-needed] ==> ignore
@@ -306,8 +306,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-K93jng"
-      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-K93jng"
+      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-24ZqGc"
+      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-24ZqGc"
     cmakeVariables:
       CMAKE_CXX_FLAGS: ""
       CMAKE_CXX_FLAGS_DEBUG: "-g"
@@ -316,12 +316,12 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-K93jng
+        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-24ZqGc
         
-        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_212e1/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_212e1.dir/build.make CMakeFiles/cmTC_212e1.dir/build
-        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-K93jng'
-        Building CXX object CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o
-        /share/apps/gcc/12.4.0/bin/g++   -v -o CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o -c /share/apps/cmake/3.26/share/cmake-3.26/Modules/CMakeCXXCompilerABI.cpp
+        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_e9501/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_e9501.dir/build.make CMakeFiles/cmTC_e9501.dir/build
+        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-24ZqGc'
+        Building CXX object CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o
+        /share/apps/gcc/12.4.0/bin/g++   -v -o CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o -c /share/apps/cmake/3.26/share/cmake-3.26/Modules/CMakeCXXCompilerABI.cpp
         Using built-in specs.
         COLLECT_GCC=/share/apps/gcc/12.4.0/bin/g++
         Target: x86_64-pc-linux-gnu
@@ -329,8 +329,8 @@ events:
         Thread model: posix
         Supported LTO compression algorithms: zlib zstd
         gcc version 12.4.0 (GCC) 
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_212e1.dir/'
-         /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/cc1plus -quiet -v -D_GNU_SOURCE /share/apps/cmake/3.26/share/cmake-3.26/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_212e1.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -o /tmp/cc0NKfEm.s
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_e9501.dir/'
+         /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/cc1plus -quiet -v -D_GNU_SOURCE /share/apps/cmake/3.26/share/cmake-3.26/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_e9501.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -o /tmp/ccaP0iNo.s
         GNU C++17 (GCC) version 12.4.0 (x86_64-pc-linux-gnu)
         	compiled by GNU C version 12.4.0, GMP version 6.2.1, MPFR version 4.1.0, MPC version 1.2.1, isl version isl-0.24-GMP
         
@@ -363,15 +363,15 @@ events:
         
         GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
         Compiler executable checksum: 26f09caa488b8bfdb98f461208e28568
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_212e1.dir/'
-         as -v --64 -o CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o /tmp/cc0NKfEm.s
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_e9501.dir/'
+         as -v --64 -o CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccaP0iNo.s
         GNU assembler version 2.35.2 (x86_64-redhat-linux) using BFD version version 2.35.2-54.el9
         COMPILER_PATH=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/
         LIBRARY_PATH=/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../:/lib/:/usr/lib/
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.'
-        Linking CXX executable cmTC_212e1
-        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_212e1.dir/link.txt --verbose=1
-        /share/apps/gcc/12.4.0/bin/g++  -v CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_212e1 
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.'
+        Linking CXX executable cmTC_e9501
+        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e9501.dir/link.txt --verbose=1
+        /share/apps/gcc/12.4.0/bin/g++  -v CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_e9501 
         Using built-in specs.
         COLLECT_GCC=/share/apps/gcc/12.4.0/bin/g++
         COLLECT_LTO_WRAPPER=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/lto-wrapper
@@ -382,10 +382,10 @@ events:
         gcc version 12.4.0 (GCC) 
         COMPILER_PATH=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/
         LIBRARY_PATH=/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../:/lib/:/usr/lib/
-        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_212e1' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_212e1.'
-         /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/collect2 -plugin /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/liblto_plugin.so -plugin-opt=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccseiwKp.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_212e1 /lib/../lib64/crt1.o /lib/../lib64/crti.o /share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtbegin.o -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0 -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../.. CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtend.o /lib/../lib64/crtn.o
-        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_212e1' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_212e1.'
-        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-K93jng'
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_e9501' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_e9501.'
+         /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/collect2 -plugin /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/liblto_plugin.so -plugin-opt=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/cc5k0aGt.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_e9501 /lib/../lib64/crt1.o /lib/../lib64/crti.o /share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtbegin.o -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0 -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../.. CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtend.o /lib/../lib64/crtn.o
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_e9501' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_e9501.'
+        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-24ZqGc'
         
       exitCode: 0
   -
@@ -433,12 +433,12 @@ events:
     message: |
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
-        ignore line: [Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-K93jng]
+        ignore line: [Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-24ZqGc]
         ignore line: []
-        ignore line: [Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_212e1/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_212e1.dir/build.make CMakeFiles/cmTC_212e1.dir/build]
-        ignore line: [gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-K93jng']
-        ignore line: [Building CXX object CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o]
-        ignore line: [/share/apps/gcc/12.4.0/bin/g++   -v -o CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o -c /share/apps/cmake/3.26/share/cmake-3.26/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_e9501/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_e9501.dir/build.make CMakeFiles/cmTC_e9501.dir/build]
+        ignore line: [gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-24ZqGc']
+        ignore line: [Building CXX object CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/share/apps/gcc/12.4.0/bin/g++   -v -o CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o -c /share/apps/cmake/3.26/share/cmake-3.26/Modules/CMakeCXXCompilerABI.cpp]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/share/apps/gcc/12.4.0/bin/g++]
         ignore line: [Target: x86_64-pc-linux-gnu]
@@ -446,8 +446,8 @@ events:
         ignore line: [Thread model: posix]
         ignore line: [Supported LTO compression algorithms: zlib zstd]
         ignore line: [gcc version 12.4.0 (GCC) ]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_212e1.dir/']
-        ignore line: [ /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/cc1plus -quiet -v -D_GNU_SOURCE /share/apps/cmake/3.26/share/cmake-3.26/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_212e1.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -o /tmp/cc0NKfEm.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_e9501.dir/']
+        ignore line: [ /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/cc1plus -quiet -v -D_GNU_SOURCE /share/apps/cmake/3.26/share/cmake-3.26/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_e9501.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -o /tmp/ccaP0iNo.s]
         ignore line: [GNU C++17 (GCC) version 12.4.0 (x86_64-pc-linux-gnu)]
         ignore line: [	compiled by GNU C version 12.4.0  GMP version 6.2.1  MPFR version 4.1.0  MPC version 1.2.1  isl version isl-0.24-GMP]
         ignore line: []
@@ -480,15 +480,15 @@ events:
         ignore line: []
         ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
         ignore line: [Compiler executable checksum: 26f09caa488b8bfdb98f461208e28568]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_212e1.dir/']
-        ignore line: [ as -v --64 -o CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o /tmp/cc0NKfEm.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_e9501.dir/']
+        ignore line: [ as -v --64 -o CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccaP0iNo.s]
         ignore line: [GNU assembler version 2.35.2 (x86_64-redhat-linux) using BFD version version 2.35.2-54.el9]
         ignore line: [COMPILER_PATH=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/]
         ignore line: [LIBRARY_PATH=/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../:/lib/:/usr/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.']
-        ignore line: [Linking CXX executable cmTC_212e1]
-        ignore line: [/share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_212e1.dir/link.txt --verbose=1]
-        ignore line: [/share/apps/gcc/12.4.0/bin/g++  -v CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_212e1 ]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.']
+        ignore line: [Linking CXX executable cmTC_e9501]
+        ignore line: [/share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e9501.dir/link.txt --verbose=1]
+        ignore line: [/share/apps/gcc/12.4.0/bin/g++  -v CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_e9501 ]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/share/apps/gcc/12.4.0/bin/g++]
         ignore line: [COLLECT_LTO_WRAPPER=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/lto-wrapper]
@@ -499,13 +499,13 @@ events:
         ignore line: [gcc version 12.4.0 (GCC) ]
         ignore line: [COMPILER_PATH=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/]
         ignore line: [LIBRARY_PATH=/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../:/lib/:/usr/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_212e1' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_212e1.']
-        link line: [ /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/collect2 -plugin /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/liblto_plugin.so -plugin-opt=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccseiwKp.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_212e1 /lib/../lib64/crt1.o /lib/../lib64/crti.o /share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtbegin.o -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0 -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../.. CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtend.o /lib/../lib64/crtn.o]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_e9501' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_e9501.']
+        link line: [ /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/collect2 -plugin /share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/liblto_plugin.so -plugin-opt=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/cc5k0aGt.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_e9501 /lib/../lib64/crt1.o /lib/../lib64/crti.o /share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtbegin.o -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0 -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../.. CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtend.o /lib/../lib64/crtn.o]
           arg [/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/collect2] ==> ignore
           arg [-plugin] ==> ignore
           arg [/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/liblto_plugin.so] ==> ignore
           arg [-plugin-opt=/share/apps/gcc/12.4.0/libexec/gcc/x86_64-pc-linux-gnu/12.4.0/lto-wrapper] ==> ignore
-          arg [-plugin-opt=-fresolution=/tmp/ccseiwKp.res] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/cc5k0aGt.res] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -517,7 +517,7 @@ events:
           arg [-dynamic-linker] ==> ignore
           arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_212e1] ==> ignore
+          arg [cmTC_e9501] ==> ignore
           arg [/lib/../lib64/crt1.o] ==> obj [/lib/../lib64/crt1.o]
           arg [/lib/../lib64/crti.o] ==> obj [/lib/../lib64/crti.o]
           arg [/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtbegin.o] ==> obj [/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/crtbegin.o]
@@ -526,7 +526,7 @@ events:
           arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
           arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
           arg [-L/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../..] ==> dir [/share/apps/gcc/12.4.0/lib/gcc/x86_64-pc-linux-gnu/12.4.0/../../..]
-          arg [CMakeFiles/cmTC_212e1.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [CMakeFiles/cmTC_e9501.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
           arg [-lstdc++] ==> lib [stdc++]
           arg [-lm] ==> lib [m]
           arg [-lgcc_s] ==> lib [gcc_s]
@@ -561,8 +561,8 @@ events:
     checks:
       - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
     directories:
-      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-tlCZB6"
-      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-tlCZB6"
+      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-pPaayy"
+      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-pPaayy"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -572,16 +572,16 @@ events:
       variable: "CMAKE_HAVE_LIBC_PTHREAD"
       cached: true
       stdout: |
-        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-tlCZB6
+        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-pPaayy
         
-        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_04dde/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_04dde.dir/build.make CMakeFiles/cmTC_04dde.dir/build
-        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-tlCZB6'
-        Building C object CMakeFiles/cmTC_04dde.dir/src.c.o
-        /share/apps/gcc/12.4.0/bin/gcc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_04dde.dir/src.c.o -c /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-tlCZB6/src.c
-        Linking C executable cmTC_04dde
-        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_04dde.dir/link.txt --verbose=1
-        /share/apps/gcc/12.4.0/bin/gcc CMakeFiles/cmTC_04dde.dir/src.c.o -o cmTC_04dde 
-        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-tlCZB6'
+        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_0586a/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_0586a.dir/build.make CMakeFiles/cmTC_0586a.dir/build
+        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-pPaayy'
+        Building C object CMakeFiles/cmTC_0586a.dir/src.c.o
+        /share/apps/gcc/12.4.0/bin/gcc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_0586a.dir/src.c.o -c /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-pPaayy/src.c
+        Linking C executable cmTC_0586a
+        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0586a.dir/link.txt --verbose=1
+        /share/apps/gcc/12.4.0/bin/gcc CMakeFiles/cmTC_0586a.dir/src.c.o -o cmTC_0586a 
+        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-pPaayy'
         
       exitCode: 0
   -
@@ -592,8 +592,8 @@ events:
     checks:
       - "Looking for memfd_create"
     directories:
-      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-t8Sym3"
-      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-t8Sym3"
+      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-4PVBlk"
+      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-4PVBlk"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -603,16 +603,16 @@ events:
       variable: "HAVE_MEMFD_CREATE"
       cached: true
       stdout: |
-        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-t8Sym3
+        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-4PVBlk
         
-        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_8ddab/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_8ddab.dir/build.make CMakeFiles/cmTC_8ddab.dir/build
-        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-t8Sym3'
-        Building C object CMakeFiles/cmTC_8ddab.dir/CheckFunctionExists.c.o
-        /share/apps/gcc/12.4.0/bin/gcc   -DCHECK_FUNCTION_EXISTS=memfd_create -o CMakeFiles/cmTC_8ddab.dir/CheckFunctionExists.c.o -c /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-t8Sym3/CheckFunctionExists.c
-        Linking C executable cmTC_8ddab
-        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8ddab.dir/link.txt --verbose=1
-        /share/apps/gcc/12.4.0/bin/gcc  -DCHECK_FUNCTION_EXISTS=memfd_create CMakeFiles/cmTC_8ddab.dir/CheckFunctionExists.c.o -o cmTC_8ddab 
-        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-t8Sym3'
+        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_a961e/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_a961e.dir/build.make CMakeFiles/cmTC_a961e.dir/build
+        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-4PVBlk'
+        Building C object CMakeFiles/cmTC_a961e.dir/CheckFunctionExists.c.o
+        /share/apps/gcc/12.4.0/bin/gcc   -DCHECK_FUNCTION_EXISTS=memfd_create -o CMakeFiles/cmTC_a961e.dir/CheckFunctionExists.c.o -c /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-4PVBlk/CheckFunctionExists.c
+        Linking C executable cmTC_a961e
+        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a961e.dir/link.txt --verbose=1
+        /share/apps/gcc/12.4.0/bin/gcc  -DCHECK_FUNCTION_EXISTS=memfd_create CMakeFiles/cmTC_a961e.dir/CheckFunctionExists.c.o -o cmTC_a961e 
+        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-4PVBlk'
         
       exitCode: 0
   -
@@ -624,8 +624,8 @@ events:
     checks:
       - "Looking for XOpenDisplay in /usr/lib64/libX11.so;/usr/lib64/libXext.so"
     directories:
-      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-Yvoi5Y"
-      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-Yvoi5Y"
+      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-xql5vM"
+      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-xql5vM"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -635,16 +635,16 @@ events:
       variable: "X11_LIB_X11_SOLO"
       cached: true
       stdout: |
-        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-Yvoi5Y
+        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-xql5vM
         
-        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_53942/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_53942.dir/build.make CMakeFiles/cmTC_53942.dir/build
-        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-Yvoi5Y'
-        Building C object CMakeFiles/cmTC_53942.dir/CheckFunctionExists.c.o
-        /share/apps/gcc/12.4.0/bin/gcc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay -o CMakeFiles/cmTC_53942.dir/CheckFunctionExists.c.o -c /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-Yvoi5Y/CheckFunctionExists.c
-        Linking C executable cmTC_53942
-        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_53942.dir/link.txt --verbose=1
-        /share/apps/gcc/12.4.0/bin/gcc  -DCHECK_FUNCTION_EXISTS=XOpenDisplay CMakeFiles/cmTC_53942.dir/CheckFunctionExists.c.o -o cmTC_53942  /usr/lib64/libX11.so /usr/lib64/libXext.so 
-        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-Yvoi5Y'
+        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_7f7be/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_7f7be.dir/build.make CMakeFiles/cmTC_7f7be.dir/build
+        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-xql5vM'
+        Building C object CMakeFiles/cmTC_7f7be.dir/CheckFunctionExists.c.o
+        /share/apps/gcc/12.4.0/bin/gcc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay -o CMakeFiles/cmTC_7f7be.dir/CheckFunctionExists.c.o -c /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-xql5vM/CheckFunctionExists.c
+        Linking C executable cmTC_7f7be
+        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7f7be.dir/link.txt --verbose=1
+        /share/apps/gcc/12.4.0/bin/gcc  -DCHECK_FUNCTION_EXISTS=XOpenDisplay CMakeFiles/cmTC_7f7be.dir/CheckFunctionExists.c.o -o cmTC_7f7be  /usr/lib64/libX11.so /usr/lib64/libXext.so 
+        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-xql5vM'
         
       exitCode: 0
   -
@@ -656,8 +656,8 @@ events:
     checks:
       - "Looking for gethostbyname"
     directories:
-      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-ON2nhr"
-      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-ON2nhr"
+      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-cs95g7"
+      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-cs95g7"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -667,16 +667,16 @@ events:
       variable: "CMAKE_HAVE_GETHOSTBYNAME"
       cached: true
       stdout: |
-        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-ON2nhr
+        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-cs95g7
         
-        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_f49a7/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_f49a7.dir/build.make CMakeFiles/cmTC_f49a7.dir/build
-        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-ON2nhr'
-        Building C object CMakeFiles/cmTC_f49a7.dir/CheckFunctionExists.c.o
-        /share/apps/gcc/12.4.0/bin/gcc   -DCHECK_FUNCTION_EXISTS=gethostbyname -o CMakeFiles/cmTC_f49a7.dir/CheckFunctionExists.c.o -c /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-ON2nhr/CheckFunctionExists.c
-        Linking C executable cmTC_f49a7
-        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f49a7.dir/link.txt --verbose=1
-        /share/apps/gcc/12.4.0/bin/gcc  -DCHECK_FUNCTION_EXISTS=gethostbyname CMakeFiles/cmTC_f49a7.dir/CheckFunctionExists.c.o -o cmTC_f49a7 
-        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-ON2nhr'
+        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_38bee/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_38bee.dir/build.make CMakeFiles/cmTC_38bee.dir/build
+        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-cs95g7'
+        Building C object CMakeFiles/cmTC_38bee.dir/CheckFunctionExists.c.o
+        /share/apps/gcc/12.4.0/bin/gcc   -DCHECK_FUNCTION_EXISTS=gethostbyname -o CMakeFiles/cmTC_38bee.dir/CheckFunctionExists.c.o -c /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-cs95g7/CheckFunctionExists.c
+        Linking C executable cmTC_38bee
+        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_38bee.dir/link.txt --verbose=1
+        /share/apps/gcc/12.4.0/bin/gcc  -DCHECK_FUNCTION_EXISTS=gethostbyname CMakeFiles/cmTC_38bee.dir/CheckFunctionExists.c.o -o cmTC_38bee 
+        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-cs95g7'
         
       exitCode: 0
   -
@@ -688,8 +688,8 @@ events:
     checks:
       - "Looking for connect"
     directories:
-      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-OF6kI5"
-      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-OF6kI5"
+      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-dcgWeH"
+      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-dcgWeH"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -699,16 +699,16 @@ events:
       variable: "CMAKE_HAVE_CONNECT"
       cached: true
       stdout: |
-        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-OF6kI5
+        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-dcgWeH
         
-        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_83c90/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_83c90.dir/build.make CMakeFiles/cmTC_83c90.dir/build
-        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-OF6kI5'
-        Building C object CMakeFiles/cmTC_83c90.dir/CheckFunctionExists.c.o
-        /share/apps/gcc/12.4.0/bin/gcc   -DCHECK_FUNCTION_EXISTS=connect -o CMakeFiles/cmTC_83c90.dir/CheckFunctionExists.c.o -c /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-OF6kI5/CheckFunctionExists.c
-        Linking C executable cmTC_83c90
-        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_83c90.dir/link.txt --verbose=1
-        /share/apps/gcc/12.4.0/bin/gcc  -DCHECK_FUNCTION_EXISTS=connect CMakeFiles/cmTC_83c90.dir/CheckFunctionExists.c.o -o cmTC_83c90 
-        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-OF6kI5'
+        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_66fc1/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_66fc1.dir/build.make CMakeFiles/cmTC_66fc1.dir/build
+        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-dcgWeH'
+        Building C object CMakeFiles/cmTC_66fc1.dir/CheckFunctionExists.c.o
+        /share/apps/gcc/12.4.0/bin/gcc   -DCHECK_FUNCTION_EXISTS=connect -o CMakeFiles/cmTC_66fc1.dir/CheckFunctionExists.c.o -c /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-dcgWeH/CheckFunctionExists.c
+        Linking C executable cmTC_66fc1
+        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_66fc1.dir/link.txt --verbose=1
+        /share/apps/gcc/12.4.0/bin/gcc  -DCHECK_FUNCTION_EXISTS=connect CMakeFiles/cmTC_66fc1.dir/CheckFunctionExists.c.o -o cmTC_66fc1 
+        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-dcgWeH'
         
       exitCode: 0
   -
@@ -720,8 +720,8 @@ events:
     checks:
       - "Looking for remove"
     directories:
-      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-JOxpAl"
-      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-JOxpAl"
+      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-ki3BUh"
+      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-ki3BUh"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -731,16 +731,16 @@ events:
       variable: "CMAKE_HAVE_REMOVE"
       cached: true
       stdout: |
-        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-JOxpAl
+        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-ki3BUh
         
-        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_3e652/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_3e652.dir/build.make CMakeFiles/cmTC_3e652.dir/build
-        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-JOxpAl'
-        Building C object CMakeFiles/cmTC_3e652.dir/CheckFunctionExists.c.o
-        /share/apps/gcc/12.4.0/bin/gcc   -DCHECK_FUNCTION_EXISTS=remove -o CMakeFiles/cmTC_3e652.dir/CheckFunctionExists.c.o -c /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-JOxpAl/CheckFunctionExists.c
-        Linking C executable cmTC_3e652
-        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3e652.dir/link.txt --verbose=1
-        /share/apps/gcc/12.4.0/bin/gcc  -DCHECK_FUNCTION_EXISTS=remove CMakeFiles/cmTC_3e652.dir/CheckFunctionExists.c.o -o cmTC_3e652 
-        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-JOxpAl'
+        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_4544a/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_4544a.dir/build.make CMakeFiles/cmTC_4544a.dir/build
+        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-ki3BUh'
+        Building C object CMakeFiles/cmTC_4544a.dir/CheckFunctionExists.c.o
+        /share/apps/gcc/12.4.0/bin/gcc   -DCHECK_FUNCTION_EXISTS=remove -o CMakeFiles/cmTC_4544a.dir/CheckFunctionExists.c.o -c /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-ki3BUh/CheckFunctionExists.c
+        Linking C executable cmTC_4544a
+        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4544a.dir/link.txt --verbose=1
+        /share/apps/gcc/12.4.0/bin/gcc  -DCHECK_FUNCTION_EXISTS=remove CMakeFiles/cmTC_4544a.dir/CheckFunctionExists.c.o -o cmTC_4544a 
+        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-ki3BUh'
         
       exitCode: 0
   -
@@ -752,8 +752,8 @@ events:
     checks:
       - "Looking for shmat"
     directories:
-      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-EObLmu"
-      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-EObLmu"
+      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-XBvwAL"
+      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-XBvwAL"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -763,16 +763,16 @@ events:
       variable: "CMAKE_HAVE_SHMAT"
       cached: true
       stdout: |
-        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-EObLmu
+        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-XBvwAL
         
-        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_94937/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_94937.dir/build.make CMakeFiles/cmTC_94937.dir/build
-        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-EObLmu'
-        Building C object CMakeFiles/cmTC_94937.dir/CheckFunctionExists.c.o
-        /share/apps/gcc/12.4.0/bin/gcc   -DCHECK_FUNCTION_EXISTS=shmat -o CMakeFiles/cmTC_94937.dir/CheckFunctionExists.c.o -c /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-EObLmu/CheckFunctionExists.c
-        Linking C executable cmTC_94937
-        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_94937.dir/link.txt --verbose=1
-        /share/apps/gcc/12.4.0/bin/gcc  -DCHECK_FUNCTION_EXISTS=shmat CMakeFiles/cmTC_94937.dir/CheckFunctionExists.c.o -o cmTC_94937 
-        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-EObLmu'
+        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_7f2ee/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_7f2ee.dir/build.make CMakeFiles/cmTC_7f2ee.dir/build
+        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-XBvwAL'
+        Building C object CMakeFiles/cmTC_7f2ee.dir/CheckFunctionExists.c.o
+        /share/apps/gcc/12.4.0/bin/gcc   -DCHECK_FUNCTION_EXISTS=shmat -o CMakeFiles/cmTC_7f2ee.dir/CheckFunctionExists.c.o -c /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-XBvwAL/CheckFunctionExists.c
+        Linking C executable cmTC_7f2ee
+        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7f2ee.dir/link.txt --verbose=1
+        /share/apps/gcc/12.4.0/bin/gcc  -DCHECK_FUNCTION_EXISTS=shmat CMakeFiles/cmTC_7f2ee.dir/CheckFunctionExists.c.o -o cmTC_7f2ee 
+        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-XBvwAL'
         
       exitCode: 0
   -
@@ -784,8 +784,8 @@ events:
     checks:
       - "Looking for IceConnectionNumber in ICE"
     directories:
-      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-L8y38h"
-      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-L8y38h"
+      source: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-3gTesJ"
+      binary: "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-3gTesJ"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -795,16 +795,16 @@ events:
       variable: "CMAKE_LIB_ICE_HAS_ICECONNECTIONNUMBER"
       cached: true
       stdout: |
-        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-L8y38h
+        Change Dir: /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-3gTesJ
         
-        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_e5289/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_e5289.dir/build.make CMakeFiles/cmTC_e5289.dir/build
-        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-L8y38h'
-        Building C object CMakeFiles/cmTC_e5289.dir/CheckFunctionExists.c.o
-        /share/apps/gcc/12.4.0/bin/gcc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber -o CMakeFiles/cmTC_e5289.dir/CheckFunctionExists.c.o -c /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-L8y38h/CheckFunctionExists.c
-        Linking C executable cmTC_e5289
-        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e5289.dir/link.txt --verbose=1
-        /share/apps/gcc/12.4.0/bin/gcc  -DCHECK_FUNCTION_EXISTS=IceConnectionNumber CMakeFiles/cmTC_e5289.dir/CheckFunctionExists.c.o -o cmTC_e5289  -lICE 
-        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-L8y38h'
+        Run Build Command(s):/share/apps/cmake/3.26/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_a50e6/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_a50e6.dir/build.make CMakeFiles/cmTC_a50e6.dir/build
+        gmake[1]: Entering directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-3gTesJ'
+        Building C object CMakeFiles/cmTC_a50e6.dir/CheckFunctionExists.c.o
+        /share/apps/gcc/12.4.0/bin/gcc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber -o CMakeFiles/cmTC_a50e6.dir/CheckFunctionExists.c.o -c /home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-3gTesJ/CheckFunctionExists.c
+        Linking C executable cmTC_a50e6
+        /share/apps/cmake/3.26/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a50e6.dir/link.txt --verbose=1
+        /share/apps/gcc/12.4.0/bin/gcc  -DCHECK_FUNCTION_EXISTS=IceConnectionNumber CMakeFiles/cmTC_a50e6.dir/CheckFunctionExists.c.o -o cmTC_a50e6  -lICE 
+        gmake[1]: Leaving directory '/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/CMakeFiles/CMakeScratch/TryCompile-3gTesJ'
         
       exitCode: 0
 ...

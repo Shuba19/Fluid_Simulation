@@ -4,6 +4,7 @@
 #include <vector>
 #include <array>
 #include <optional>
+#include <cstdio>
 
 #include <vulkan/vulkan.h>
 
@@ -147,7 +148,7 @@ struct UniformBufferObject {
 struct appState{
 
     // ---- off-screen video recording ----
-    float maxDuration = 15.0f;
+    float maxDuration = 5.0f;
 
     // One VkImage per frame-in-flight used as color attachment instead of a swapchain image.
     std::vector<VkImage>        offscreenImages;
@@ -158,8 +159,11 @@ struct appState{
     VkBuffer       readbackBuffer       = VK_NULL_HANDLE;
     VkDeviceMemory readbackBufferMemory = VK_NULL_HANDLE;
 
-    // Sequential counter incremented every saved frame (used for filenames).
+    // Sequential counter incremented every saved frame.
     uint32_t offscreenFrameIndex = 0;
+
+    // Pipe to a running ffmpeg process (opened in mainLoop, closed after the loop).
+    FILE* ffmpegPipe = nullptr;
 
     // Target frames-per-second for the output video.
     uint32_t videoFPS = 60;

@@ -37,9 +37,9 @@ static void framebufferResizeCallback(GLFWwindow* window, int width, int height)
 
 void initWindow(appState & state) {
     glfwInit();
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API); //tells GLFW we're using Vulkan
-    //glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-    //window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan Triangle", nullptr, nullptr);
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    if (USE_OFF_SCREEN_RENDERING)
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
     state.window = glfwCreateWindow(state.WIDTH, state.HEIGHT, "Vulkan", nullptr, nullptr);
     glfwSetFramebufferSizeCallback(state.window, framebufferResizeCallback);
     glfwSetWindowUserPointer(state.window, &state);

@@ -339,6 +339,7 @@ void cleanup() {
 
 int main() {
     try {
+        buildSphereMesh(state);
         initWindow(state);
         initVulkan();
         mainLoop();

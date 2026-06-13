@@ -387,7 +387,10 @@ void updateUniformBuffer(uint32_t currentImage, appState & state) {
     UniformBufferObject ubo{};
     // ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     ubo.model = glm::mat4(1.0f);
-    ubo.view = glm::lookAt(glm::vec3(3.5f, 3.5f, 5.5f), glm::vec3(0.5f, 0.5f, 1.5f), glm::vec3(0.0f, 1.0f, 0.0f));
+    float half = state.gridWorldSize * 0.5f;
+    glm::vec3 gridCenter(half, half, half);
+    glm::vec3 eye = gridCenter + glm::vec3(0.0f, half, state.gridWorldSize * 1.5f);
+    ubo.view = glm::lookAt(eye, gridCenter, glm::vec3(0.0f, 1.0f, 0.0f));
     ubo.proj = glm::perspective(glm::radians(45.0f), state.swapChainExtent.width / (float) state.swapChainExtent.height, 0.1f, 20.0f);
     ubo.proj[1][1] *= -1;//invert the y cordinate of the clip space since glm was designed for opengl
     memcpy(state.uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));

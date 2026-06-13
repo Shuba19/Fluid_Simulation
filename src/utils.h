@@ -136,7 +136,7 @@ struct appState{
     // ---- sphere mesh resolution ----
     int sphereStacks   = 16;
     int sphereSectors  = 32;
-    float sphereRadius = 0.15f;
+    float sphereRadius = 0.05f;
 
     // ---- off-screen video recording ----
     float maxDuration = 5.0f;

@@ -43,7 +43,8 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
+  # Include the install script for each subdirectory.
   include("/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/_deps/glm-build/glm/cmake_install.cmake")
+
 endif()
 

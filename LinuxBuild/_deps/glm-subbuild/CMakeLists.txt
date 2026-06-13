@@ -21,7 +21,7 @@ set_property(GLOBAL PROPERTY _CMAKE_FindGit_GIT_EXECUTABLE_VERSION
 
 include(ExternalProject)
 ExternalProject_Add(glm-populate
-                     "UPDATE_DISCONNECTED" "False" "GIT_REPOSITORY" "https://github.com/g-truc/glm.git"
+                     "UPDATE_DISCONNECTED" "False" "GIT_REPOSITORY" "https://github.com/g-truc/glm.git" "GIT_TAG" "0.9.9.8"
                     SOURCE_DIR          "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/_deps/glm-src"
                     BINARY_DIR          "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/_deps/glm-build"
                     CONFIGURE_COMMAND   ""

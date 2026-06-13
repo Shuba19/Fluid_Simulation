@@ -41,12 +41,12 @@ endif()
 
 execute_process(
   COMMAND "/usr/bin/git" 
-          checkout "master" --
+          checkout "3.3.8" --
   WORKING_DIRECTORY "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/_deps/glfw-src"
   RESULT_VARIABLE error_code
 )
 if(error_code)
-  message(FATAL_ERROR "Failed to checkout tag: 'master'")
+  message(FATAL_ERROR "Failed to checkout tag: '3.3.8'")
 endif()
 
 set(init_submodules TRUE)

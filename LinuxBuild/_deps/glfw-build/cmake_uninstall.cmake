@@ -1,6 +1,6 @@
 
 if (NOT EXISTS "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/_deps/glfw-build/install_manifest.txt")
-    message(FATAL_ERROR "Cannot find install manifest: \"/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/_deps/glfw-build/install_manifest.txt\"")
+  message(FATAL_ERROR "Cannot find install manifest: \"/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/_deps/glfw-build/install_manifest.txt\"")
 endif()
 
 file(READ "/home/gpu_group9/AntonioWS/Project/Fluid_Simulation/LinuxBuild/_deps/glfw-build/install_manifest.txt" files)

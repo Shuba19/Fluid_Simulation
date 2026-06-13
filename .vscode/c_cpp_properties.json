@@ -3,13 +3,31 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/usr/local/cuda-13.0/targets/x86_64-linux/include",
+                "/usr/include/x86_64-linux-gnu"
             ],
             "defines": [],
-            "compilerPath": "/usr/bin/clang",
+            "compilerPath": "/usr/bin/g++-13",
             "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "macos-clang-arm64"
+            "intelliSenseMode": "linux-gcc-x86"
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/local/cuda-13.0/targets/x86_64-linux/include",
+                "/usr/include/x86_64-linux-gnu"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/g++-13",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "${default}",
+            "compilerArgs": [
+                "-std=c++17"
+            ]
         }
     ],
     "version": 4

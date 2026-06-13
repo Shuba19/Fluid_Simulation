@@ -61,7 +61,7 @@ __global__ void jacobiKernel(
     float *divergence,
     int *CellType,
     int nx, int ny, int nz,
-    float dx)
+    float dx, float density, float deltaTime)
 {
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     int j = blockIdx.y * blockDim.y + threadIdx.y;
@@ -123,10 +123,8 @@ __global__ void jacobiKernel(
         pNew[cidx] = 0.0f;
         return;
     }
-
-    pNew[cidx] = (sum - dx * dx * divergence[cidx]) / count;
+    pNew[cidx] = (sum - density * dx * dx * divergence[cidx] / deltaTime) / count;
 }
-
 
 /*
     Nel pressure solver viene usato un metodo di Jacobi.
@@ -161,7 +159,7 @@ void cudaParticleSimulator::pressureSolve()
             grid_data.p, grid_data.pBuffer,
             grid_data.divergence,
             grid_data.cellType,
-            nx, ny, nz, dx);
+            nx, ny, nz, dx, fluidProps.density, deltaTime);
         cudaDeviceSynchronize();
 
         // Swappa i puntatori — pBuffer diventa la nuova p
@@ -173,8 +171,6 @@ void cudaParticleSimulator::pressureSolve()
     // Passo 4 — applica gradiente pressione alle velocità
     applyPressureGradient();
 }
-
-
 
 /*
     Applica il gradiente di pressione alle velocità della grid.
@@ -208,7 +204,6 @@ __global__ void applyPressureGradientKernel(
         }
     }
 
-    
     if (i < nx && j <= ny && k < nz)
     {
         bool bottomFluid = (j > 0 && cellType[i + nx * ((j - 1) + ny * k)] == (int)cellType::FLUID);
@@ -224,7 +219,6 @@ __global__ void applyPressureGradientKernel(
         }
     }
 
-    
     if (i < nx && j < ny && k <= nz)
     {
         bool backFluid = (k > 0 && cellType[i + nx * (j + ny * (k - 1))] == (int)cellType::FLUID);

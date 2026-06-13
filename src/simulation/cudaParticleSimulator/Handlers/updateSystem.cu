@@ -5,16 +5,26 @@ void cudaParticleSimulator::updateSystem()
     // update system, funz<ione che verrà usata solo per chiamare altre funzioni, a mò di wrapper
     // La prima fase è P2G
     p2g();
-    //vengono applicate forze esterne, per ora solo g = -9.81
+    // vengono applicate forze esterne, per ora solo g = -9.81
+    saveGridVelocities();
     applyExternalForces();
-    //qua vengono calcolate le divergenze, essenzialmente quanto il fluido si sta comprimendo o espandendo
+    // qua vengono calcolate le divergenze, essenzialmente quanto il fluido si sta comprimendo o espandendo
     pressureSolve();
     g2p();
     computeAdvection();
 
-    //da qua si trasferisce a vulkan
-    //cuda2vulkan();
 }
+
+void cudaParticleSimulator::cuda2vulkan(uint32_t currentImage, appState& state)
+{
+    //printf("Transferring data from CUDA to Vulkan...\n");
+    std::vector<glm::vec3> positions(this->numParticles);
+    cudaMemcpy(positions.data(), deviceData.pos, this->numParticles * sizeof(float3), cudaMemcpyDeviceToHost);
+    cudaDeviceSynchronize();
+    memcpy(state.instanceBuffersMapped[currentImage], positions.data(),
+            sizeof(positions[0]) * positions.size());
+}
+
 __global__ void p2gNormalizeKernel(
     float *u, float *v, float *w,
     float *uW, float *vW, float *wW,
@@ -232,59 +242,62 @@ __global__ void p2gKernel(
     }
 
     int ci = (int)gx, cj = (int)gy, ck = (int)gz;
-    if(ci>=0 && ci<nx && cj>=0 && cj<ny && ck>=0 && ck<nz) {
-        int cidx = ci + nx*(cj + ny*ck);
-        if(ctype[cidx] != (int)cellType::SOLID)
+    if (ci >= 0 && ci < nx && cj >= 0 && cj < ny && ck >= 0 && ck < nz)
+    {
+        int cidx = ci + nx * (cj + ny * ck);
+        if (ctype[cidx] != (int)cellType::SOLID)
             ctype[cidx] = (int)cellType::FLUID;
     }
 }
-void cudaParticleSimulator::p2g() {
+void cudaParticleSimulator::p2g()
+{
     int nx = grid_size.x, ny = grid_size.y, nz = grid_size.z;
     float invDx = 1.0f / grid_size.cellSize;
 
     // Azzera griglia e pesi
-    cudaMemset(grid_data.u,  0, (nx+1)*ny*nz     * sizeof(float));
-    cudaMemset(grid_data.v,  0,  nx*(ny+1)*nz    * sizeof(float));
-    cudaMemset(grid_data.w,  0,  nx*ny*(nz+1)    * sizeof(float));
-    cudaMemset(grid_data.uWeight, 0, (nx+1)*ny*nz     * sizeof(float));
-    cudaMemset(grid_data.vWeight, 0,  nx*(ny+1)*nz    * sizeof(float));
-    cudaMemset(grid_data.wWeight, 0,  nx*ny*(nz+1)    * sizeof(float));
+    cudaMemset(grid_data.u, 0, (nx + 1) * ny * nz * sizeof(float));
+    cudaMemset(grid_data.v, 0, nx * (ny + 1) * nz * sizeof(float));
+    cudaMemset(grid_data.w, 0, nx * ny * (nz + 1) * sizeof(float));
+    cudaMemset(grid_data.uWeight, 0, (nx + 1) * ny * nz * sizeof(float));
+    cudaMemset(grid_data.vWeight, 0, nx * (ny + 1) * nz * sizeof(float));
+    cudaMemset(grid_data.wWeight, 0, nx * ny * (nz + 1) * sizeof(float));
 
-    cudaMemset(grid_data.cellType, (int)cellType::AIR, nx*ny*nz * sizeof(int));
+    cudaMemset(grid_data.cellType, (int)cellType::AIR, nx * ny * nz * sizeof(int));
     computeBoundary();
 
     // P2G kernel — 1 thread per particella
     int blockSize = 256;
-    int gridDim   = (numParticles + blockSize - 1) / blockSize;
+    int gridDim = (numParticles + blockSize - 1) / blockSize;
     p2gKernel<<<gridDim, blockSize>>>(
         deviceData.pos, deviceData.vel,
-        grid_data.u,  grid_data.v,  grid_data.w,
+        grid_data.u, grid_data.v, grid_data.w,
         grid_data.uWeight, grid_data.vWeight, grid_data.wWeight,
         grid_data.cellType,
-        nx, ny, nz, invDx, numParticles
-    );
+        nx, ny, nz, invDx, numParticles);
 
     int s1 = (nx + 1) * ny * nz;
     int s2 = nx * (ny + 1) * nz;
     int s3 = nx * ny * (nz + 1);
 
     int maxSize = s1;
-    if (s2 > maxSize) maxSize = s2;
-    if (s3 > maxSize) maxSize = s3;
+    if (s2 > maxSize)
+        maxSize = s2;
+    if (s3 > maxSize)
+        maxSize = s3;
     int gridNorm = (maxSize + blockSize - 1) / blockSize;
     p2gNormalizeKernel<<<gridNorm, blockSize>>>(
-        grid_data.u,  grid_data.v,  grid_data.w,
+        grid_data.u, grid_data.v, grid_data.w,
         grid_data.uWeight, grid_data.vWeight, grid_data.wWeight,
-        nx, ny, nz
-    );
+        nx, ny, nz);
 
     cudaDeviceSynchronize();
 }
 
-void cudaParticleSimulator::saveGridVelocities() {
+void cudaParticleSimulator::saveGridVelocities()
+{
     int nx = grid_size.x, ny = grid_size.y, nz = grid_size.z;
 
-    cudaMemcpy(grid_data.u_old, grid_data.u, (nx+1)*ny*nz     * sizeof(float), cudaMemcpyDeviceToDevice);
-    cudaMemcpy(grid_data.v_old, grid_data.v,  nx*(ny+1)*nz    * sizeof(float), cudaMemcpyDeviceToDevice);
-    cudaMemcpy(grid_data.w_old, grid_data.w,  nx*ny*(nz+1)    * sizeof(float), cudaMemcpyDeviceToDevice);
+    cudaMemcpy(grid_data.u_old, grid_data.u, (nx + 1) * ny * nz * sizeof(float), cudaMemcpyDeviceToDevice);
+    cudaMemcpy(grid_data.v_old, grid_data.v, nx * (ny + 1) * nz * sizeof(float), cudaMemcpyDeviceToDevice);
+    cudaMemcpy(grid_data.w_old, grid_data.w, nx * ny * (nz + 1) * sizeof(float), cudaMemcpyDeviceToDevice);
 }

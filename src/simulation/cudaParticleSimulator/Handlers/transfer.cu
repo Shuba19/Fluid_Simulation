@@ -127,29 +127,36 @@ void cudaParticleSimulator::g2p()
 
     cudaDeviceSynchronize();
 }
-
-__global__ void advectionKernel(
-    float3 *pos, float3 *vel,
-    int numParticles, float deltaTime)
+__global__ void advectionKernel(float3 *pos, float3 *vel,
+    int numParticles, float deltaTime, float3 gridMin, float3 gridMax)
 {
     int pid = blockIdx.x * blockDim.x + threadIdx.x;
-    if (pid >= numParticles)
-        return;
+    if (pid >= numParticles) return;
 
-    // Semplice integrazione esplicita
     pos[pid].x += vel[pid].x * deltaTime;
     pos[pid].y += vel[pid].y * deltaTime;
     pos[pid].z += vel[pid].z * deltaTime;
+
+    // Rimbalzo sui bordi
+    if (pos[pid].x < gridMin.x) { pos[pid].x = gridMin.x; vel[pid].x *= -0.5f; }
+    if (pos[pid].x > gridMax.x) { pos[pid].x = gridMax.x; vel[pid].x *= -0.5f; }
+    if (pos[pid].y < gridMin.y) { pos[pid].y = gridMin.y; vel[pid].y *= -0.5f; }
+    if (pos[pid].y > gridMax.y) { pos[pid].y = gridMax.y; vel[pid].y *= -0.5f; }
+    if (pos[pid].z < gridMin.z) { pos[pid].z = gridMin.z; vel[pid].z *= -0.5f; }
+    if (pos[pid].z > gridMax.z) { pos[pid].z = gridMax.z; vel[pid].z *= -0.5f; }
 }
 
 void cudaParticleSimulator::computeAdvection()
 {
     int blockSize = 256;
     int gridDim = (numParticles + blockSize - 1) / blockSize;
-
+    float3 gridMin = {0.0f, 0.0f, 0.0f};
+    float3 gridMax = {grid_size.x * grid_size.cellSize,
+                      grid_size.y * grid_size.cellSize,
+                      grid_size.z * grid_size.cellSize};
     advectionKernel<<<gridDim, blockSize>>>(
         deviceData.pos, deviceData.vel,
-        numParticles, fluidProps.timeStep);
+        numParticles, this->deltaTime, gridMin, gridMax);
 
     cudaDeviceSynchronize();
 }

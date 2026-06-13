@@ -28,12 +28,23 @@
 #pragma region Config
 bool OBJ_INSTANCING = true;
 //bool USE_OFF_SCREEN_RENDERING = false;
-bool USE_OFF_SCREEN_RENDERING = true;
+bool USE_OFF_SCREEN_RENDERING = false;
 #pragma endregion Config
+
+/*
+
+
+Particle position: (3.001085, 7.501266, 4.999569)
+Particle position: (3.050902, 7.100272, 4.852314)
+Particle position: (3.050189, 7.101429, 4.898479)
+Particle position: (3.049405, 7.101741, 4.951680)
+Segmentation fault (core dumped)
+*/
+
 
 std::vector<glm::vec3> particleInitialPositions = {
     {0.0f, 0.0f, 0.0f},
-    {1.0f, 0.0f, 1.0f},
+    {3.050902f, 7.100272f, 4.852314f},
     {0.0f, 1.0f, 2.0f},
     {1.0f, 1.0f, 3.0f},
 };
@@ -44,12 +55,11 @@ std::vector<glm::vec3> particleBasePositions = {
     {0.0f, 1.0f, 2.0f},
     {1.0f, 1.0f, 3.0f},
 };
-
 const std::vector<Vertex> vertices = {
-    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-    {{ 0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-    {{ 0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}},
-    {{-0.5f,  0.5f}, {1.0f, 1.0f, 1.0f}},
+    {{-0.05f, -0.05f}, {1.0f, 0.0f, 0.0f}},
+    {{ 0.05f, -0.05f}, {0.0f, 1.0f, 0.0f}},
+    {{ 0.05f,  0.05f}, {0.0f, 0.0f, 1.0f}},
+    {{-0.05f,  0.05f}, {1.0f, 1.0f, 1.0f}},
 };
 
 const std::vector<uint16_t> indices = {

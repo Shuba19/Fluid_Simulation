@@ -6,12 +6,17 @@
 #include <driver_types.h>
 #include <vulkan/vulkan.h>
 #include <iostream>
+#include <GLFW/glfw3.h>
 
+/*
+@params density: density of the fluid
+@params viscosity: viscosity of the fluid
+@params flipRatio: ratio of FLIP to PIC, between 0 and 1
+*/
 struct fluidProperties
 {
     float density;
     float viscosity;
-    float timeStep;
     float flipRatio;
 };
 
@@ -34,10 +39,13 @@ struct gridDeviceData {
     float *p; // Pressione al centro della cella
     int *cellType;
 };
-struct gridSize{
-    int x,y,z;
+struct gridSize {
+    int x, y, z;
     int gridCells;
-    int cellSize;
+    float cellSize;  
+    gridSize() : x(0), y(0), z(0), cellSize(0.1f), gridCells(0) {} // Default constructor
+    gridSize(int x, int y, int z, float cellSize = 0.1f)
+        : x(x), y(y), z(z), cellSize(cellSize), gridCells(x * y * z) {}
 };
 
 struct vulkanData{

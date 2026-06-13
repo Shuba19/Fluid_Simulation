@@ -14,7 +14,17 @@
     }
 
 // init all
-cudaParticleSimulator::cudaParticleSimulator(int numParticles, float deltaTime, vulkanData h_vkData, int deviceId, fluidProperties fluidProps, int num_iterations, gridSize grid_size)
+/*
+@param numParticles: numero di particelle da simulare
+@param deltaTime: passo temporale della simulazione
+@param h_vkData: dati di vulkan per la condivisione del buffer
+@param deviceId: id del dispositivo CUDA da utilizzare
+@param fluidProps: proprietà del fluido (densità, viscosità, ecc.)
+@param num_iterations: numero di iterazioni per il solver della pressione
+@param grid_size: dimensione della griglia (numero di celle in x, y, z)
+
+*/
+cudaParticleSimulator::cudaParticleSimulator(int numParticles, float deltaTime, int deviceId, fluidProperties fluidProps, int num_iterations, gridSize grid_size)
 {
     srand(time(NULL));
     this->deviceId = deviceId;
@@ -25,6 +35,8 @@ cudaParticleSimulator::cudaParticleSimulator(int numParticles, float deltaTime, 
     this->fluidProps = fluidProps;
     this->num_iterations = num_iterations;
     this->grid_size = grid_size;
+    printf("Initializing CUDA Particle Simulator with %d particles, grid size (%d, %d, %d), and %d pressure iterations\n",
+           numParticles, grid_size.x, grid_size.y, grid_size.z, num_iterations);
     cudaMalloc(&deviceData.pos, numParticles * sizeof(float3));
     cudaMalloc(&deviceData.vel, numParticles * sizeof(float3));
     cudaMalloc(&deviceData.old_vel, numParticles * sizeof(float3));
@@ -81,7 +93,7 @@ cudaParticleSimulator::~cudaParticleSimulator()
 
 void cudaParticleSimulator::initParticles()
 {
-    float dx = 0.1f;
+    float dx = grid_size.cellSize; // dimensione della cella
 
     //limiti griglia
     float worldWidth = grid_size.x * dx;
@@ -116,9 +128,9 @@ void cudaParticleSimulator::initParticles()
 
                 if (distSq <= radius * radius)
                 {
-                    float jitterx = ((rand() / (float)RAND_MAX) - 0.5f) * p_spacing * 0.1f; // Jitter fino al 10% della spaziatura
-                    float jittery = ((rand() / (float)RAND_MAX) - 0.5f) * p_spacing * 0.1f; // Jitter fino al 10% della spaziatura
-                    float jitterz = ((rand() / (float)RAND_MAX) - 0.5f) * p_spacing * 0.1f; // Jitter fino al 10% della spaziatura
+                    float jitterx = ((rand() / (float)RAND_MAX) - 0.5f) * p_spacing * 0.01f; // Jitter fino al 10% della spaziatura
+                    float jittery = ((rand() / (float)RAND_MAX) - 0.5f) * p_spacing * 0.01f; // Jitter fino al 10% della spaziatura
+                    float jitterz = ((rand() / (float)RAND_MAX) - 0.5f) * p_spacing * 0.01f; // Jitter fino al 10% della spaziatura
                     h_pos.push_back({x + jitterx, y + jittery, z + jitterz});
                     h_vel.push_back({0.0f, 0.0f, 0.0f}); // Fluido inizialmente fermo
                 }

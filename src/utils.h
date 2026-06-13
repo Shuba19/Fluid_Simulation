@@ -165,6 +165,9 @@ struct appState{
     uint32_t videoFPS = 60;
 
     
+    //BASCIU
+    float gridWorldSize = 3.0f; // default
+
     //app info
     bool framebufferResized = false;
     

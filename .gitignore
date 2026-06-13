@@ -2,3 +2,5 @@ build/
 MacBuild/
 LinuxBuild/
 .DS_Store
+frames/
+*.mp4
